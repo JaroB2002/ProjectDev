@@ -4,20 +4,30 @@ if(!empty($_POST)){
     $options = [
         'cost' => 14,
     ];
-
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT, $options);
     echo $password;
 
-$conn = new pDO('mysql:host=localhost;dbname=demo', "root", "");
-$query = $conn->prepare("insert into users (email, password) values(:email, :password)");
-$query->bindValue(":email", $email);
-$query->bindValue(":password", $password);
-$query->execute();
+    $conn = new PDO('mysql:host=localhost;dbname=demo', "root", "");
 
+    // Check if email already exists
+    $query = $conn->prepare("SELECT COUNT(*) FROM users WHERE email = :email");
+    $query->bindValue(":email", $email);
+    $query->execute();
+    $count = $query->fetchColumn();
 
+    if ($count > 0) {
+        echo "Error: This email already exists.";
+    } else {
+        // Insert new user into database
+        $query = $conn->prepare("INSERT INTO users (email, password) VALUES(:email, :password)");
+        $query->bindValue(":email", $email);
+        $query->bindValue(":password", $password);
+        $query->execute();
+        echo "User registered successfully!";
+    }
 }
-
 ?>
+
 
 
 
