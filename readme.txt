@@ -1,6 +1,11 @@
 Done:
 - Login
 - Register
-- Delete account
 - Log out
 - Dashboard
+
+Bezig met:
+- Profile picture
+
+Almost done:
+- Delete account
