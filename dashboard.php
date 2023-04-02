@@ -115,12 +115,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if(file_exists("upload/" . $_FILES["profile_picture"]["name"])){
                 echo $_FILES["profile_picture"]["name"] . " is already exists.";
             } else{
-                $stmt = $conn->prepare("INSERT INTO profile_pictures (user_id, filename) VALUES (:user_id, :filename)");
-                $stmt->bindParam(':user_id', $_POST['user_id']);
-                $stmt->bindParam(':filename', $_FILES["profile_picture"]["name"]);
+                $user_id = $_POST['user_id'];
+                $stmt = $conn->prepare("UPDATE profile_pictures SET filename = :filename WHERE user_id = :user_id");
+                $stmt->bindParam(':user_id', $user_id);
+                $stmt->bindParam(':filename', $filename);
                 if($stmt->execute()){
                     move_uploaded_file($_FILES["profile_picture"]["tmp_name"], "upload/" . $_FILES["profile_picture"]["name"]);
-                    echo "Your file was uploaded successfully.";
+                    echo "Your profile picture was uploaded successfully.";
                     header("Refresh:2");
                 } else {
                     echo "Error: There was a problem uploading your file. Please try again."; 
