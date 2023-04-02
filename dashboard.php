@@ -26,6 +26,44 @@
 </html>
 
 
+<?php
+// Establish database connection
+$conn = new PDO('mysql:host=localhost;dbname=demo', 'root', '');
+
+// Check if form is submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get email from form input
+    $email = $_POST['email'];
+
+    // Get user data from database
+    $stmt = $conn->prepare('SELECT * FROM users WHERE email = :email');
+    $stmt->bindParam(':email', $email);
+    $stmt->execute();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Check if account was found
+    if ($stmt->rowCount() == 0) {
+        echo "Account not found.";
+    } else {
+        // Confirm user's identity
+        if ($_POST['confirm_delete'] != $user['email']) {
+            echo "Email confirmation does not match.";
+        } else {
+            // Delete all data related to user
+            $stmt = $conn->prepare('DELETE FROM users WHERE email = :email');
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+            // Confirm deletion
+            if ($stmt->rowCount() > 0) {
+                echo "Account was deleted.";
+            } else {
+                echo "Account was not deleted.";
+            }
+        }
+    }
+}
+?>
+
 <h2>Delete Your Account</h2>
 <p>Please confirm your email address to delete your account and all associated data.</p>
 <form method="post" action="dashboard.php">
@@ -44,3 +82,73 @@
 <a href="download_data.php">Download My Data</a>
 
 
+
+
+
+
+
+
+<?php
+// Establish database connection
+$conn = new PDO('mysql:host=localhost;dbname=demo', 'root', '');
+
+// Check if form is submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Check if file was uploaded without errors
+    if(isset($_FILES["profile_picture"]) && $_FILES["profile_picture"]["error"] == 0){
+        $allowed = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "png" => "image/png");
+        $filename = $_FILES["profile_picture"]["name"];
+        $filetype = $_FILES["profile_picture"]["type"];
+        $filesize = $_FILES["profile_picture"]["size"];
+
+        // Verify file extension
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        if(!array_key_exists($ext, $allowed)) die("Error: Please select a valid file format.");
+
+        // Verify file size - 5MB maximum
+        $maxsize = 5 * 1024 * 1024;
+        if($filesize > $maxsize) die("Error: File size is larger than the allowed limit.");
+
+        // Verify MYME type of the file
+        if(in_array($filetype, $allowed)){
+            // Check if file exists
+            if(file_exists("upload/" . $_FILES["profile_picture"]["name"])){
+                echo $_FILES["profile_picture"]["name"] . " is already exists.";
+            } else{
+                $stmt = $conn->prepare("INSERT INTO profile_pictures (user_id, filename) VALUES (:user_id, :filename)");
+                $stmt->bindParam(':user_id', $_POST['user_id']);
+                $stmt->bindParam(':filename', $_FILES["profile_picture"]["name"]);
+                if($stmt->execute()){
+                    move_uploaded_file($_FILES["profile_picture"]["tmp_name"], "upload/" . $_FILES["profile_picture"]["name"]);
+                    echo "Your file was uploaded successfully.";
+                    header("Refresh:2");
+                } else {
+                    echo "Error: There was a problem uploading your file. Please try again."; 
+                }
+            }
+        } else{
+            echo "Error: There was a problem uploading your file. Please try again."; 
+        }
+    } else{
+        echo "Error: " . $_FILES["profile_picture"]["error"];
+    }
+}
+
+// Get user's profile picture filename
+$user_id = 1; // change this to the user_id of the user whose profile picture you want to display
+$stmt = $conn->prepare("SELECT filename FROM profile_pictures WHERE user_id = :user_id");
+$stmt->bindParam(':user_id', $user_id);
+$stmt->execute();
+$row = $stmt->fetch(PDO::FETCH_ASSOC);
+$filename = $row['filename'];
+?>
+
+<!-- Display user's profile picture -->
+<img src="upload/<?php echo $filename; ?>" alt="Profile Picture">
+
+<!-- Form to upload profile picture -->
+<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
+    <input type="file" name="profile_picture">
+    <input type="submit" value="Upload">
+</form>
