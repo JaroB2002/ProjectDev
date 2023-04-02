@@ -3,9 +3,8 @@ Done:
 - Register
 - Log out
 - Dashboard
+- Delete account
 
 Bezig met:
 - Profile picture
-
-Almost done:
-- Delete account
+- Password reset
