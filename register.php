@@ -29,7 +29,7 @@ if(!empty($_POST)){
       echo "User registered successfully!";
 
       $email = new \SendGrid\Mail\Mail();
-        $email->setFrom("r0784273@student.thomasmore.be", "Fred Kroket");
+        $email->setFrom("yadina.moreira@gmail.com", "Fred Kroket");
         $email->setSubject("Sending with Twilio SendGrid is Fun");
         $email->addTo("yadina.moreira@gmail.com", "Yadina");
         $email->addContent("text/plain", "and easy to do anywhere, even with PHP");
@@ -41,7 +41,7 @@ if(!empty($_POST)){
           'turn_off_ssl_verification' => true
         );
 
-        $sendgrid = new \SendGrid('SG.MWndBhPUQH-jE2IdPh1YCQ.W5KrTG1HTQZfhZRRN6_-OZCDqCwT62QZe_PrGz_WfQQ', $options);
+        $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'), $options);
         try {
             $response = $sendgrid->send($email);
             print $response->statusCode() . "\n";
