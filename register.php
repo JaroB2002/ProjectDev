@@ -1,65 +1,22 @@
-<?php 
+<?php
+    include_once("bootstrap.php");
 
-require 'vendor/autoload.php';
+    if(!empty($_POST)){
+      try{
+        $user = new User();
+        $user->setEmail($_POST["email"]);
+        $user->setPassword($_POST["password"]);
+        $user->save();
 
-if(!empty($_POST)){
-  $email = $_POST['username'];
-  $options = [
-      'cost' => 14,
-  ];
-  $password = password_hash($_POST['password'], PASSWORD_DEFAULT, $options);
-  //echo $password;
-
-  $conn = new PDO('mysql:host=localhost;dbname=demo', "root", "root");
-
-  // Check if email already exists
-  $query = $conn->prepare("SELECT COUNT(*) FROM users WHERE email = :email");
-  $query->bindValue(":email", $email);
-  $query->execute();
-  $count = $query->fetchColumn();
-
-  if ($count > 0) {
-      echo "Error: This email already exists.";
-  } else {
-      // Insert new user into database
-      $query = $conn->prepare("INSERT INTO users (email, password) VALUES(:email, :password)");
-      $query->bindValue(":email", $email);
-      $query->bindValue(":password", $password);
-      $query->execute();
-      echo "User registered successfully!";
-
-      $email = new \SendGrid\Mail\Mail();
-        $email->setFrom("yadina.moreira@gmail.com", "Fred Kroket");
-        $email->setSubject("Sending with Twilio SendGrid is Fun");
-        $email->addTo("yadina.moreira@gmail.com", "Yadina");
-        $email->addContent("text/plain", "and easy to do anywhere, even with PHP");
-        $email->addContent(
-           "text/html", "<strong>and easy to do anywhere, even with PHP</strong>"
-        );
-
-        $options = array(
-          'turn_off_ssl_verification' => true
-        );
-
-        $sendgrid = new \SendGrid(getenv('SENDGRID_API_KEY'), $options);
-        try {
-            $response = $sendgrid->send($email);
-            print $response->statusCode() . "\n";
-            print_r($response->headers());
-            print $response->body() . "\n";
-            echo "email sent!\n";
-
-        } catch (Exception $e) {
-            echo 'Caught exception: '. $e->getMessage() ."\n";
-        }
-  }
-}
-
+        /*session_start(); 
+        $id = $_SESSION['id'];*/
+        header("Location:index.php");
+      }
+      catch (Throwable $e){
+        $error = $e->getMessage();
+      }
+    }
 ?>
-
-
-
-
 <!DOCTYPE html>
 <html lang="en" >
 <head>
@@ -89,9 +46,6 @@ if(!empty($_POST)){
 
 <body>
 
-
-// Path: index.php
-
 <div class="flex min-h-full items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
   <div class="w-full max-w-md space-y-8">
     <div>
@@ -102,12 +56,17 @@ if(!empty($_POST)){
         <a href="index.php" class="font-medium text-indigo-600 hover:text-indigo-500">login now</a>
       </p>
     </div>
+    <?php if (isset($error)) : ?>
+      <div>
+        <p><?php echo $error; ?></p>
+      </div>
+    <?php endif; ?>
     <form class="mt-8 space-y-6" action="#" method="POST">
       <input type="hidden" name="remember" value="true">
       <div class="-space-y-px rounded-md shadow-sm">
         <div>
-          <label for="username" class="sr-only">Username</label>
-          <input id="username" name="username" type="text" autocomplete="username" required class="relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Username">
+          <label for="email" class="sr-only">Email</label>
+          <input id="email" name="email" type="text" autocomplete="email" required class="relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Email">
         </div>
         <div>
           <label for="password" class="sr-only">Password</label>
@@ -151,6 +110,5 @@ if(!empty($_POST)){
 </div>
 </div>
 <!-- partial -->
-  
 </body>
 </html>
