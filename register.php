@@ -1,31 +1,60 @@
 <?php 
+
+require 'vendor/autoload.php';
+
 if(!empty($_POST)){
-    $email = $_POST['username'];
-    $options = [
-        'cost' => 14,
-    ];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT, $options);
-    echo $password;
+  $email = $_POST['username'];
+  $options = [
+      'cost' => 14,
+  ];
+  $password = password_hash($_POST['password'], PASSWORD_DEFAULT, $options);
+  //echo $password;
 
-    $conn = new PDO('mysql:host=localhost;dbname=demo', "root", "");
+  $conn = new PDO('mysql:host=localhost;dbname=demo', "root", "root");
 
-    // Check if email already exists
-    $query = $conn->prepare("SELECT COUNT(*) FROM users WHERE email = :email");
-    $query->bindValue(":email", $email);
-    $query->execute();
-    $count = $query->fetchColumn();
+  // Check if email already exists
+  $query = $conn->prepare("SELECT COUNT(*) FROM users WHERE email = :email");
+  $query->bindValue(":email", $email);
+  $query->execute();
+  $count = $query->fetchColumn();
 
-    if ($count > 0) {
-        echo "Error: This email already exists.";
-    } else {
-        // Insert new user into database
-        $query = $conn->prepare("INSERT INTO users (email, password) VALUES(:email, :password)");
-        $query->bindValue(":email", $email);
-        $query->bindValue(":password", $password);
-        $query->execute();
-        echo "User registered successfully!";
-    }
+  if ($count > 0) {
+      echo "Error: This email already exists.";
+  } else {
+      // Insert new user into database
+      $query = $conn->prepare("INSERT INTO users (email, password) VALUES(:email, :password)");
+      $query->bindValue(":email", $email);
+      $query->bindValue(":password", $password);
+      $query->execute();
+      echo "User registered successfully!";
+
+      $email = new \SendGrid\Mail\Mail();
+        $email->setFrom("r0784273@student.thomasmore.be", "Fred Kroket");
+        $email->setSubject("Sending with Twilio SendGrid is Fun");
+        $email->addTo("yadina.moreira@gmail.com", "Yadina");
+        $email->addContent("text/plain", "and easy to do anywhere, even with PHP");
+        $email->addContent(
+           "text/html", "<strong>and easy to do anywhere, even with PHP</strong>"
+        );
+
+        $options = array(
+          'turn_off_ssl_verification' => true
+        );
+
+        $sendgrid = new \SendGrid('SG.MWndBhPUQH-jE2IdPh1YCQ.W5KrTG1HTQZfhZRRN6_-OZCDqCwT62QZe_PrGz_WfQQ', $options);
+        try {
+            $response = $sendgrid->send($email);
+            print $response->statusCode() . "\n";
+            print_r($response->headers());
+            print $response->body() . "\n";
+            echo "email sent!\n";
+
+        } catch (Exception $e) {
+            echo 'Caught exception: '. $e->getMessage() ."\n";
+        }
+  }
 }
+
 ?>
 
 
