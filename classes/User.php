@@ -1,5 +1,6 @@
 <?php
-include_once(__DIR__ . "/Db.php");
+//include_once(__DIR__ . "/Db.php");
+include_once("bootstrap.php");
 
 class User{
     private $email;
@@ -10,7 +11,10 @@ class User{
         if (empty($email)) {
             throw new Exception("Email cannot be empty.");
         }
+        else{ 
         $this->email = $email;
+        }
+        
     }
     public function getEmail(){
         return $this->email;
@@ -20,10 +24,12 @@ class User{
         if(empty($password)){
             throw new Exception("Password cannot be empty.");
         }
+        else{
         $options = [
             'cost' => 12,
             ];
         $this->password = password_hash($password, PASSWORD_DEFAULT, $options);
+        }
     }
     public function getPassword(){
         return $this->password;
