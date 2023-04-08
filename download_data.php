@@ -1,4 +1,3 @@
-
 <?php
 // Establish database connection
 $conn = new PDO('mysql:host=localhost;dbname=demo', 'root', '');
@@ -11,6 +10,8 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Set headers for CSV file download
 header('Content-Type: text/csv');
 header('Content-Disposition: attachment; filename="users.csv"');
+header('Pragma: no-cache');
+header('Expires: 0');
 
 // Create file pointer for output
 $output = fopen('php://output', 'w');
@@ -25,4 +26,7 @@ foreach ($results as $row) {
 
 // Close file pointer
 fclose($output);
+
+// End script execution
+exit;
 ?>
