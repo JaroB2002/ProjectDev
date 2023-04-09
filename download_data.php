@@ -1,11 +1,26 @@
 <?php
 // Establish database connection
-$conn = new PDO('mysql:host=localhost;dbname=demo', 'root', '');
+try {
+  $conn = new PDO('mysql:host=localhost;dbname=demo', 'root', '');
+} catch (PDOException $e) {
+  // handle connection error
+  die('Connection failed: ' . $e->getMessage());
+}
 
 // Retrieve data from database
-$stmt = $conn->prepare('SELECT * FROM users');
-$stmt->execute();
-$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+try {
+  $stmt = $conn->prepare('SELECT * FROM users');
+  $stmt->execute();
+  $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+  // handle query error
+  die('Query failed: ' . $e->getMessage());
+}
+
+// If no results found, display error message and exit
+if (count($results) == 0) {
+  die('No results found.');
+}
 
 // Set headers for CSV file download
 header('Content-Type: text/csv');
@@ -21,7 +36,7 @@ fputcsv($output, array_keys($results[0]));
 
 // Write data to CSV file
 foreach ($results as $row) {
-    fputcsv($output, $row);
+  fputcsv($output, $row);
 }
 
 // Close file pointer
