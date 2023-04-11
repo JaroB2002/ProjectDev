@@ -113,7 +113,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if(in_array($filetype, $allowed)){
             // Check if file exists
             if(file_exists("upload/" . $_FILES["profile_picture"]["name"])){
-                echo $_FILES["profile_picture"]["name"] . " is already exists.";
+                // Remove the line that displays the error message for existing file
+                // echo $_FILES["profile_picture"]["name"] . " is already exists.";
             } else{
                 $user_id = $_POST['user_id'];
                 $stmt = $conn->prepare("UPDATE profile_pictures SET filename = :filename WHERE user_id = :user_id");
@@ -128,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         } else{
-            echo "Error: There was a problem uploading your file. Please try again."; 
+            echo "Error: Please select a valid file format.";
         }
     } else{
         echo "Error: " . $_FILES["profile_picture"]["error"];
@@ -141,7 +142,11 @@ $stmt = $conn->prepare("SELECT filename FROM profile_pictures WHERE user_id = :u
 $stmt->bindParam(':user_id', $user_id);
 $stmt->execute();
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
-$filename = $row['filename'];
+if (isset($_FILES["profile_picture"]["error"]) && $_FILES["profile_picture"]["error"] !== false) {
+    echo "Error: " . $_FILES["profile_picture"]["error"];
+} else {
+    echo "Error: There was a problem uploading your file. Please try again."; 
+}
 ?>
 
 <!-- Display user's profile picture -->
@@ -152,4 +157,5 @@ $filename = $row['filename'];
     <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
     <input type="file" name="profile_picture">
     <input type="submit" value="Upload">
+    
 </form>
