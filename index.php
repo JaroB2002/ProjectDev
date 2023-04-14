@@ -1,17 +1,15 @@
 <?php 
 function canLogin($username, $password){
-  // var_dump($password);
-  $conn = new pDO('mysql:host=localhost;dbname=demo', "root", "");
+  $conn = new PDO('mysql:host=localhost;dbname=demo', "root", "");
   $statement = $conn->prepare("select * from users where email= :email");
   $statement->bindValue(":email", $username);
   $statement->execute();
-  $user = $statement->fetchAll();
-  var_dump($user);
+  $user = $statement->fetch(PDO::FETCH_ASSOC); // Fetch as associative array
   if(!$user){
     return false;
   }  
 
-  $hash =  $user['0']['password'];
+  $hash = $user['password'];
 
   if(password_verify($password, $hash) ){
     return true;
@@ -24,19 +22,24 @@ if(!empty($_POST)){
   //er is verzonden
   $username= $_POST['username'];
   $password= $_POST['password'];
+  $rememberMe = isset($_POST['remember-me']) ? true : false; // Check if the checkbox is checked
 
   if(canLogin($username, $password)){
     //inloggen
     session_start();
     $_SESSION['username'] = $username;
+
+    if ($rememberMe) {
+      // Store the value in the database or use it for further processing
+      // ...
+    }
+
     header("Location: dashboard.php");
   } else{
     //error
     $error = true;
   }
 }
-  //var_dump($_POST);
-
 ?>
 
 
