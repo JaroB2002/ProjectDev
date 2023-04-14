@@ -1,5 +1,4 @@
 <?php
-//include_once(__DIR__ . "/Db.php");
 include_once("bootstrap.php");
 
 class User{
@@ -34,7 +33,7 @@ class User{
     public function getPassword(){
         return $this->password;
     }
-
+    /*registratie*/
     public function save(){
         //get connection
         $conn = Db::getInstance();
@@ -65,6 +64,28 @@ class User{
         $users = $statement->fetchAll(PDO::FETCH_ASSOC);
         return $users;
     }
+
+    public function setBiography($biography){
+        $this->biography=$biography;
+    }
+
+    public function getBiography(){
+        return $this->biography;
+    }
+    /*profiel updaten*/
+    public function updateProfile(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("UPDATE users SET biography = :biography WHERE email = :email");
+        $statement->bindValue(":biography", $this->getBiography());
+        $statement->bindValue(":email", $this->getEmail());
+        $statement->execute();
+    }
+    /*Denkwijze profile edits weergeven ~ Sarah 
+    getuserdetails
+    select * users where email = $email
+    bindvalue van email set email
+    username ophalen met session */
+    
     //CODE YADINA MAIL - STAAT HIER RANDOM WANT WEET DE PLEK NIET NA OOP OMVORMING IN SIGNUP ~ Sarah
     /*  
         require 'vendor/autoload.php';
