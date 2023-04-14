@@ -1,6 +1,7 @@
 <?php 
 function canLogin($username, $password){
-  $conn = new PDO('mysql:host=localhost;dbname=demo', "root", "");
+  require_once 'classes/Db.php'; // Include the file containing the definition of the Db class
+  $conn = Db::getInstance(); // Create an instance of the Db class
   $statement = $conn->prepare("select * from users where email= :email");
   $statement->bindValue(":email", $username);
   $statement->execute();
@@ -30,8 +31,8 @@ if(!empty($_POST)){
     $_SESSION['username'] = $username;
 
     if ($rememberMe) {
-      // Store the value in the database or use it for further processing
-      // ...
+      // Store the value in a cookie
+      setcookie("remember_me", "1", time() + (86400 * 30), "/"); // 30 days expiration time
     }
 
     header("Location: dashboard.php");
@@ -41,6 +42,7 @@ if(!empty($_POST)){
   }
 }
 ?>
+
 
 
 <!DOCTYPE html>
@@ -77,14 +79,9 @@ if(!empty($_POST)){
     <a href="#" class="loggedIn">
      <?php if(isset($_SESSION['username'])): ?>
       <h3 class="user--name"><?php echo $_SESSION['username']; ?></h3>
-      <php else: ?>
-
-      <h3 class="user--name">Username here</h3>
       <?php endif; ?>
 
-      <span class="user--status">Naam user</span>
     </a>
-    <a href="logout.php">Log out?</a>
   </nav>    
 </header>
 
