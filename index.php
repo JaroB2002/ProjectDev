@@ -1,17 +1,16 @@
 <?php 
 function canLogin($username, $password){
-  // var_dump($password);
-  $conn = new pDO('mysql:host=localhost;dbname=demo', "root", "");
+  require_once 'classes/Db.php'; // Include the file containing the definition of the Db class
+  $conn = Db::getInstance(); // Create an instance of the Db class
   $statement = $conn->prepare("select * from users where email= :email");
   $statement->bindValue(":email", $username);
   $statement->execute();
-  $user = $statement->fetchAll();
-  var_dump($user);
+  $user = $statement->fetch(PDO::FETCH_ASSOC); // Fetch as associative array
   if(!$user){
     return false;
   }  
 
-  $hash =  $user['0']['password'];
+  $hash = $user['password'];
 
   if(password_verify($password, $hash) ){
     return true;
@@ -24,20 +23,26 @@ if(!empty($_POST)){
   //er is verzonden
   $username= $_POST['username'];
   $password= $_POST['password'];
+  $rememberMe = isset($_POST['remember-me']) ? true : false; // Check if the checkbox is checked
 
   if(canLogin($username, $password)){
     //inloggen
     session_start();
     $_SESSION['username'] = $username;
+
+    if ($rememberMe) {
+      // Store the value in a cookie
+      setcookie("remember_me", "1", time() + (86400 * 30), "/"); // 30 days expiration time
+    }
+
     header("Location: dashboard.php");
   } else{
     //error
     $error = true;
   }
 }
-  //var_dump($_POST);
-
 ?>
+
 
 
 <!DOCTYPE html>
@@ -74,14 +79,9 @@ if(!empty($_POST)){
     <a href="#" class="loggedIn">
      <?php if(isset($_SESSION['username'])): ?>
       <h3 class="user--name"><?php echo $_SESSION['username']; ?></h3>
-      <php else: ?>
-
-      <h3 class="user--name">Username here</h3>
       <?php endif; ?>
 
-      <span class="user--status">Naam user</span>
     </a>
-    <a href="logout.php">Log out?</a>
   </nav>    
 </header>
 
