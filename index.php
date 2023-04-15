@@ -1,12 +1,13 @@
 <?php 
 function canLogin($username, $password){
   // var_dump($password);
-  $conn = new pDO('mysql:host=localhost;dbname=demo', "root", "");
+  $conn = new pDO('mysql:host=localhost;dbname=demo', "root", "root");
   $statement = $conn->prepare("select * from users where email= :email");
   $statement->bindValue(":email", $username);
   $statement->execute();
   $user = $statement->fetchAll();
   var_dump($user);
+
   if(!$user){
     return false;
   }  
@@ -36,7 +37,6 @@ if(!empty($_POST)){
   }
 }
   //var_dump($_POST);
-
 ?>
 
 

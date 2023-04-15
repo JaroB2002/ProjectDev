@@ -25,8 +25,9 @@
 </body>
 </html>
 
-
 <?php
+// START DELETE ACCOUNT CODE
+
 // Establish database connection
 $conn = new PDO('mysql:host=localhost;dbname=demo', 'root', '');
 
@@ -86,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 
-
+// START PROFILE PICTURE CODE
 
 <?php
 // Establish database connection
@@ -106,19 +107,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if(!array_key_exists($ext, $allowed)) die("Error: Please select a valid file format.");
 
         // Verify file size - 5MB maximum
-        $maxsize = 5 * 1024 * 1024;
+        $maxsize = 10 * 1024 * 1024; // 10MB
         if($filesize > $maxsize) die("Error: File size is larger than the allowed limit.");
 
         // Verify MYME type of the file
         if(in_array($filetype, $allowed)){
             // Check if file exists
             if(file_exists("upload/" . $_FILES["profile_picture"]["name"])){
-                echo $_FILES["profile_picture"]["name"] . " is already exists.";
+                // Remove the line that displays the error message for existing file
+                // echo $_FILES["profile_picture"]["name"] . " is already exists.";
             } else{
                 $user_id = $_POST['user_id'];
                 $stmt = $conn->prepare("UPDATE profile_pictures SET filename = :filename WHERE user_id = :user_id");
                 $stmt->bindParam(':user_id', $user_id);
                 $stmt->bindParam(':filename', $filename);
+                $button_text = "Upload";
+
                 if($stmt->execute()){
                     move_uploaded_file($_FILES["profile_picture"]["tmp_name"], "upload/" . $_FILES["profile_picture"]["name"]);
                     echo "Your profile picture was uploaded successfully.";
@@ -128,11 +132,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         } else{
-            echo "Error: There was a problem uploading your file. Please try again."; 
+            echo "Error: Please select a valid file format.";
         }
     } else{
         echo "Error: " . $_FILES["profile_picture"]["error"];
     }
+    // delete profile picture
+// Delete profile picture
+if(isset($_POST['delete_profile_picture'])){
+    // Get user ID
+    $user_id = $_POST['user_id'];
+
+    // Fetch the filename of the profile picture from the database
+    $stmt = $conn->prepare("SELECT filename FROM profile_pictures WHERE user_id = :user_id");
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $filename = $row['filename'];
+
+    // Delete the profile picture file from the server
+    $file_path = "upload/" . $filename;
+    if(file_exists($file_path)){
+        unlink($file_path);
+    }
+
+    // Update the filename in the database to empty string or null, depending on your database schema
+    $stmt = $conn->prepare("UPDATE profile_pictures SET filename = '' WHERE user_id = :user_id");
+    $stmt->bindParam(':user_id', $user_id);
+    if($stmt->execute()){
+        echo "Your profile picture was deleted successfully.";
+        header("Refresh:2");
+    } else {
+        echo "Error: There was a problem deleting your file. Please try again."; 
+    }
+}
 }
 
 // Get user's profile picture filename
@@ -141,15 +174,21 @@ $stmt = $conn->prepare("SELECT filename FROM profile_pictures WHERE user_id = :u
 $stmt->bindParam(':user_id', $user_id);
 $stmt->execute();
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
-$filename = $row['filename'];
+if (isset($_FILES["profile_picture"]["error"]) && $_FILES["profile_picture"]["error"] !== false) {
+    echo "Error: " . $_FILES["profile_picture"]["error"];
+} else {
+    echo "Error: There was a problem uploading your file. Please try again."; 
+}
 ?>
 
 <!-- Display user's profile picture -->
 <img src="upload/<?php echo $filename; ?>" alt="Profile Picture">
+<img src="delete/<?php echo $filename; ?>" alt="Delete Picture">
 
 <!-- Form to upload profile picture -->
 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
     <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
     <input type="file" name="profile_picture">
     <input type="submit" value="Upload">
+    <input type="submit" value="Delete"> 
 </form>
