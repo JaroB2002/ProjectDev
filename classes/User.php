@@ -1,5 +1,4 @@
 <?php
-//include_once(__DIR__ . "/Db.php");
 include_once("bootstrap.php");
 
 class User{
@@ -34,7 +33,7 @@ class User{
     public function getPassword(){
         return $this->password;
     }
-
+    /*registratie*/
     public function save(){
         //get connection
         $conn = Db::getInstance();
@@ -65,13 +64,13 @@ class User{
         $users = $statement->fetchAll(PDO::FETCH_ASSOC);
         return $users;
     }
-
+    
     public function sendMail(){
         $config = parse_ini_file('config/config.ini', true);
         $key = $config['keys']['SENDGRID_API_KEY'];
         //var_dump($key);
-
-        require 'vendor/autoload.php';
+        
+         require 'vendor/autoload.php';
         $email = new \SendGrid\Mail\Mail();
         $email->setFrom("r0784273@student.thomasmore.be", "Fred Kroket");
         $email->setSubject("Sending with Twilio SendGrid is Fun");
@@ -97,4 +96,27 @@ class User{
             echo 'Caught exception: '. $e->getMessage() ."\n";
         }
     }
+
+
+    public function setBiography($biography){
+        $this->biography=$biography;
+    }
+
+    public function getBiography(){
+        return $this->biography;
+    }
+    /*profiel updaten*/
+    public function updateProfile(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("UPDATE users SET biography = :biography WHERE email = :email");
+        $statement->bindValue(":biography", $this->getBiography());
+        $statement->bindValue(":email", $this->getEmail());
+        $statement->execute();
+    }
+    /*Denkwijze profile edits weergeven ~ Sarah 
+    getuserdetails
+    select * users where email = $email
+    bindvalue van email set email
+    username ophalen met session */  
+       
 }
