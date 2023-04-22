@@ -1,5 +1,4 @@
 <?php
-//include_once(__DIR__ . "/Db.php");
 include_once("bootstrap.php");
 
 class User{
@@ -34,7 +33,7 @@ class User{
     public function getPassword(){
         return $this->password;
     }
-
+    /*registratie*/
     public function save(){
         //get connection
         $conn = Db::getInstance();
@@ -66,12 +65,36 @@ class User{
         return $users;
     }
 
+    /*login*/
+    /*public function canLogin($username, $password){
+        $conn = Db::getInstance(); // Create an instance of the Db class
+        $statement = $conn->prepare("select email and password from users where email= :email and password = :password");
+        $statement->bindValue(":email", $this->getEmail());
+        $statement->bindValue(":password", $this->getPassword());
+        $statement->execute();
+        $user = $statement->fetch(PDO::FETCH_ASSOC); // Fetch as associative array
+        if(!$user){
+            throw new Exception('this did not work');
+        }  
+      
+        $hash = $user[$this->getPassword()];
+      
+        if(password_verify($password, $hash) ){
+          return true;
+        } else{
+          return false;
+        }
+    }*/
+
+    /*Email versturen*/
     public function sendMail(){
         $config = parse_ini_file('config/config.ini', true);
         $key = $config['keys']['SENDGRID_API_KEY'];
         //var_dump($key);
 
         require 'vendor/autoload.php';
+        
+         require 'vendor/autoload.php';
         $email = new \SendGrid\Mail\Mail();
         $email->setFrom("r0784273@student.thomasmore.be", "Fred Kroket");
         $email->setSubject("Sending with Twilio SendGrid is Fun");
@@ -95,6 +118,43 @@ class User{
 
         } catch (Exception $e) {
             echo 'Caught exception: '. $e->getMessage() ."\n";
+        }
+    }
+
+    public function setBiography($biography){
+        $this->biography=$biography;
+    }
+
+    public function getBiography(){
+        return $this->biography;
+    }
+    /*profiel updaten*/
+    public function updateProfile(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("UPDATE users SET biography = :biography WHERE email = :email");
+        $statement->bindValue(":biography", $this->getBiography());
+        $statement->bindValue(":email", $this->getEmail());
+        $statement->execute();
+    }
+    /*Denkwijze profile edits weergeven ~ Sarah 
+    getuserdetails
+    select * users where email = $email
+    bindvalue van email set email
+    username ophalen met session */  
+
+    public function isAdmin(){
+        $conn = Db::getInstance();
+        $username = $_SESSION['username'];
+        
+        $statement = $conn->prepare("select * from users where is_admin = :is_admin and email = :email");
+        $statement->bindValue(":is_admin", 1);
+        $statement->bindValue(":email", $username); 
+        $statement->execute();
+        $admins = $statement->fetchAll(PDO::FETCH_ASSOC);
+        //var_dump($admins);
+        //als array leeg is is die persoon geen admin dus mag die niet opdeze pagina
+        if (empty($admins)) {
+            header("Location: dashboard.php");
         }
     }
 }
