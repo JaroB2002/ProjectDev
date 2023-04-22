@@ -141,6 +141,15 @@ class Prompt{
         return $prompts;
     }
 
+    public static function getAllUnapproved(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("select * from prompts where approved = :approved");
+        $statement->bindValue(":approved", 0);        
+        $statement->execute();
+        $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $prompts;
+    }
+
     /*public function setPromptById($promptId){
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT id FROM prompts WHERE id = :promptId");
