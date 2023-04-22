@@ -64,7 +64,29 @@ class User{
         $users = $statement->fetchAll(PDO::FETCH_ASSOC);
         return $users;
     }
-    
+
+    /*login*/
+    /*public function canLogin($username, $password){
+        $conn = Db::getInstance(); // Create an instance of the Db class
+        $statement = $conn->prepare("select email and password from users where email= :email and password = :password");
+        $statement->bindValue(":email", $this->getEmail());
+        $statement->bindValue(":password", $this->getPassword());
+        $statement->execute();
+        $user = $statement->fetch(PDO::FETCH_ASSOC); // Fetch as associative array
+        if(!$user){
+            throw new Exception('this did not work');
+        }  
+      
+        $hash = $user[$this->getPassword()];
+      
+        if(password_verify($password, $hash) ){
+          return true;
+        } else{
+          return false;
+        }
+    }*/
+
+    /*Email versturen*/
     public function sendMail(){
         $config = parse_ini_file('config/config.ini', true);
         $key = $config['keys']['SENDGRID_API_KEY'];
@@ -97,7 +119,6 @@ class User{
         }
     }
 
-
     public function setBiography($biography){
         $this->biography=$biography;
     }
@@ -118,5 +139,5 @@ class User{
     select * users where email = $email
     bindvalue van email set email
     username ophalen met session */  
-       
+
 }
