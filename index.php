@@ -138,3 +138,33 @@ if(!empty($_POST)){
   
 </body>
 </html>
+
+<!--if(!empty($_POST)){
+    try{
+      //er is verzonden
+      $user = new User();
+      $user->setEmail($_POST["email"]);
+      $user->setPassword($_POST["password"]);
+      $user->canLogin();
+
+      $rememberMe = isset($_POST['remember-me']) ? true : false; // Check if the checkbox is checked
+
+      if($user->canLogin()){
+        //inloggen
+        session_start();
+        $_SESSION['username'] = $username;
+    
+        if ($rememberMe) {
+          // Store the value in a cookie
+          setcookie("remember_me", "1", time() + (86400 * 30), "/"); // 30 days expiration time
+        }
+    
+        header("Location: dashboard.php");
+      } 
+    }
+    catch (Throwable $e){
+      $error = $e->getMessage();
+    }
+  }
+
+  var_dump($e);!>

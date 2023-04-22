@@ -2,11 +2,42 @@
     include_once("bootstrap.php");
    //alleen admin logt in op deze pagina
     session_start();
+    $admin = new User();
+    $admin->isAdmin();
 
     //prompts printen
     $allPrompts = Prompt::getAllUnapproved();
     //var_dump($allPrompts);
 
+    if(isset($_GET["approve"])){
+        var_dump("😍");
+        $conn = Db::getInstance();
+        $statement = $conn->prepare('update prompts set approved = :approve where id = :id');
+        $statement->bindValue(':approve', 1);
+        $statement->bindValue(":id", $_GET["approve"]);
+        $statement->execute();
+         // Remove the prompt from the $allPrompts array
+         foreach ($allPrompts as $key => $prompt) {
+            if ($prompt["id"] == $_GET["approve"]) {
+                unset($allPrompts[$key]);
+                break;
+            }
+        }
+    }
+
+    if(isset($_GET["disapprove"])){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare('delete from prompts where id = :id');
+        $statement->bindValue(":id", $_GET["disapprove"]);
+        $statement->execute();
+        // Remove the prompt from the $allPrompts array
+        foreach ($allPrompts as $key => $prompt) {
+            if ($prompt["id"] == $_GET["disapprove"]) {
+                unset($allPrompts[$key]);
+                break;
+            }
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -27,6 +58,10 @@
                 <p> <strong>description: </strong> <?php echo $prompt["description"];?></p>
                 <p> <strong>type: </strong> <?php echo $prompt["type"]?> <strong>price: </strong> <?php echo $prompt["price"];?></p>
             </div>
+            <form action="">
+                <button type="submit" name="approve" value="<?php echo $prompt['id']; ?>">Approve</button>
+                <button type="submit" name="disapprove" value="<?php echo $prompt['id']; ?>">disapprove</button>
+            </form>
         <?php endforeach; ?>
     </article>
 </body>

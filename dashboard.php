@@ -29,7 +29,7 @@
 // START DELETE ACCOUNT CODE
 
 // Establish database connection
-$conn = new PDO('mysql:host=localhost;dbname=demo', 'root', '');
+$conn = new PDO('mysql:host=localhost;dbname=demo', 'root', 'root');
 
 // Check if form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <?php
 // Establish database connection
-$conn = new PDO('mysql:host=localhost;dbname=demo', 'root', '');
+$conn = new PDO('mysql:host=localhost;dbname=demo', 'root', 'root');
 
 // Check if form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
