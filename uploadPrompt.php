@@ -74,9 +74,9 @@ if(!empty($_POST)){
     <div>
         <p>Name: <?php echo htmlspecialchars($name); ?></p>
         <p>Description: <?php echo htmlspecialchars($description); ?></p>
-        <p>Image: <?php echo htmlspecialchars($image); ?></p>
+        <img src="<?php echo htmlspecialchars($image); ?>" alt="input image">
         <p>Type: <?php echo htmlspecialchars($type); ?></p>
         <p>Price: € <?php echo htmlspecialchars($price); ?></p>
     </div>
-    <p> <?php echo $succes?></p>
+    <p><?php echo $succes?></p>
 </body>
