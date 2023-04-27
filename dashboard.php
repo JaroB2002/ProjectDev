@@ -12,6 +12,18 @@ include_once("bootstrap.php");
     }
     
     $allApprovedPrompts = Prompt::getAllApproved();
+
+    if(!empty($_POST["search"])){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM `prompts` WHERE name LIKE CONCAT('%', :title, '%')");
+        $statement->bindValue(":title", $_POST["search"]);
+        $statement->execute();
+        $search = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        if (empty($search)) {
+            echo "No results found.";
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -22,11 +34,27 @@ include_once("bootstrap.php");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
 </head>
-<a href="logout.php">Log out?</a>
 
 <body>
+    <a href="logout.php">Log out?</a>
+
+    <form method="post" action="">
+        <div>
+            <input id="search" name="search" type="text" placeholder="Search">
+        </div>
+    </form>
+
     <h1>Your home</h1>
     <article>
+        <?php foreach($search as $s): ?>
+            <div>
+                <p> <strong>Name: </strong> <?php echo htmlspecialchars($s["name"]);?></p>
+                <img src="<?php echo htmlspecialchars($s["image"]); ?>" alt="input image">
+                <p> <strong>description: </strong> <?php echo htmlspecialchars($s["description"]);?></p>
+                <p> <strong>type: </strong> <?php echo htmlspecialchars($s["type"])?>  </p>
+                <p> <strong>price: </strong> <?php echo htmlspecialchars($s["price"]);?></p>
+            </div>
+        <?php endforeach; ?>
         <?php foreach($allApprovedPrompts as $prompt): ?>
             <div>
                 <p> <strong>Name: </strong> <?php echo $prompt["name"];?></p>
