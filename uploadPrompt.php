@@ -3,9 +3,9 @@ include_once("bootstrap.php");
 
 session_start();
 $username = $_SESSION['username'];
-/*if(!isset($_SESSION['username'])){
+if(!isset($_SESSION['username'])){
     header('Location: index.php');
-}*/
+}
 
 if(!empty($_POST)){
     try{
@@ -28,6 +28,7 @@ if(!empty($_POST)){
 
         $prompt->save();
         //header('Location: dashboard.php');
+        $succes="Thanks for sharing you prompt! We will be approving them as fast as possible.";
 
     } 
     catch(Throwable $e){
@@ -69,13 +70,13 @@ if(!empty($_POST)){
         <button type="submit" name="uploadPrompt">Upload prompt</button>
         </div>
     </form>
-    <h3> Thanks for sharing you prompt! We will be approving them as fast as possible. </h3>
     <p><strong>your prompt:</strong></p>
     <div>
-        <p>name: <?php echo htmlspecialchars($name); ?></p>
-        <p>description: <?php echo htmlspecialchars($description); ?></p>
-        <p>image: <?php echo htmlspecialchars($image); ?></p>
-        <p>type: <?php echo htmlspecialchars($type); ?></p>
-        <p>price: € <?php echo htmlspecialchars($price); ?></p>
+        <p>Name: <?php echo htmlspecialchars($name); ?></p>
+        <p>Description: <?php echo htmlspecialchars($description); ?></p>
+        <img src="<?php echo htmlspecialchars($image); ?>" alt="input image">
+        <p>Type: <?php echo htmlspecialchars($type); ?></p>
+        <p>Price: € <?php echo htmlspecialchars($price); ?></p>
     </div>
+    <p><?php echo $succes?></p>
 </body>
