@@ -2,7 +2,7 @@
     include_once("bootstrap.php");
    //alleen admin logt in op deze pagina
     session_start();
-    $admin = new User();
+    $admin = new Moderator();
     $admin->isAdmin();
 
     //prompts printen
