@@ -38,10 +38,11 @@ class User{
         //get connection
         $conn = Db::getInstance();
         //prepare statement
-        $statement = $conn->prepare("INSERT INTO users (email, password) VALUES (:email, :password)");
+        $statement = $conn->prepare("INSERT INTO users (email, password, is_admin) VALUES (:email, :password, :is_admin)");
         //binden
         $statement->bindValue(":email", $this->getEmail()); 
         $statement->bindValue(":password", $this->getPassword());
+        $statement->bindValue(":is_admin", 0);
         //execute
         return $statement->execute(); 
         /* ~ code van Jaro uit eerste register.php
@@ -91,10 +92,7 @@ class User{
         $config = parse_ini_file('config/config.ini', true);
         $key = $config['keys']['SENDGRID_API_KEY'];
         //var_dump($key);
-
-        require 'vendor/autoload.php';
         
-         require 'vendor/autoload.php';
         $email = new \SendGrid\Mail\Mail();
         $email->setFrom("r0784273@student.thomasmore.be", "Fred Kroket");
         $email->setSubject("Sending with Twilio SendGrid is Fun");

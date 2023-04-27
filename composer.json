@@ -1,5 +1,17 @@
 {
+    "name": "yadina/project-dev",
+    "autoload": {
+        "psr-4": {
+            "Yadina\\ProjectDev\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "YadinaM",
+            "email": "yadina.moreira@gmail.com"
+        }
+    ],
     "require": {
-      "sendgrid/sendgrid": "~7"
+        "sendgrid/sendgrid": "^8.0"
     }
-  }
+}
