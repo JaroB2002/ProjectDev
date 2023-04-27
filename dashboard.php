@@ -1,13 +1,17 @@
 <?php 
+include_once("bootstrap.php");
     session_start();
+    
     if(isset($_SESSION['username'])){
         //user is logged in
         echo "Welcome " . $_SESSION['username'];
         //queries in sql
     } else{
         //user is not logged in
-        header("location: login.php");
+        header("location: index.php");
     }
+    
+    $allApprovedPrompts = Prompt::getAllApproved();
 ?>
 
 <!DOCTYPE html>
@@ -22,6 +26,17 @@
 
 <body>
     <h1>Your home</h1>
+    <article>
+        <?php foreach($allApprovedPrompts as $prompt): ?>
+            <div>
+                <p> <strong>Name: </strong> <?php echo $prompt["name"];?></p>
+                <img src="<?php echo $prompt["image"]; ?>" alt="input image">
+                <p> <strong>description: </strong> <?php echo $prompt["description"];?></p>
+                <p> <strong>type: </strong> <?php echo $prompt["type"]?>  </p>
+                <p> <strong>price: </strong> <?php echo $prompt["price"];?></p>
+            </div>
+        <?php endforeach; ?>
+    </article>
 </body>
 </html>
 

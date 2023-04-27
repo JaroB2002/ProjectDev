@@ -52,10 +52,11 @@
     <article>
         <?php foreach($allPrompts as $prompt): ?>
             <div>
-                <p> <strong>User: </strong> <?php echo $prompt["name"];?></p>
-                <p> <strong>Image: </strong> <?php echo $prompt["image"];?></p>
+                <p> <strong>Name: </strong> <?php echo $prompt["name"];?></p>
+                <img src="<?php echo $prompt["image"]; ?>" alt="input image">
                 <p> <strong>description: </strong> <?php echo $prompt["description"];?></p>
-                <p> <strong>type: </strong> <?php echo $prompt["type"]?> <strong>price: </strong> <?php echo $prompt["price"];?></p>
+                <p> <strong>type: </strong> <?php echo $prompt["type"]?> </p>
+                <p><strong>price: </strong> <?php echo $prompt["price"];?></p>
             </div>
             <form action="">
                 <button type="submit" name="approve" value="<?php echo $prompt['id']; ?>">Approve</button>

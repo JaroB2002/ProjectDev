@@ -74,19 +74,6 @@ class Prompt{
         return $this->image;
     }
 
-    /*public function setPromptId($promptId){
-        if (empty($promptId)) {
-            throw new Exception("Prompt ID cannot be empty.");
-        }
-        else{ 
-        $this->promptId = $promptId;
-        }
-        
-    }
-    public function getPromptId(){
-        return $this->promptId;
-    }*/
-
     public function setType($type){
         if (empty($type)) {
             throw new Exception("Type cannot be empty.");
@@ -115,11 +102,8 @@ class Prompt{
 
     //prompts in databank opslaan
     public function save(){
-        //get connection
         $conn = Db::getInstance();
-        //prepare statement
         $statement = $conn->prepare("INSERT INTO prompts (name, description, email,/*user_id,*/ image, type, price, date, approved) VALUES (:name, :description, :email, /*:userId,*/ :image, :type, :price, now(), :approved)");
-        //binden
         $statement->bindValue(":name", $this->getName()); 
         $statement->bindValue(":description", $this->getDescription());
         //$statement->bindValue(":userId", $this->getUserId());
@@ -128,10 +112,9 @@ class Prompt{
         $statement->bindValue(":type", $this->getType());
         $statement->bindValue(":price", $this->getPrice());
         $statement->bindValue(":approved", 0);
-        //execute
         return $statement->execute(); 
     }
-
+    //alle prompts los van specificaties
     public static function getAll()
     {
         $conn = Db::getInstance();
@@ -140,7 +123,7 @@ class Prompt{
         $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
         return $prompts;
     }
-
+    //unapproved prompts ophalen
     public static function getAllUnapproved(){
         $conn = Db::getInstance();
         $statement = $conn->prepare("select * from prompts where approved = :approved");
@@ -149,22 +132,13 @@ class Prompt{
         $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
         return $prompts;
     }
-
-    /*public function setPromptById($promptId){
+    //tonen en chronologisch sorteren
+    public static function getAllApproved(){
         $conn = Db::getInstance();
-        $statement = $conn->prepare("SELECT id FROM prompts WHERE id = :promptId");
-        $statement->bindValue(":promptId", $promptId);
-        $promptId = $statement->execute();
-        return $promptId;
-    }*/
-   
-    //chronologisch op datum
-    public function chronologicalOrder(){
-        $conn = Db::getInstance();
-        $statement = $conn->prepare("SELECT * FROM prompts ORDER BY date DESC");
+        $statement = $conn->prepare("select * from prompts where approved = :approved order by date asc");
+        $statement->bindValue(":approved", 1);        
         $statement->execute();
         $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
         return $prompts;
     }
-
 }
