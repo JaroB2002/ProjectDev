@@ -7,8 +7,9 @@ class User{
     private $biography;
 
     public function setEmail($email){
-        if (empty($email)) {
-            throw new Exception("Email cannot be empty.");
+        if(strpos($email, '@') === false || empty($email)){
+            throw new Exception("Email is not valid.");
+            return false;
         }
         else{ 
         $this->email = $email;
@@ -20,8 +21,9 @@ class User{
     }
 
     public function setPassword($password){
-        if(empty($password)){
-            throw new Exception("Password cannot be empty.");
+        if(strlen($password) <= 5 || empty($password)){
+            throw new Exception("Password is not valid.");
+            return false;
         }
         else{
         $options = [
@@ -65,29 +67,19 @@ class User{
         return $users;
     }
 
-    /*login*/
-    /*public function canLogin($username, $password){
-        $conn = Db::getInstance(); // Create an instance of the Db class
-        $statement = $conn->prepare("select email and password from users where email= :email and password = :password");
+    /*public function checkDoubleMail(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("select count(*) from users where email = :email");
         $statement->bindValue(":email", $this->getEmail());
-        $statement->bindValue(":password", $this->getPassword());
         $statement->execute();
-        $user = $statement->fetch(PDO::FETCH_ASSOC); // Fetch as associative array
-        if(!$user){
-            throw new Exception('this did not work');
-        }  
-      
-        $hash = $user[$this->getPassword()];
-      
-        if(password_verify($password, $hash) ){
-          return true;
-        } else{
-          return false;
+        $count = $statement->fetchColumn();
+
+        if ($count > 0) {
+            echo "Error: This email already exists.";
         }
     }*/
-
     /*Email versturen*/
-    public function sendMail(){
+    /*public function sendMail(){
         $config = parse_ini_file('config/config.ini', true);
         $key = $config['keys']['SENDGRID_API_KEY'];
         //var_dump($key);
@@ -119,7 +111,7 @@ class User{
         } catch (Exception $e) {
             echo 'Caught exception: '. $e->getMessage() ."\n";
         }
-    }
+    }*/
 
     public function setBiography($biography){
         $this->biography=$biography;
@@ -136,11 +128,14 @@ class User{
         $statement->bindValue(":email", $this->getEmail());
         $statement->execute();
     }
-    /*Denkwijze profile edits weergeven ~ Sarah 
-    getuserdetails
-    select * users where email = $email
-    bindvalue van email set email
-    username ophalen met session */  
+
+    /*public static function getAllBiography(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("select max(biography) from users");
+        $statement->execute();
+        $users = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $users;
+    }*/
 
     public function isAdmin(){
         $conn = Db::getInstance();
