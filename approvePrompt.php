@@ -10,13 +10,12 @@
     //var_dump($allPrompts);
 
     if(isset($_GET["approve"])){
-        var_dump("😍");
         $conn = Db::getInstance();
         $statement = $conn->prepare('update prompts set approved = :approve where id = :id');
         $statement->bindValue(':approve', 1);
         $statement->bindValue(":id", $_GET["approve"]);
         $statement->execute();
-         // Remove the prompt from the $allPrompts array
+         // prompts uit allPrompt array halen
          foreach ($allPrompts as $key => $prompt) {
             if ($prompt["id"] == $_GET["approve"]) {
                 unset($allPrompts[$key]);
@@ -30,7 +29,7 @@
         $statement = $conn->prepare('delete from prompts where id = :id');
         $statement->bindValue(":id", $_GET["disapprove"]);
         $statement->execute();
-        // Remove the prompt from the $allPrompts array
+        // prompts uit allPrompt array halen
         foreach ($allPrompts as $key => $prompt) {
             if ($prompt["id"] == $_GET["disapprove"]) {
                 unset($allPrompts[$key]);
@@ -60,7 +59,7 @@
             </div>
             <form action="">
                 <button type="submit" name="approve" value="<?php echo $prompt['id']; ?>">Approve</button>
-                <button type="submit" name="disapprove" value="<?php echo $prompt['id']; ?>">disapprove</button>
+                <button type="submit" name="disapprove" value="<?php echo $prompt['id']; ?>">Unapprove</button>
             </form>
         <?php endforeach; ?>
     </article>
