@@ -46,23 +46,19 @@ include_once("bootstrap.php");
 
     <h1>Your home</h1>
     <article>
-        <?php foreach($search as $s): ?>
-            <div>
-                <p> <strong>Name: </strong> <?php echo htmlspecialchars($s["name"]);?></p>
-                <img src="<?php echo htmlspecialchars($s["image"]); ?>" alt="input image">
-                <p> <strong>description: </strong> <?php echo htmlspecialchars($s["description"]);?></p>
-                <p> <strong>type: </strong> <?php echo htmlspecialchars($s["type"])?>  </p>
-                <p> <strong>price: </strong> <?php echo htmlspecialchars($s["price"]);?></p>
-            </div>
-        <?php endforeach; ?>
-        <?php foreach($allApprovedPrompts as $prompt): ?>
-            <div>
-                <p> <strong>Name: </strong> <?php echo $prompt["name"];?></p>
-                <img src="<?php echo $prompt["image"]; ?>" alt="input image">
-                <p> <strong>description: </strong> <?php echo $prompt["description"];?></p>
-                <p> <strong>type: </strong> <?php echo $prompt["type"]?>  </p>
-                <p> <strong>price: </strong> <?php echo $prompt["price"];?></p>
-            </div>
+        <?php foreach ($allApprovedPrompts as $prompt): ?>
+            <?php if (empty($_POST["search"]) || stripos($prompt["name"], $_POST["search"]) !== false): ?>
+                <div>
+                    <a href="user.php?id=<?php echo $prompt["email"]; ?>">
+                        <p><strong>User:</strong> <?php echo $prompt["email"]; ?></p>
+                    </a>
+                    <p><strong>Name:</strong> <?php echo htmlspecialchars($prompt["name"]); ?></p>
+                    <img src="<?php echo htmlspecialchars($prompt["image"]); ?>" alt="input image">
+                    <p><strong>Description:</strong> <?php echo htmlspecialchars($prompt["description"]); ?></p>
+                    <p><strong>Type:</strong> <?php echo htmlspecialchars($prompt["type"]); ?></p>
+                    <p><strong>Price:</strong> <?php echo htmlspecialchars($prompt["price"]); ?></p>
+                </div>
+            <?php endif; ?>
         <?php endforeach; ?>
     </article>
 </body>
