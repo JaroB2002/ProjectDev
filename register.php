@@ -7,10 +7,8 @@
         $user->setEmail($_POST["email"]);
         $user->setPassword($_POST["password"]);
         $user->save();
-        $user->sendMail();
+        /*$user->sendMail();*/
 
-        /*session_start(); 
-        $id = $_SESSION['id'];*/
         header("Location:index.php");
       }
       catch (Throwable $e){
