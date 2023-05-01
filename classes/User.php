@@ -127,11 +127,12 @@ class User{
         $statement->execute();
     }
 
-    /*public static function getAllBiography(){
+     public function getUserDetails(){
         $conn = Db::getInstance();
-        $statement = $conn->prepare("select max(biography) from users");
+        $statement = $conn->prepare("select * from users WHERE email = :email");
+        $statement->bindValue(":email", $this->getEmail());
         $statement->execute();
-        $users = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $users = $statement->fetch(PDO::FETCH_ASSOC);
         return $users;
-    }*/
+    }
 }
