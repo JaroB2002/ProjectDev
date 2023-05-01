@@ -7,6 +7,14 @@ if(!isset($_SESSION['username'])){
     header('Location: index.php');
 }
 
+$name = "";
+$description = "";
+$email = "";
+//$image = "";
+$type = "";
+$price = "";
+$succes="";
+
 if(!empty($_POST)){
     try{
         $prompt = new Prompt();
@@ -43,40 +51,67 @@ if(!empty($_POST)){
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload prompt</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+      theme: {
+        screens: {
+            sm: '480px',
+            md: '768px',
+            lg: '1024px',
+            xl: '1280px',
+        },
+        extend: {
+          colors: {
+            fadedpurple: '#C688F4',
+            fadedblue: '#5C69AA',
+            offgrey: '#D9D9D9',
+            offblack: '#D9D9D9',
+          }
+        }
+      }
+    }
+  </script>
 </head>
 <body>
-    <h1> Share your prompt! </h1>
-    <form action="#" method="post">
-        <div>
+    <h1 class="text-4xl mx-5 font-semibold mt-7"> Share your prompt! </h1>
+    <form action="#" method="post" class="my-5 mx-5 bg-offgrey px-8 py-8 rounded max-w-sm">
+        <div class="my-2">
           <label for="name">Name</label>
-          <input id="name" name="name" type="text" placeholder="Name">
+          <input class="bg-offgrey" id="name" name="name" type="text" placeholder="Name">
         </div>
-        <div>
+        <div class="my-2">
           <label for="description">Description</label>
-          <input id="description" name="description" type="text" placeholder="Description">
+          <input class="bg-offgrey" id="description" name="description" type="text" placeholder="Description">
         </div>
-        <div>
+        <div class="my-2">
           <label for="image">Image</label>
-          <input id="image" name="image" type="text" placeholder="Image">
+          <input class="bg-offgrey" id="image" name="image" type="text" placeholder="Image">
         </div>
-        <div>
+        <div class="my-2">
           <label for="type">Type</label>
-          <input id="type" name="type" type="text" placeholder="Type">
-        </div>
+          <input class="bg-offgrey" id="type" name="type" type="text" placeholder="Type">
+          <!--<input type="checkbox" name="type[]" value="lineart"> Line art <br>
+          <input type="checkbox" name="type[]" value="cartoon"> Cartoon <br>
+          <input type="checkbox" name="type[]" value="realistic"> Realistic <br>-->
+        </div class="my-2">
             <label for="price">Price</label>
-            <input id="price" name="price" type="text" placeholder="Price">
+            <input class="bg-offgrey" id="price" name="price" type="text" placeholder="Price">
         </div>
-        <div>
-        <button type="submit" name="uploadPrompt">Upload prompt</button>
+        <div class="my-2">
+        <button class="bg-fadedpurple px-5 py-3 mt-5 rounded font-semibold" type="submit" name="uploadPrompt">Upload prompt</button>
         </div>
     </form>
-    <p><strong>your prompt:</strong></p>
-    <div>
-        <p>Name: <?php echo htmlspecialchars($name); ?></p>
-        <p>Description: <?php echo htmlspecialchars($description); ?></p>
-        <img src="<?php echo htmlspecialchars($image); ?>" alt="input image">
-        <p>Type: <?php echo htmlspecialchars($type); ?></p>
-        <p>Price: € <?php echo htmlspecialchars($price); ?></p>
-    </div>
-    <p><?php echo $succes?></p>
+    <article class="my-5 mx-5 bg-offgrey px-8 py-8 rounded max-w-sm">
+        <h2 class="text-2xl font-semibold">Your prompt:</h2>
+        <div>
+            <p class="my-2">Name: <?php echo htmlspecialchars($name); ?></p>
+            <p class="my-2">Description: <?php echo htmlspecialchars($description); ?></p>
+            <img class="my-2" src="<?php echo htmlspecialchars($image); ?>" alt="input image">
+            <p class="my-2">Type: <?php echo htmlspecialchars($type); ?></p>
+            <p class="my-2">Price: € <?php echo htmlspecialchars($price); ?></p>
+        </div>
+        <p class="font-semibold text-fadedblue"><?php echo $succes?></p>
+    </article>
 </body>
