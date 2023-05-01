@@ -12,7 +12,7 @@ include_once("bootstrap.php");
     }
     
     $allApprovedPrompts = Prompt::getAllApproved();
-
+    
     if(!empty($_POST["search"])){
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT * FROM `prompts` WHERE name LIKE CONCAT('%', :title, '%')");
@@ -21,6 +21,17 @@ include_once("bootstrap.php");
         $search = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         if (empty($search)) {
+            echo "No results found.";
+        }
+    }
+    if(!empty($_POST["type[]"])){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM `prompts` WHERE type LIKE CONCAT('%', :type, '%')");
+        $statement->bindValue(":type", $_POST["type[]"]);
+        $statement->execute();
+        $type = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        if (empty($type)) {
             echo "No results found.";
         }
     }
@@ -37,17 +48,34 @@ include_once("bootstrap.php");
 
 <body>
     <a href="logout.php">Log out?</a>
-
+    <!--search-->
     <form method="post" action="">
         <div>
-            <input id="search" name="search" type="text" placeholder="Search">
+            <h2>Filter on title</h2>
+            <input id="search" name="search" type="text" placeholder="Search by title">
         </div>
     </form>
-
+    <!--filter paid/free-->
+    <form method="post" action="">
+        <div>
+            <h2>Filter on price</h2>
+            <input type="checkbox" name="price" value="paid">Paid
+            <input type="checkbox" name="price" value="free">Free
+        </div>
+    </form>
+    <!--filter type checkboxes-->	
+    <form method="post" action="">
+        <div>
+            <h2>Filter on type</h2>
+            <input type="checkbox" name="type" value="text">Line art
+            <input type="checkbox" name="type" value="text">Realistic
+            <input type="checkbox" name="type" value="video">Cartoon
+        </div>
+    </form>
     <h1>Your home</h1>
     <article>
         <?php foreach ($allApprovedPrompts as $prompt): ?>
-            <?php if (empty($_POST["search"]) || stripos($prompt["name"], $_POST["search"]) !== false): ?>
+            <?php if (empty($_POST["search"]) || stripos($prompt["name"], $_POST["search"]) !== false):?>
                 <div>
                     <a href="user.php?id=<?php echo $prompt["email"]; ?>">
                         <p><strong>User:</strong> <?php echo $prompt["email"]; ?></p>

@@ -4,9 +4,7 @@ class Prompt{
     private $name; 
     private $description;
     private $email;
-    //private $userId;
     private $image;
-    //private $promptId;
     private $type;
     private $price;
 
@@ -48,18 +46,6 @@ class Prompt{
     public function getEmail(){
         return $this->email;
     }
-    /*public function setUserId($userId){
-        if (empty($userId)) {
-            throw new Exception("User ID cannot be empty.");
-        }
-        else{ 
-        $this->userId = $userId;
-        }
-        
-    }
-    public function getUserId(){
-        return $this->userId;
-    }*/
 
     public function setImage($image){
         if (empty($image)) {
@@ -103,10 +89,9 @@ class Prompt{
     //prompts in databank opslaan
     public function save(){
         $conn = Db::getInstance();
-        $statement = $conn->prepare("INSERT INTO prompts (name, description, email,/*user_id,*/ image, type, price, date, approved) VALUES (:name, :description, :email, /*:userId,*/ :image, :type, :price, now(), :approved)");
+        $statement = $conn->prepare("INSERT INTO prompts (name, description, email, image, type, price, date, approved) VALUES (:name, :description, :email, :image, :type, :price, now(), :approved)");
         $statement->bindValue(":name", $this->getName()); 
         $statement->bindValue(":description", $this->getDescription());
-        //$statement->bindValue(":userId", $this->getUserId());
         $statement->bindValue(":email", $this->getEmail());
         $statement->bindValue(":image", $this->getImage());
         $statement->bindValue(":type", $this->getType());
@@ -141,4 +126,22 @@ class Prompt{
         $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
         return $prompts;
     }
+
+    public static function filterByPaid(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("select * from prompts where price > 0");
+        $statement->execute();
+        $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $prompts;
+    }
+
+    public static function filterByType($type){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("select * from prompts where type like :type");
+        $statement->bindValue(":type", "%$type%");
+        $statement->execute();
+        $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $prompts;
+    }
+
 }
