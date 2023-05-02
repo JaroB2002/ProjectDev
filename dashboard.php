@@ -138,15 +138,12 @@ include_once("bootstrap.php");
 </html>
 
 <?php
-// START DELETE ACCOUNT CODE
-
-// Establish database connection
-$conn = new PDO('mysql:host=localhost;dbname=demo', 'root', 'root');
+$conn = Db::getInstance();
 
 // Check if form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get email from form input
-    $email = $_POST['email'];
+    // Validate and sanitize email input to prevent SQL injection
+    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 
     // Get user data from database
     $stmt = $conn->prepare('SELECT * FROM users WHERE email = :email');
@@ -159,16 +156,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Account not found.";
     } else {
         // Confirm user's identity
-        if ($_POST['confirm_delete'] != $user['email']) {
+        $confirm = filter_input(INPUT_POST, 'confirm_delete', FILTER_SANITIZE_EMAIL);
+        if ($confirm != $user['email']) {
             echo "Email confirmation does not match.";
         } else {
             // Delete all data related to user
             $stmt = $conn->prepare('DELETE FROM users WHERE email = :email');
             $stmt->bindParam(':email', $email);
             $stmt->execute();
+
             // Confirm deletion
             if ($stmt->rowCount() > 0) {
-                echo "Account was deleted.";
+                // Log out user and redirect to index.php
+                session_start();
+                session_unset();
+                session_destroy();
+                header("Location: index.php");
+                exit();
             } else {
                 echo "Account was not deleted.";
             }
@@ -183,10 +187,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <label for="email">Email:</label>
   <input type="email" name="email" required>
   <br>
-  <label for="confirm_delete">Type your email address to confirm:</label>
+  <label for="confirm_delete">Confirm your email address:</label>
   <input type="email" name="confirm_delete" required>
   <br>
-  <p>By clicking the button below, you will permanently delete your account and all associated data.</p>
+  <p>To delete your account, type "delete my account" below:</p>
+  <input type="text" name="delete_confirmation" required>
+  <br>
   <button type="submit" name="delete_account" onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">Delete Account</button>
 </form>
 
