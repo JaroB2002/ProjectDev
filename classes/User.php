@@ -147,8 +147,8 @@ class User{
         $admins = $statement->fetchAll(PDO::FETCH_ASSOC);
         //var_dump($admins);
         //als array leeg is is die persoon geen admin dus mag die niet opdeze pagina
-        //if (empty($admins)) {
-            //header("Location: dashboard.php");
-        //}
+        if (empty($admins)) {
+            header("Location: dashboard.php");
+        }
     }
 }
