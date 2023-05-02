@@ -7,18 +7,13 @@
 
     //approve prompts
     if(isset($_GET["approve"])){
-        $conn = Db::getInstance();
-        $statement = $conn->prepare('update prompts set approved = :approve where id = :id');
-        $statement->bindValue(':approve', 1);
-        $statement->bindValue(":id", $_GET["approve"]);
-        $statement->execute();         
+        $approve = new Moderator();
+        $approve->approvePrompt();         
     }
 
     if(isset($_GET["disapprove"])){
-        $conn = Db::getInstance();
-        $statement = $conn->prepare('delete from prompts where id = :id');
-        $statement->bindValue(":id", $_GET["disapprove"]);
-        $statement->execute();
+        $unapprove = new Moderator();
+        $unapprove->unapprovePrompt();
     }
 
     //prompts printen
