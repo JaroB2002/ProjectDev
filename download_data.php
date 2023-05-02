@@ -1,7 +1,12 @@
 <?php
 // Establish database connection
+// ik moet connectie linken met database, van de database die ik heb gemaakt van Bootstrap.php
+include_once("bootstrap.php");
+
+
+
 try {
-  $conn = new PDO('mysql:host=localhost;dbname=demo', 'root', '');
+  $conn = Db::getInstance();
 } catch (PDOException $e) {
   // handle connection error
   die('Connection failed: ' . $e->getMessage());
