@@ -103,15 +103,5 @@ if(!empty($_POST)){
         <button class="bg-fadedpurple px-5 py-3 mt-5 rounded font-semibold" type="submit" name="uploadPrompt">Upload prompt</button>
         </div>
     </form>
-    <article class="my-5 mx-5 bg-offgrey px-8 py-8 rounded max-w-sm">
-        <h2 class="text-2xl font-semibold">Your prompt:</h2>
-        <div>
-            <p class="my-2">Name: <?php echo htmlspecialchars($name); ?></p>
-            <p class="my-2">Description: <?php echo htmlspecialchars($description); ?></p>
-            <img class="my-2" src="<?php echo htmlspecialchars($image); ?>" alt="input image">
-            <p class="my-2">Type: <?php echo htmlspecialchars($type); ?></p>
-            <p class="my-2">Price: € <?php echo htmlspecialchars($price); ?></p>
-        </div>
-        <p class="font-semibold text-fadedblue"><?php echo $succes?></p>
-    </article>
+    <p class="font-semibold text-fadedblue mx-5 text-xl"><?php echo $succes?></p>
 </body>
