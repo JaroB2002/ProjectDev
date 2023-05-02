@@ -3,11 +3,9 @@ include_once("bootstrap.php");
     session_start();
     
     //niet via url binnen raken
-    if(isset($_SESSION['username'])){
-        echo "Welcome " . $_SESSION['username'];
-    } else{
+    if(!isset($_SESSION['username'])){
         header("location: index.php");
-    }
+    } 
     //price filter
     if(!empty($_GET['price'])){
         $pricing = $_GET['price'];
@@ -71,8 +69,9 @@ include_once("bootstrap.php");
           colors: {
             fadedpurple: '#C688F4',
             fadedblue: '#5C69AA',
-            offgrey: '#D9D9D9',
-            offblack: '#D9D9D9',
+            offgrey: '#fdfcfd',
+            offblack: '#313639',
+            offwhite: '#f9f9f9'
           }
         }
       }
@@ -81,7 +80,17 @@ include_once("bootstrap.php");
 </head>
 
 <body class="mx-10">
-    <a href="logout.php" class="font-semibold text-xl">Log out?</a>
+    <nav class="relative container mx-auto p-6 bg-offwhite rounded-md">
+    <div class="flex items-center justify-between">
+        <div class=" md:flex space-x-6">
+            <a href="dashboard.php" class="text-lg font-bold hover:text-fadedpurple">Home</a>
+            <a href="editprofile.php" class="text-lg font-bold hover:text-fadedpurple">Profile</a>
+            <a href="uploadPrompt.php" class="text-lg font-bold hover:text-fadedpurple">Upload</a>
+        </div>
+        <a href="logout.php" class="hidden md:block p-3 px-6 pt-2 text-white bg-fadedpurple rounded-full baseline font-semibold text-lg">Log out</a>
+    </div>
+    </nav>
+    <h1 class="text-4xl font-semibold">Homepage</h1>
     <!--search-->
     <form method="get" action=""> <!--veranderd nr get-->
         <div>
@@ -98,7 +107,7 @@ include_once("bootstrap.php");
             </select>
         </div>
         <div class="mr-10">
-            <h2 class="text-xl font-semibold mt-7 mb-2">Illustration type</h2>
+            <h2 class="text-xl font-semibold mt-7 mb-2">Category</h2>
             <select name="type">
                 <option value="all">All</option>
                 <option value="lineArt">Line art</option>
@@ -116,21 +125,21 @@ include_once("bootstrap.php");
         </div>
         </article>
         <div>
-            <button class="bg-fadedpurple px-5 py-3 mt-5 rounded font-semibold text-2xl" type="submit" value="Search">Search</button>
+            <button class="bg-fadedblue text-white px-5 py-2 mt-5 rounded font-semibold text-lg" type="submit" value="Search">Search</button>
         </div>
     </form>
-    <h1>Your home</h1>
-    <article>
+    <h2 class="text-3xl font-semibold mt-5">Prompt overview</h2>
+    <article class="flex flex-wrap">
         <?php foreach ($filter as $prompt): ?>
-                <div>
+                <div class="my-5 bg-offblack mr-10 px-8 py-8 rounded max-w-sm">
+                    <h3 class="font-semibold text-xl text-fadedpurple"><?php echo htmlspecialchars($prompt["name"]); ?></h3>
                     <a href="user.php?id=<?php echo $prompt["email"]; ?>">
-                        <p><strong>User:</strong> <?php echo $prompt["email"]; ?></p>
+                        <p class="mb-5 text-lg text-offwhite hover:text-fadedpurple"><strong>User:</strong> <?php echo $prompt["email"]; ?></p>
                     </a>
-                    <p><strong>Name:</strong> <?php echo htmlspecialchars($prompt["name"]); ?></p>
-                    <img src="<?php echo htmlspecialchars($prompt["image"]); ?>" alt="input image">
-                    <p><strong>Description:</strong> <?php echo htmlspecialchars($prompt["description"]); ?></p>
-                    <p><strong>Type:</strong> <?php echo htmlspecialchars($prompt["type"]); ?></p>
-                    <p><strong>Price:</strong> <?php echo htmlspecialchars($prompt["price"]); ?></p>
+                    <img class="mb-5" src="<?php echo htmlspecialchars($prompt["image"]); ?>" alt="input image">
+                    <p class="mb-3 text-lg text-offwhite"><strong>Description:</strong> <?php echo htmlspecialchars($prompt["description"]); ?></p>
+                    <p class="mb-3 text-lg text-offwhite"><strong>Type:</strong> <?php echo htmlspecialchars($prompt["type"]); ?></p>
+                    <p class="mb-3 text-lg text-offwhite"><strong>Price:</strong> <?php echo htmlspecialchars($prompt["price"]); ?></p>
                 </div>
         <?php endforeach; ?>
     </article>
