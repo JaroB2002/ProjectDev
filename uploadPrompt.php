@@ -20,7 +20,6 @@ if(!empty($_POST)){
         $prompt = new Prompt();
         $prompt->setName($_POST['name']);
         $prompt->setDescription($_POST['description']);
-        //$prompt->setUserId($username); //$prompt->setUserId($_SESSION['id']);
         $prompt->setEmail($username);
         $prompt->setImage($_POST['image']);
         $prompt->setType($_POST['type']);
@@ -28,7 +27,6 @@ if(!empty($_POST)){
 
         $name = $prompt->getName();
         $description = $prompt->getDescription();
-        //$userId = $prompt->getUserId();
         $email = $prompt->getEmail();
         $image = $prompt->getImage();
         $type = $prompt->getType();
@@ -92,9 +90,9 @@ if(!empty($_POST)){
         <div class="my-2">
           <label for="type">Type</label>
           <input class="bg-offgrey" id="type" name="type" type="text" placeholder="Type">
-          <!--<input type="checkbox" name="type[]" value="lineart"> Line art <br>
-          <input type="checkbox" name="type[]" value="cartoon"> Cartoon <br>
-          <input type="checkbox" name="type[]" value="realistic"> Realistic <br>-->
+          <!--<input type="checkbox" name="type[]" value="text"> Line art <br>
+          <input type="checkbox" name="type[]" value="text"> Cartoon <br>
+          <input type="checkbox" name="type[]" value="text"> Realistic <br>-->
         </div class="my-2">
             <label for="price">Price</label>
             <input class="bg-offgrey" id="price" name="price" type="text" placeholder="Price">
