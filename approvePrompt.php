@@ -2,41 +2,22 @@
     include_once("bootstrap.php");
    //alleen admin logt in op deze pagina
     session_start();
-    $admin = new Moderator();
+    $admin = new User();
     $admin->isAdmin();
+    $approve = new Moderator();
+
+    if(isset($_GET["approve"])){
+        $approve->approvePrompt();
+    }
+    if(isset($_GET["disapprove"])){
+        $approve->unapprovePrompt();
+    }
 
     //prompts printen
     $allPrompts = Prompt::getAllUnapproved();
     //var_dump($allPrompts);
 
-    if(isset($_GET["approve"])){
-        $conn = Db::getInstance();
-        $statement = $conn->prepare('update prompts set approved = :approve where id = :id');
-        $statement->bindValue(':approve', 1);
-        $statement->bindValue(":id", $_GET["approve"]);
-        $statement->execute();
-         // prompts uit allPrompt array halen
-         foreach ($allPrompts as $key => $prompt) {
-            if ($prompt["id"] == $_GET["approve"]) {
-                unset($allPrompts[$key]);
-                break;
-            }
-        }
-    }
-
-    if(isset($_GET["disapprove"])){
-        $conn = Db::getInstance();
-        $statement = $conn->prepare('delete from prompts where id = :id');
-        $statement->bindValue(":id", $_GET["disapprove"]);
-        $statement->execute();
-        // prompts uit allPrompt array halen
-        foreach ($allPrompts as $key => $prompt) {
-            if ($prompt["id"] == $_GET["disapprove"]) {
-                unset($allPrompts[$key]);
-                break;
-            }
-        }
-    }
+   
 ?>
 
 <!DOCTYPE html>
