@@ -2,32 +2,40 @@
 include_once("bootstrap.php");
     session_start();
     
+    //niet via url binnen raken
     if(isset($_SESSION['username'])){
-        //user is logged in
         echo "Welcome " . $_SESSION['username'];
-        //queries in sql
     } else{
-        //user is not logged in
         header("location: index.php");
     }
+    //price filter
     if(!empty($_GET['price'])){
         $pricing = $_GET['price'];
     }
     else{
         $pricing = "all";
     }
+    //type filter
     if(!empty($_GET['type'])){
         $type = $_GET['type'];
     }
     else{
         $type = "all";
     }
+    //date filter
+    if(!empty($_GET['date'])){
+        $date = $_GET['date'];
+    }
+    else{
+        $date = "all";
+    }
     
 
     //$allApprovedPrompts = Prompt::getAllApproved();
-    $filter = Prompt::filter($pricing, $type);
+    $filter = Prompt::filter($pricing, $type, $date);
 
 
+    /*verhuizen naar functie filter in class prompts
     if(!empty($_POST["search"])){
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT * FROM `prompts` WHERE name LIKE CONCAT('%', :title, '%')");
@@ -38,7 +46,7 @@ include_once("bootstrap.php");
         if (empty($search)) {
             echo "No results found.";
         }
-    }
+    }*/
 ?>
 
 <!DOCTYPE html>
@@ -76,20 +84,21 @@ include_once("bootstrap.php");
     <a href="logout.php" class="font-semibold text-xl">Log out?</a>
     <!--search-->
     <form method="get" action=""> <!--veranderd nr get-->
-        <!--<div>
+        <div>
             <h2 class="text-xl font-semibold mt-7">Filter on title</h2>
             <input name="search" type="text" placeholder="Search by title">
-        </div>-->
-        <div>
-            <h2 class="text-xl font-semibold mt-7">Filter on price</h2>
+        </div>
+        <article class="flex flex-row">
+        <div class="mr-10">
+            <h2 class="text-xl font-semibold mt-7 mb-2">Pricing</h2>
             <select name="price">
                 <option value="all">All</option>
                 <option value="paid">Paid</option>
                 <option value="free">Free</option>
             </select>
         </div>
-        <div>
-            <h2 class="text-xl font-semibold mt-7">Filter on type</h2>
+        <div class="mr-10">
+            <h2 class="text-xl font-semibold mt-7 mb-2">Illustration type</h2>
             <select name="type">
                 <option value="all">All</option>
                 <option value="lineArt">Line art</option>
@@ -98,13 +107,21 @@ include_once("bootstrap.php");
             </select>
         </div>
         <div>
+            <h2 class="text-xl font-semibold mt-7 mb-2">Date</h2>
+            <select name="date">
+                <option value="all">All</option>
+                <option value="new">New</option>
+                <option value="old">Old</option>
+            </select>
+        </div>
+        </article>
+        <div>
             <button class="bg-fadedpurple px-5 py-3 mt-5 rounded font-semibold text-2xl" type="submit" value="Search">Search</button>
         </div>
     </form>
     <h1>Your home</h1>
     <article>
         <?php foreach ($filter as $prompt): ?>
-            <?php if (empty($_POST["search"]) || stripos($prompt["name"], $_POST["search"]) !== false):?>
                 <div>
                     <a href="user.php?id=<?php echo $prompt["email"]; ?>">
                         <p><strong>User:</strong> <?php echo $prompt["email"]; ?></p>
@@ -115,7 +132,6 @@ include_once("bootstrap.php");
                     <p><strong>Type:</strong> <?php echo htmlspecialchars($prompt["type"]); ?></p>
                     <p><strong>Price:</strong> <?php echo htmlspecialchars($prompt["price"]); ?></p>
                 </div>
-            <?php endif; ?>
         <?php endforeach; ?>
     </article>
 </body>
