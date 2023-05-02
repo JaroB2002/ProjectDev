@@ -24,17 +24,6 @@ include_once("bootstrap.php");
             echo "No results found.";
         }
     }
-    if(!empty($_POST["type[]"])){
-        $conn = Db::getInstance();
-        $statement = $conn->prepare("SELECT * FROM `prompts` WHERE type LIKE CONCAT('%', :type, '%')");
-        $statement->bindValue(":type", $_POST["type[]"]);
-        $statement->execute();
-        $type = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-        if (empty($type)) {
-            echo "No results found.";
-        }
-    }
 ?>
 
 <!DOCTYPE html>
@@ -44,32 +33,51 @@ include_once("bootstrap.php");
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+      theme: {
+        screens: {
+            sm: '480px',
+            md: '768px',
+            lg: '1024px',
+            xl: '1280px',
+        },
+        extend: {
+          colors: {
+            fadedpurple: '#C688F4',
+            fadedblue: '#5C69AA',
+            offgrey: '#D9D9D9',
+            offblack: '#D9D9D9',
+          }
+        }
+      }
+    }
+  </script>
 </head>
 
-<body>
-    <a href="logout.php">Log out?</a>
+<body class="mx-10">
+    <a href="logout.php" class="font-semibold text-xl">Log out?</a>
     <!--search-->
     <form method="post" action="">
         <div>
-            <h2>Filter on title</h2>
-            <input id="search" name="search" type="text" placeholder="Search by title">
+            <h2 class="text-xl font-semibold mt-7">Filter on title</h2>
+            <input name="search" type="text" placeholder="Search by title">
         </div>
-    </form>
-    <!--filter paid/free-->
-    <form method="post" action="">
         <div>
-            <h2>Filter on price</h2>
+            <h2 class="text-xl font-semibold mt-7">Filter on price</h2>
             <input type="checkbox" name="price" value="paid">Paid
             <input type="checkbox" name="price" value="free">Free
         </div>
-    </form>
-    <!--filter type checkboxes-->	
-    <form method="post" action="">
         <div>
-            <h2>Filter on type</h2>
+            <h2 class="text-xl font-semibold mt-7">Filter on type</h2>
             <input type="checkbox" name="type" value="text">Line art
             <input type="checkbox" name="type" value="text">Realistic
             <input type="checkbox" name="type" value="video">Cartoon
+        </div>
+        <div>
+            <button class="bg-fadedpurple px-5 py-3 mt-5 rounded font-semibold text-2xl" type="submit" value="Search">Search</button>
         </div>
     </form>
     <h1>Your home</h1>
