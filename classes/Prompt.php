@@ -118,6 +118,7 @@ class Prompt{
         return $prompts;
     }
     //tonen en chronologisch sorteren
+    //kunnen kiezen/ sorteren
     public static function getAllApproved(){
         $conn = Db::getInstance();
         $statement = $conn->prepare("select * from prompts where approved = :approved order by date asc");
@@ -127,7 +128,7 @@ class Prompt{
         return $prompts;
     }
 
-    public static function filterByPaid(){
+    /*public static function filterByPaid(){
         $conn = Db::getInstance();
         $statement = $conn->prepare("select * from prompts where price > 0");
         $statement->execute();
@@ -142,6 +143,24 @@ class Prompt{
         $statement->execute();
         $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
         return $prompts;
+    }*/
+    public function search($pricing, $type, $search){
+        $conn = Db::getInstance();
+        if($pricing == "paid"){
+            $statement = $conn->prepare("select * from prompts where price > 0");
+            $statement->execute();
+        }
+        if($type == "all"){
+            $statement = $conn->prepare("select * from prompts where type like :type");
+            $statement->bindValue(":type", "%$type%");
+            $statement->execute();
+        }
+        if($search){
+            $statement = $conn->prepare("SELECT * FROM `prompts` WHERE name LIKE CONCAT('%', :title, '%')");
+            $statement->bindValue(":title", "%$search%");
+            $statement->execute();
+            $search = $statement->fetchAll(PDO::FETCH_ASSOC);
+        }
     }
 
 }
