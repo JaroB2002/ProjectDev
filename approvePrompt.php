@@ -4,9 +4,19 @@
     session_start();
     $admin = new User();
     $admin->isAdmin();
+    $approve = new Moderator();
+
+    if(isset($_GET["approve"])){
+        $approve->approvePrompt();
+    }
+    if(isset($_GET["disapprove"])){
+        $approve->unapprovePrompt();
+    }
+
+    
 
     //approve prompts
-    if(isset($_GET["approve"])){
+    /*if(isset($_GET["approve"])){
         $approve = new Moderator();
         $approve->approvePrompt();         
     }
@@ -14,7 +24,7 @@
     if(isset($_GET["disapprove"])){
         $unapprove = new Moderator();
         $unapprove->unapprovePrompt();
-    }
+    }*/
 
     //prompts printen
     $allPrompts = Prompt::getAllUnapproved();
