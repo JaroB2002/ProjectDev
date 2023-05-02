@@ -119,16 +119,16 @@ class Prompt{
     }
     //tonen en chronologisch sorteren
     //kunnen kiezen/ sorteren
-    public static function getAllApproved(){
+    /*public static function getAllApproved(){
         $conn = Db::getInstance();
         $statement = $conn->prepare("select * from prompts where approved = :approved order by date asc");
         $statement->bindValue(":approved", 1);        
         $statement->execute();
         $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
         return $prompts;
-    }
+    }*/
 
-    public static function filter($pricing, $type){
+    public static function filter($pricing, $type, $date){
         $conn = Db::getInstance();
         $statement = "select * from prompts where approved = :approved";
         switch($pricing){
@@ -148,6 +148,14 @@ class Prompt{
                 break;
             case "realistic":
                 $statement .= " and type = 'realistic'";
+                break;
+        }
+        switch($date){
+            case "new":
+                $statement .= " order by date desc";
+                break;
+            case "old":
+                $statement .= " order by date asc";
                 break;
         }
         $result = $conn->prepare($statement);
