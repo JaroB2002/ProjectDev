@@ -4,9 +4,7 @@ class Prompt{
     private $name; 
     private $description;
     private $email;
-    //private $userId;
     private $image;
-    //private $promptId;
     private $type;
     private $price;
 
@@ -48,18 +46,6 @@ class Prompt{
     public function getEmail(){
         return $this->email;
     }
-    /*public function setUserId($userId){
-        if (empty($userId)) {
-            throw new Exception("User ID cannot be empty.");
-        }
-        else{ 
-        $this->userId = $userId;
-        }
-        
-    }
-    public function getUserId(){
-        return $this->userId;
-    }*/
 
     public function setImage($image){
         if (empty($image)) {
@@ -103,10 +89,9 @@ class Prompt{
     //prompts in databank opslaan
     public function save(){
         $conn = Db::getInstance();
-        $statement = $conn->prepare("INSERT INTO prompts (name, description, email,/*user_id,*/ image, type, price, date, approved) VALUES (:name, :description, :email, /*:userId,*/ :image, :type, :price, now(), :approved)");
+        $statement = $conn->prepare("INSERT INTO prompts (name, description, email, image, type, price, date, approved) VALUES (:name, :description, :email, :image, :type, :price, now(), :approved)");
         $statement->bindValue(":name", $this->getName()); 
         $statement->bindValue(":description", $this->getDescription());
-        //$statement->bindValue(":userId", $this->getUserId());
         $statement->bindValue(":email", $this->getEmail());
         $statement->bindValue(":image", $this->getImage());
         $statement->bindValue(":type", $this->getType());
@@ -132,13 +117,42 @@ class Prompt{
         $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
         return $prompts;
     }
-    //tonen en chronologisch sorteren
-    public static function getAllApproved(){
+
+    public static function filter($pricing, $type, $date){
         $conn = Db::getInstance();
-        $statement = $conn->prepare("select * from prompts where approved = :approved order by date asc");
-        $statement->bindValue(":approved", 1);        
-        $statement->execute();
-        $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
-        return $prompts;
+        $statement = "select * from prompts where approved = :approved";
+        switch($pricing){
+            case "paid":
+                $statement .= " and price > 0";
+                break;
+            case "free":
+                $statement .= " and price = 0";
+                break;
+        }
+        switch($type){
+            case "lineArt":
+                $statement .= " and type = 'line art'";
+                break;
+            case "cartoon":
+                $statement .= " and type = 'cartoon'";
+                break;
+            case "realistic":
+                $statement .= " and type = 'realistic'";
+                break;
+        }
+        switch($date){
+            case "new":
+                $statement .= " order by date desc";
+                break;
+            case "old":
+                $statement .= " order by date asc";
+                break;
+        }
+        $result = $conn->prepare($statement);
+        $result->bindValue(":approved", 1);
+        $result->execute();
+        $filter = $result->fetchAll(PDO::FETCH_ASSOC);
+        return $filter;
     }
+
 }
