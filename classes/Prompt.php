@@ -128,39 +128,33 @@ class Prompt{
         return $prompts;
     }
 
-    /*public static function filterByPaid(){
+    public static function filter($pricing, $type){
         $conn = Db::getInstance();
-        $statement = $conn->prepare("select * from prompts where price > 0");
-        $statement->execute();
-        $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
-        return $prompts;
-    }
-
-    public static function filterByType($type){
-        $conn = Db::getInstance();
-        $statement = $conn->prepare("select * from prompts where type like :type");
-        $statement->bindValue(":type", "%$type%");
-        $statement->execute();
-        $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
-        return $prompts;
-    }*/
-    public function search($pricing, $type, $search){
-        $conn = Db::getInstance();
-        if($pricing == "paid"){
-            $statement = $conn->prepare("select * from prompts where price > 0");
-            $statement->execute();
+        $statement = "select * from prompts where approved = :approved";
+        switch($pricing){
+            case "paid":
+                $statement .= " and price > 0";
+                break;
+            case "free":
+                $statement .= " and price = 0";
+                break;
         }
-        if($type == "all"){
-            $statement = $conn->prepare("select * from prompts where type like :type");
-            $statement->bindValue(":type", "%$type%");
-            $statement->execute();
+        switch($type){
+            case "lineArt":
+                $statement .= " and type = 'line art'";
+                break;
+            case "cartoon":
+                $statement .= " and type = 'cartoon'";
+                break;
+            case "realistic":
+                $statement .= " and type = 'realistic'";
+                break;
         }
-        if($search){
-            $statement = $conn->prepare("SELECT * FROM `prompts` WHERE name LIKE CONCAT('%', :title, '%')");
-            $statement->bindValue(":title", "%$search%");
-            $statement->execute();
-            $search = $statement->fetchAll(PDO::FETCH_ASSOC);
-        }
+        $result = $conn->prepare($statement);
+        $result->bindValue(":approved", 1);
+        $result->execute();
+        $filter = $result->fetchAll(PDO::FETCH_ASSOC);
+        return $filter;
     }
 
 }

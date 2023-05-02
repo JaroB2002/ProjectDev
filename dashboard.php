@@ -10,9 +10,24 @@ include_once("bootstrap.php");
         //user is not logged in
         header("location: index.php");
     }
+    if(!empty($_GET['price'])){
+        $pricing = $_GET['price'];
+    }
+    else{
+        $pricing = "all";
+    }
+    if(!empty($_GET['type'])){
+        $type = $_GET['type'];
+    }
+    else{
+        $type = "all";
+    }
     
-    $allApprovedPrompts = Prompt::getAllApproved();
-    
+
+    //$allApprovedPrompts = Prompt::getAllApproved();
+    $filter = Prompt::filter($pricing, $type);
+
+
     if(!empty($_POST["search"])){
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT * FROM `prompts` WHERE name LIKE CONCAT('%', :title, '%')");
@@ -60,21 +75,27 @@ include_once("bootstrap.php");
 <body class="mx-10">
     <a href="logout.php" class="font-semibold text-xl">Log out?</a>
     <!--search-->
-    <form method="post" action="">
-        <div>
+    <form method="get" action=""> <!--veranderd nr get-->
+        <!--<div>
             <h2 class="text-xl font-semibold mt-7">Filter on title</h2>
             <input name="search" type="text" placeholder="Search by title">
-        </div>
+        </div>-->
         <div>
             <h2 class="text-xl font-semibold mt-7">Filter on price</h2>
-            <input type="checkbox" name="price" value="paid">Paid
-            <input type="checkbox" name="price" value="free">Free
+            <select name="price">
+                <option value="all">All</option>
+                <option value="paid">Paid</option>
+                <option value="free">Free</option>
+            </select>
         </div>
         <div>
             <h2 class="text-xl font-semibold mt-7">Filter on type</h2>
-            <input type="checkbox" name="type" value="text">Line art
-            <input type="checkbox" name="type" value="text">Realistic
-            <input type="checkbox" name="type" value="video">Cartoon
+            <select name="type">
+                <option value="all">All</option>
+                <option value="lineArt">Line art</option>
+                <option value="realistic">Realistic</option>
+                <option value="cartoon">Cartoon</option>
+            </select>
         </div>
         <div>
             <button class="bg-fadedpurple px-5 py-3 mt-5 rounded font-semibold text-2xl" type="submit" value="Search">Search</button>
@@ -82,7 +103,7 @@ include_once("bootstrap.php");
     </form>
     <h1>Your home</h1>
     <article>
-        <?php foreach ($allApprovedPrompts as $prompt): ?>
+        <?php foreach ($filter as $prompt): ?>
             <?php if (empty($_POST["search"]) || stripos($prompt["name"], $_POST["search"]) !== false):?>
                 <div>
                     <a href="user.php?id=<?php echo $prompt["email"]; ?>">
