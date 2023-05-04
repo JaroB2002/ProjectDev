@@ -6,31 +6,33 @@ include_once("bootstrap.php");
     if(!isset($_SESSION['username'])){
         header("location: index.php");
     } 
+
     //price filter
-    if(!empty($_GET['price'])){
-        $pricing = $_GET['price'];
-    }
-    else{
-        $pricing = "all";
-    }
-    //type filter
-    if(!empty($_GET['type'])){
-        $type = $_GET['type'];
-    }
-    else{
-        $type = "all";
-    }
-    //date filter
-    if(!empty($_GET['date'])){
-        $date = $_GET['date'];
-    }
-    else{
-        $date = "all";
-    }
+        if(!empty($_GET['price'])){
+            $pricing = $_GET['price'];
+        }
+        else{
+            $pricing = "all";
+        }
+        //type filter
+        if(!empty($_GET['type'])){
+            $type = $_GET['type'];
+        }
+        else{
+            $type = "all";
+        }
+        //date filter
+        if(!empty($_GET['date'])){
+            $date = $_GET['date'];
+        }
+        else{
+            $date = "all";
+        }
+        $filter = Prompt::filter($pricing, $type, $date);
     
 
     //$allApprovedPrompts = Prompt::getAllApproved();
-    $filter = Prompt::filter($pricing, $type, $date);
+   
 
 
     /*verhuizen naar functie filter in class prompts
@@ -130,6 +132,11 @@ include_once("bootstrap.php");
     </form>
     <h2 class="text-3xl font-semibold mt-5">Prompt overview</h2>
     <article class="flex flex-wrap">
+        <?php if (isset($error)) : ?>
+        <div>
+            <p><?php echo $error; ?></p>
+        </div>
+        <?php endif; ?>
         <?php foreach ($filter as $prompt): ?>
                 <div class="my-5 bg-offblack mr-10 px-8 py-8 rounded max-w-sm">
                     <h3 class="font-semibold text-xl text-fadedpurple"><?php echo htmlspecialchars($prompt["name"]); ?></h3>
