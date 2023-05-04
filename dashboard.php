@@ -27,10 +27,19 @@ include_once("bootstrap.php");
     else{
         $date = "all";
     }
+    //text filter
+    if(!empty($_GET['search'])){
+        $search = $_GET['search'];
+    }
+    else{
+        $search = "all";
+    }
+
+    //var_dump($search);
     
 
     //$allApprovedPrompts = Prompt::getAllApproved();
-    $filter = Prompt::filter($pricing, $type, $date);
+    $filter = Prompt::filter($pricing, $type, $date, $search);
 
 
     /*verhuizen naar functie filter in class prompts
@@ -95,7 +104,7 @@ include_once("bootstrap.php");
     <form method="get" action=""> <!--veranderd nr get-->
         <div>
             <h2 class="text-xl font-semibold mt-7">Filter on title</h2>
-            <input name="search" type="text" placeholder="Search by title">
+            <input name="search" value="search" type="text" placeholder="Search by title">
         </div>
         <article class="flex flex-row">
         <div class="mr-10">
