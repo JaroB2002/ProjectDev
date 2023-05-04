@@ -118,7 +118,7 @@ class Prompt{
         return $prompts;
     }
 
-    public static function filter($pricing, $type, $date){
+    public static function filter($pricing, $type, $date, $search){
         $conn = Db::getInstance();
         $statement = "select * from prompts where approved = :approved";
         switch($pricing){
@@ -148,8 +148,18 @@ class Prompt{
                 $statement .= " order by date asc";
                 break;
         }
+        switch($search){
+            case "all":
+                break;
+            default:
+                $statement .= " and name LIKE :title";
+                break;
+        }
         $result = $conn->prepare($statement);
         $result->bindValue(":approved", 1);
+        if($search != "all"){
+            $result->bindValue(":title", "%$search%");
+        }
         $result->execute();
         $filter = $result->fetchAll(PDO::FETCH_ASSOC);
         return $filter;
