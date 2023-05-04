@@ -29,7 +29,6 @@ include_once("bootstrap.php");
     else{
         $date = "all";
     }
-    
 
     //$allApprovedPrompts = Prompt::getAllApproved();
     $filter = Prompt::filter($pricing, $type, $date);
