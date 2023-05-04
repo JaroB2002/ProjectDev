@@ -1,9 +1,9 @@
 <?php 
-function canLogin($email, $password){
+function canLogin($username, $password){
   require_once 'classes/Db.php'; // Include the file containing the definition of the Db class
   $conn = Db::getInstance(); // Create an instance of the Db class
   $statement = $conn->prepare("select * from users where email= :email");
-  $statement->bindValue(":email", $email);
+  $statement->bindValue(":email", $username);
   $statement->execute();
   $user = $statement->fetch(PDO::FETCH_ASSOC); // Fetch as associative array
   if(!$user){
@@ -21,14 +21,14 @@ function canLogin($email, $password){
 
 if(!empty($_POST)){
   //er is verzonden
-  $email= $_POST['email'];
+  $username= $_POST['username'];
   $password= $_POST['password'];
   $rememberMe = isset($_POST['remember-me']) ? true : false; // Check if the checkbox is checked
 
-  if(canLogin($email, $password)){
+  if(canLogin($username, $password)){
     //inloggen
     session_start();
-    $_SESSION['email'] = $email;
+    $_SESSION['username'] = $username;
 
     if ($rememberMe) {
       // Store the value in a cookie
@@ -127,8 +127,8 @@ if(!empty($_POST)){
 <!-- partial:index.partial.html -->
 <header>
     <a href="#" class="loggedIn">
-     <?php if(isset($_SESSION['email'])): ?>
-      <h3 class="user--name"><?php echo $_SESSION['email']; ?></h3>
+     <?php if(isset($_SESSION['username'])): ?>
+      <h3 class="user--name"><?php echo $_SESSION['username']; ?></h3>
       <?php endif; ?>
 
     </a>
@@ -149,8 +149,8 @@ if(!empty($_POST)){
            <input type="hidden" name="remember" value="true">
            <div class="-space-y-px rounded-md shadow-sm">
              <div>
-               <label for="email" class="sr-only">Email address</label>
-               <input id="email" name="email" type="text" autocomplete="email" required class="relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Email address">
+               <label for="username" class="sr-only">Email address</label>
+               <input id="username" name="username" type="text" autocomplete="username" required class="relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Email address">
              </div>
              <div>
                <label for="password" class="sr-only">Wachtwoord</label>
