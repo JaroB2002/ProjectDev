@@ -8,8 +8,9 @@
 
     if(!empty($_GET["id"])){
         $conn = Db::getInstance();
-        $statement = $conn->prepare("SELECT * FROM `prompts` WHERE email = :email");
+        $statement = $conn->prepare("SELECT * FROM `prompts` WHERE email = :email and approved = :approved");
         $statement->bindValue(":email", $_GET["id"]);
+        $statement->bindValue(":approved", 1);
         $statement->execute();
         $user_prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
     }
