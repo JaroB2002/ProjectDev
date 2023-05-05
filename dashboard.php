@@ -86,6 +86,8 @@ include_once("bootstrap.php");
       }
     }
   </script>
+      <script src="js/like.js"></script>
+
 </head>
 
 <body class="mx-10">
@@ -149,6 +151,7 @@ include_once("bootstrap.php");
                     <p class="mb-3 text-lg text-offwhite"><strong>Description:</strong> <?php echo htmlspecialchars($prompt["description"]); ?></p>
                     <p class="mb-3 text-lg text-offwhite"><strong>Type:</strong> <?php echo htmlspecialchars($prompt["type"]); ?></p>
                     <p class="mb-3 text-lg text-offwhite"><strong>Price:</strong> <?php echo htmlspecialchars($prompt["price"]); ?></p>
+                    <a href="#" class="like">Like</a>
                 </div>
         <?php endforeach; ?>
     </article>
