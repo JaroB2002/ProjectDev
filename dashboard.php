@@ -86,7 +86,6 @@ include_once("bootstrap.php");
       }
     }
   </script>
-      <script src="js/like.js"></script>
 
 </head>
 
@@ -151,7 +150,11 @@ include_once("bootstrap.php");
                     <p class="mb-3 text-lg text-offwhite"><strong>Description:</strong> <?php echo htmlspecialchars($prompt["description"]); ?></p>
                     <p class="mb-3 text-lg text-offwhite"><strong>Type:</strong> <?php echo htmlspecialchars($prompt["type"]); ?></p>
                     <p class="mb-3 text-lg text-offwhite"><strong>Price:</strong> <?php echo htmlspecialchars($prompt["price"]); ?></p>
-                    <a href="#" class="like">Like</a>
+
+                    <div>
+                        <a href="#" data-id="<?php echo $prompt['id']; ?>" class="like">Like</a>
+                        <span class='likes' id="likes">people like this</span> 
+                    </div>
                 </div>
         <?php endforeach; ?>
     </article>
@@ -331,3 +334,5 @@ if (isset($_FILES["profile_picture"]["error"]) && $_FILES["profile_picture"]["er
     <input type="submit" value="Upload">
     <input type="submit" value="Delete"> 
 </form>
+
+      <script src="js/like.js"></script>
