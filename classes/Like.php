@@ -1,7 +1,7 @@
 <?php
     class Like{
         private $promptId;
-        private $userId;
+        private $user;
 
         /**
          * Get the value of promptId
@@ -22,33 +22,34 @@
 
                 return $this;
         }
-
+        
         /**
-         * Get the value of userId
+         * Get the value of user
          */ 
-        public function getUserId()
+        public function getUser()
         {
-                return $this->userId;
+                return $this->user;
         }
 
         /**
-         * Set the value of userId
+         * Set the value of user
          *
          * @return  self
          */ 
-        public function setUserId($userId)
+        public function setUser($user)
         {
-                $this->userId = $userId;
+                $this->user = $user;
 
                 return $this;
         }
 
         public function save(){
             $conn = Db::getInstance();
-            $statement = $conn->prepare("insert into likes (prompts_id, users_id, date_created) values (:prompts_id, :user_id, NOW())");
+            $statement = $conn->prepare("insert into likes (prompts_id, username, date_created) values (:prompts_id, :username, NOW())");
             $statement->bindValue(":prompts_id", $this->getPromptId());
-            $statement->bindValue(":user_id", $this->getUserId());
+            $statement->bindValue(":username", $this->getUser());
             return $statement->execute();
         }
+
     }
 ?>
