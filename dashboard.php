@@ -105,7 +105,7 @@ include_once("bootstrap.php");
     <form method="get" action=""> <!--veranderd nr get-->
         <div>
             <h2 class="text-xl font-semibold mt-7">Filter on title</h2>
-            <input name="search" value="search" type="text" placeholder="Search by title">
+            <input name="search" type="text" placeholder="Search by title">
         </div>
         <article class="flex flex-row">
         <div class="mr-10">
@@ -162,6 +162,10 @@ include_once("bootstrap.php");
 </html>
 
 <?php
+// START DELETE ACCOUNT CODE
+
+// Establish database connection
+//$conn = new PDO('mysql:host=localhost;dbname=demo', 'root', '');
 $conn = Db::getInstance();
 
 // Check if form is submitted
@@ -205,6 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
+
 <h2>Delete Your Account</h2>
 <p>Please confirm your email address to delete your account and all associated data.</p>
 <form method="post" action="dashboard.php">
@@ -229,11 +234,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 
-// START PROFILE PICTURE CODE
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dashboard</title>
+</head>
+<body>
+	<h1>Dashboard</h1>
+	
+	<form method="post" enctype="multipart/form-data">
+		<label for="file">Selecteer een afbeelding:</label>
+		<input type="file" name="file" id="file"><br><br>
+		<input type="submit" name="submit" value="Uploaden">
+	</form>
 
-<?php
-// Establish database connection
-$conn = new PDO('mysql:host=localhost;dbname=demo', 'root', 'root');
+	<?php
+require_once('classes/ProfilePic.php');
 
 // Check if form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -335,4 +351,4 @@ if (isset($_FILES["profile_picture"]["error"]) && $_FILES["profile_picture"]["er
     <input type="submit" value="Delete"> 
 </form>
 
-      <script src="js/like.js"></script>
+<script src="js/like.js"></script>
