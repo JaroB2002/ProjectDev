@@ -12,7 +12,5 @@ for(let i = 0; i < links.length; i++){
         //de spam met de id likes[id]
         let span = document.querySelector("#likes" + id);
         console.log(id);
-
-
     });
 }
