@@ -7,14 +7,6 @@ if(!isset($_SESSION['username'])){
     header('Location: index.php');
 }
 
-$name = "";
-$description = "";
-$email = "";
-//$image = "";
-$type = "";
-$price = "";
-$succes="";
-
 if(!empty($_POST)){
     try{
         $prompt = new Prompt();
@@ -89,10 +81,12 @@ if(!empty($_POST)){
         </div>
         <div class="my-2">
           <label for="type">Type</label>
-          <input class="bg-offgrey" id="type" name="type" type="text" placeholder="Type">
-          <!--<input type="checkbox" name="type[]" value="text"> Line art <br>
-          <input type="checkbox" name="type[]" value="text"> Cartoon <br>
-          <input type="checkbox" name="type[]" value="text"> Realistic <br>-->
+          <select class="bg-offgrey" name="type">
+                <option value="all">All</option>
+                <option value="line art">Line art</option>
+                <option value="realistic">Realistic</option>
+                <option value="cartoon">Cartoon</option>
+            </select>
         </div class="my-2">
             <label for="price">Price</label>
             <input class="bg-offgrey" id="price" name="price" type="text" placeholder="Price">

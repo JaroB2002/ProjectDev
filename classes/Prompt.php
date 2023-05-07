@@ -121,6 +121,12 @@ class Prompt{
     public static function filter($pricing, $type, $date, $search){
         $conn = Db::getInstance();
         $statement = "select * from prompts where approved = :approved";
+        $typeConditions = [
+            "all" => "1",
+            "lineArt" => "type = 'line art'",
+            "cartoon" => "type = 'cartoon'",
+            "realistic" => "type = 'realistic'"
+        ];
         switch($pricing){
             case "paid":
                 $statement .= " and price > 0";
@@ -129,7 +135,10 @@ class Prompt{
                 $statement .= " and price = 0";
                 break;
         }
-        switch($type){
+        if (isset($typeConditions[$type])) {
+            $statement .= " AND " . $typeConditions[$type];
+        }
+        /*switch($type){
             case "lineArt":
                 $statement .= " and type = 'line art'";
                 break;
@@ -139,7 +148,7 @@ class Prompt{
             case "realistic":
                 $statement .= " and type = 'realistic'";
                 break;
-        }
+        }*/
         switch($date){
             case "new":
                 $statement .= " order by date desc";
