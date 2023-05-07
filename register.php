@@ -1,15 +1,18 @@
 <?php
     include_once("bootstrap.php");
-
     if(!empty($_POST)){
       try{
         $user = new User();
         $user->setEmail($_POST["email"]);
         $user->setPassword($_POST["password"]);
-        $user->save();
-        /*$user->sendMail();*/
-
-        header("Location:index.php");
+        // Check if email is available before saving
+        if ($user->checkMailAvailable()) {
+          $user->save();
+          /*$user->sendMail();*/
+          header("Location: index.php");
+        } else {
+          $error = "Email was already taken. Registration failed.";
+        }
       }
       catch (Throwable $e){
         $error = $e->getMessage();
@@ -56,16 +59,17 @@
       </p>
     </div>
     <?php if (isset($error)) : ?>
-      <div>
-        <p><?php echo $error; ?></p>
-      </div>
+    <div class="error-message" style="color: red;">
+        <?php echo $error; ?>
+    </div>
     <?php endif; ?>
     <form class="mt-8 space-y-6" action="#" method="POST">
       <input type="hidden" name="remember" value="true">
       <div class="-space-y-px rounded-md shadow-sm">
         <div>
           <label for="email" class="sr-only">Email</label>
-          <input id="email" name="email" type="text" autocomplete="email" required class="relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Email">
+          <span id="feedback"></span>
+          <input id="email" name="email" type="text" autocomplete="email" onchange="checkMail()" required class="relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Email">
         </div>
         <div>
           <label for="password" class="sr-only">Password</label>
@@ -109,5 +113,32 @@
 </div>
 </div>
 <!-- partial -->
+<!--<script src="js/checkMail.js"></script>--> <!--dit werkt niet, hoezo?-->
+<script>
+  function checkMail(){
+    console.log("checkEmail");
+    let email = document.getElementById("email").value;
+    let feedback = document.querySelector("#feedback"); 
+    console.log(email);
+    let formData = new FormData();
+    formData.append("email", email);
+
+    fetch("ajax/checkMail.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(function(response){
+        return response.json();
+    })
+    .then(function(result){
+        if(result.available === 'false'){
+            feedback.innerHTML = "Email is unavailable";
+        } else {
+            feedback.innerHTML = "Email is available";
+        }
+        console.log(result);
+    })
+}
+</script>
 </body>
 </html>
