@@ -1,5 +1,6 @@
 <?php 
 include_once("bootstrap.php");
+
     session_start();
     
     //niet via url binnen raken
@@ -31,7 +32,7 @@ include_once("bootstrap.php");
     if(!empty($_GET['search'])){
         $search = $_GET['search'];
     }
-    else{
+    else{ 
         $search = "all";
     }
 
@@ -149,11 +150,24 @@ include_once("bootstrap.php");
                     <p class="mb-3 text-lg text-offwhite"><strong>Description:</strong> <?php echo htmlspecialchars($prompt["description"]); ?></p>
                     <p class="mb-3 text-lg text-offwhite"><strong>Type:</strong> <?php echo htmlspecialchars($prompt["type"]); ?></p>
                     <p class="mb-3 text-lg text-offwhite"><strong>Price:</strong> <?php echo htmlspecialchars($prompt["price"]); ?></p>
+                    <button class="report-button" data-prompt-id="<?php echo $prompt["id"]; ?>">Report user</button>
+                    
                 </div>
+                
         <?php endforeach; ?>
     </article>
+    
 </body>
 </html>
+
+<div class="comment-prompt">
+    <form>
+        <input type="hidden" name="prompt_id" value="1">
+        <textarea name="comment" placeholder="Write your comment here"></textarea>
+        <button type="submit">Submit Comment</button>
+    </form>
+</div>
+
 
 <?php
 // START DELETE ACCOUNT CODE
@@ -248,7 +262,24 @@ require_once('classes/ProfilePic.php');
 	if(isset($_POST['submit'])) {
 		$profilePic = new ProfilePic();
 		$profilePic->upload();
+
 	}
 	?>
 </body>
+
 </html>
+<body class="mx-1">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<?php include_once("footer.php");?>
+
+</body>
+</html>
+

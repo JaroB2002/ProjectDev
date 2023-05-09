@@ -3,7 +3,7 @@ class ProfilePic {
 	private $target_dir = "uploads/";
 	private $target_file;
 	private $imageFileType;
-
+	
 	public function __construct() {
 		$this->target_file = $this->target_dir . basename($_FILES["file"]["name"]);
 		$this->imageFileType = strtolower(pathinfo($this->target_file,PATHINFO_EXTENSION));
