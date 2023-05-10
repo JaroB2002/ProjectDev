@@ -1,5 +1,5 @@
 <?php
-include_once("bootstrap.php");
+//include_once("bootstrap.php");
 
 class User{
     private $email;
@@ -47,16 +47,6 @@ class User{
         $statement->bindValue(":is_admin", 0);
         //execute
         return $statement->execute(); 
-        /* ~ code van Jaro uit eerste register.php
-        latere deadline: zien of een account bij signup nog available is: 
-        $query = $conn->prepare("SELECT COUNT(*) FROM users WHERE email = :email");
-        $query->bindValue(":email", $email);
-        $query->execute();
-        $count = $query->fetchColumn();
-
-        if ($count > 0) {
-            echo "Error: This email already exists.";
-        }*/
     }
 
     public static function getAll()
@@ -68,17 +58,19 @@ class User{
         return $users;
     }
 
-    /*public function checkDoubleMail(){
+    public function checkMailAvailable(){
         $conn = Db::getInstance();
-        $statement = $conn->prepare("select count(*) from users where email = :email");
+        $statement = $conn->prepare("select * from users where email = :email");
         $statement->bindValue(":email", $this->getEmail());
         $statement->execute();
-        $count = $statement->fetchColumn();
-
-        if ($count > 0) {
-            echo "Error: This email already exists.";
+        $count = $statement->fetch();
+        if ($count != null) {
+            return false;
+        } else{
+            return true;
         }
-    }*/
+        return $count;
+    }
     /*Email versturen*/
     /*public function sendMail(){
         $config = parse_ini_file('config/config.ini', true);
