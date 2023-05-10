@@ -51,5 +51,14 @@
             return $statement->execute();
         }
 
+        public function getLikes(){
+                $conn = Db::getInstance();
+                $statement = $conn->prepare("select count(*) as count from likes where prompts_id = :prompts_id");
+                $statement->bindValue(":prompts_id", $this->getPromptId());
+                $statement->execute();
+                $result = $statement->fetch(PDO::FETCH_ASSOC);
+                return $result['count'];
+        }
+
     }
 ?>
