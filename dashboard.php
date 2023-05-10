@@ -239,17 +239,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	<title>Dashboard</title>
 </head>
 
-<?php
-    include "ProfilePic.php";
-    $profilePic = new ProfilePic();
-    $profilePic->setUploadDir("uploads/");
-    if ($profilePic->uploadPic()) {
-        $picUrl = $profilePic->getPicUrl();
-        // Doe iets met $picUrl, bijvoorbeeld opslaan in de database
-    } else {
-        // De upload is mislukt
-    }
-?>
 
 
 </html>
