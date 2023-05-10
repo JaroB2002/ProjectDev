@@ -15,7 +15,7 @@ for(let i = 0; i < links.length; i++){
 
         //post naar database AJAX
         let formData = new  FormData();
-        formData.append("data-id",promptId );
+        formData.append("promptId",promptId );
 
         fetch("ajax/like.php", {
                 method: "POST", // or 'PUT'
