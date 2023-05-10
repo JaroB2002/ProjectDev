@@ -45,7 +45,7 @@
 
         public function save(){
             $conn = Db::getInstance();
-            $statement = $conn->prepare("insert into likes (prompts_id, username, date_created) values (:prompts_id, :username, NOW())");
+            $statement = $conn->prepare("insert into likes (prompts_id, username) values (:prompts_id, :username)");
             $statement->bindValue(":prompts_id", $this->getPromptId());
             $statement->bindValue(":username", $this->getUser());
             return $statement->execute();

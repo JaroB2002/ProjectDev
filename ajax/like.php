@@ -1,9 +1,10 @@
 <?php
-    include_once("bootstrap.php");
+    include_once("../bootstrap.php");
+    session_start();
     if(!empty($_POST)){
          //nieuwe like aanmaken
         $l = new Like();
-        $l->setPromptId($_POST["data-id"]);
+        $l->setPromptId($_POST["promptId"]);
         $l->setUser($_SESSION["username"]);
 
          //save()
