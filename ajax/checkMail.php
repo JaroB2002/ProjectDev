@@ -12,14 +12,12 @@ if(!empty($_POST)){
             'status' => 'success',
             'email' => $email,
             'available' => 'true',
-            'message' => 'Email is available.'
         ];
     } else{
         $response = [
             'status' => 'success',
             'email' => $email,
             'available' => 'false',
-            'message' => 'Email is not available.'
         ];
     }
     echo json_encode($response);
