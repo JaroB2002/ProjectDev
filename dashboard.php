@@ -140,7 +140,7 @@ include_once("bootstrap.php");
 
                     <div>
                         <a href="#" data-id="<?php echo $prompt['id']; ?>" class="like">Like</a>
-                        <span class='likes' id="likes">people like this</span> 
+                        <span class='likes' id="likes <?php echo $prompt['id']; ?>">people like this</span> 
                     </div>
                 </div>
         <?php endforeach; ?>
