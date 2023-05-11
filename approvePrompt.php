@@ -57,11 +57,11 @@
         <?php foreach($allPrompts as $prompt): ?>
             <div class="my-5 mx-5 bg-stone-700 px-8 py-8 rounded max-w-sm">
                 <div>
-                    <p> <strong>Name: </strong> <?php echo $prompt["name"];?></p>
-                    <img class="h-80 w-80" src="<?php echo $prompt["image"]; ?>" alt="input image">
-                    <p> <strong>description: </strong> <?php echo $prompt["description"];?></p>
-                    <p> <strong>type: </strong> <?php echo $prompt["type"]?> </p>
-                    <p><strong>price: </strong> <?php echo $prompt["price"];?></p>
+                    <p> <strong>Name: </strong> <?php echo htmlspecialchars($prompt["name"]);?></p>
+                    <img class="h-80 w-80" src="<?php echo htmlspecialchars($prompt["image"]); ?>" alt="input image">
+                    <p> <strong>description: </strong> <?php echo htmlspecialchars($prompt["description"]);?></p>
+                    <p> <strong>type: </strong> <?php echo htmlspecialchars($prompt["type"])?> </p>
+                    <p><strong>price: </strong> <?php echo htmlspecialchars($prompt["price"]);?></p>
                 </div>
                 <form action="" class="mt-3">
                     <button class="bg-sky-500 px-5 py-3 rounded font-semibold" type="submit" name="approve" value="<?php echo $prompt['id']; ?>">Approve</button>
