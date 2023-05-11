@@ -122,7 +122,7 @@
     console.log(email);
     let formData = new FormData();
     formData.append("email", email);
-
+    //..erbij
     fetch("ajax/checkMail.php", {
         method: "POST",
         body: formData
