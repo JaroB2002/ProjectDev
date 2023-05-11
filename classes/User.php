@@ -143,4 +143,13 @@ class User{
             header("Location: dashboard.php");
         }
     }
+
+    public function getAllFromUser(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM `prompts` WHERE email = :email and approved = :approved");
+        $statement->bindValue(":email", $_GET["id"]);
+        $statement->bindValue(":approved", 1);
+        $statement->execute();
+        $user_prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
