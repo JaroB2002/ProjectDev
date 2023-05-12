@@ -150,13 +150,11 @@ include_once("bootstrap.php");
                     <p class="mb-3 text-lg text-offwhite"><strong>Description:</strong> <?php echo htmlspecialchars($prompt["description"]); ?></p>
                     <p class="mb-3 text-lg text-offwhite"><strong>Type:</strong> <?php echo htmlspecialchars($prompt["type"]); ?></p>
                     <p class="mb-3 text-lg text-offwhite"><strong>Price:</strong> <?php echo htmlspecialchars($prompt["price"]); ?></p>
-                    <button class="report-button" data-prompt-id="<?php echo $prompt["id"]; ?>">Report user</button>
-                    
+                    <button class="p-3 px-6 pt-2 text-white bg-fadedpurple rounded-full baseline font-semibold text-lg" class="report-button" data-prompt-id="<?php echo $prompt["id"]; ?>">Report user</button>
+                    <button id="reportButton" onclick="reportPrompt()" class="p-3 px-6 pt-2 text-white bg-fadedpurple rounded-full baseline font-semibold text-lg">Report Prompt</button>
                 </div>
-                
         <?php endforeach; ?>
     </article>
-    
 </body>
 </html>
 
