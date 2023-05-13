@@ -2,7 +2,12 @@
 include_once("bootstrap.php");
 
     session_start();
-    
+    $report = new Report();
+    /*if($report->reportCountPrompt()){
+        $reportCount = $report->deletePrompt(true);
+        echo "done";
+    };*/
+
     //niet via url binnen raken
     if(!isset($_SESSION['username'])){
         header("location: index.php");
@@ -35,28 +40,23 @@ include_once("bootstrap.php");
     else{
         $search = "all";
     }
-
-    //var_dump($search);
     
-
     //$allApprovedPrompts = Prompt::getAllApproved();
     $filter = Prompt::filter($pricing, $type, $date, $search);
 
-    try {
-        $user = new User();
-        if(isset($_GET['buy'])){
-            $canBuy = $user->checkIfCanBuy();
-            /*var_dump($canBuy);*/
-            if($canBuy['can_buy'] === '1'){
-                $user->buyPrompt();
-                $user->sellPrompt();
-            }else{
-                throw new Exception("You don't have enough credits.");
-            }
+
+    /*verhuizen naar functie filter in class prompts
+    if(!empty($_POST["search"])){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM `prompts` WHERE name LIKE CONCAT('%', :title, '%')");
+        $statement->bindValue(":title", $_POST["search"]);
+        $statement->execute();
+        $search = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        if (empty($search)) {
+            echo "No results found.";
         }
-    } catch (Exception $e) {
-        $errorMessage = $e->getMessage();
-    }
+    }*/
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -151,47 +151,12 @@ include_once("bootstrap.php");
                     <p class="mb-3 text-lg text-offwhite"><strong>Description:</strong> <?php echo htmlspecialchars($prompt["description"]); ?></p>
                     <p class="mb-3 text-lg text-offwhite"><strong>Type:</strong> <?php echo htmlspecialchars($prompt["type"]); ?></p>
                     <p class="mb-3 text-lg text-offwhite"><strong>Price:</strong> <?php echo htmlspecialchars($prompt["price"]); ?></p>
-
-                    <div>
-                        <button class="report-button" data-prompt-id="<?php echo $prompt["id"]; ?>" data-error-id="<?php echo 'error-' . $prompt["id"]; ?>">Report user</button>
-                        <?php if (isset($errorMessage) && $_GET["buy"] == $prompt["id"]): ?>
-                            <div class="error-message" id="<?php echo 'error-' . $prompt["id"]; ?>">
-                                <?php echo $errorMessage; ?>
-                            </div>
-                        <?php endif; ?>
-                        <form action="" class="mt-3">
-                            <button class="bg-fadedpurple px-5 py-3 rounded font-semibold ml-5" type="submit" name="buy" value="<?php echo $prompt['id'];?>">Buy</button>
-                        </form>
-                    </div>
+                    <button class="report-button" data-prompt-id="<?php echo $prompt["id"]; ?>">Report user</button>
+                    
                 </div>
-                
         <?php endforeach; ?>
     </article>
-    <?php
-include_once(__DIR__ . "/classes/Comment.php");
-$allComments = Comment::getAll(3);
-//var_dump($allComments);
-?>
-<div class="post">  
-  <div class="post__comments">
-      <div class="post__comments__form">
-        <input type="text" id="commentText" placeholder="What's on your mind">
-        <a href="#" class="btn" id="btnAddComment" data-postid="3">Add comment</a>
-      </div>  
     
-      <ul class="post__comments__list">
-        <?php foreach($allComments as $c): ?>
-          <li><?php echo $c['text']; ?></li>
-        <?php endforeach; ?>
-      </ul>
-  </div>
-
-  
-</div>
-  <script src="index.css"></script>
-  <script src="app.js"></script>
-
-
 </body>
 </html>
 
