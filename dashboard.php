@@ -2,7 +2,12 @@
 include_once("bootstrap.php");
 
     session_start();
-    
+    $report = new Report();
+    /*if($report->reportCountPrompt()){
+        $reportCount = $report->deletePrompt(true);
+        echo "done";
+    };*/
+
     //niet via url binnen raken
     if(!isset($_SESSION['username'])){
         header("location: index.php");
@@ -35,26 +40,10 @@ include_once("bootstrap.php");
     else{
         $search = "all";
     }
-
-    //var_dump($search);
     
-
     //$allApprovedPrompts = Prompt::getAllApproved();
     $filter = Prompt::filter($pricing, $type, $date, $search);
 
-
-    /*verhuizen naar functie filter in class prompts
-    if(!empty($_POST["search"])){
-        $conn = Db::getInstance();
-        $statement = $conn->prepare("SELECT * FROM `prompts` WHERE name LIKE CONCAT('%', :title, '%')");
-        $statement->bindValue(":title", $_POST["search"]);
-        $statement->execute();
-        $search = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-        if (empty($search)) {
-            echo "No results found.";
-        }
-    }*/
 ?>
 
 <!DOCTYPE html>
@@ -150,25 +139,22 @@ include_once("bootstrap.php");
                     <p class="mb-3 text-lg text-offwhite"><strong>Description:</strong> <?php echo htmlspecialchars($prompt["description"]); ?></p>
                     <p class="mb-3 text-lg text-offwhite"><strong>Type:</strong> <?php echo htmlspecialchars($prompt["type"]); ?></p>
                     <p class="mb-3 text-lg text-offwhite"><strong>Price:</strong> <?php echo htmlspecialchars($prompt["price"]); ?></p>
-                    <button class="p-3 px-6 pt-2 text-white bg-fadedpurple rounded-full baseline font-semibold text-lg" class="report-button" data-prompt-id="<?php echo $prompt["id"]; ?>">Report user</button>
+                    <!--<button class="p-3 px-6 pt-2 text-white bg-fadedpurple rounded-full baseline font-semibold text-lg" class="report-button" data-prompt-id="<?php echo $prompt["id"]; ?>">Report user</button>-->
                     <button id="reportButton" data-promptid="<?php echo $prompt['id'];?>" class="p-3 px-6 pt-2 text-white bg-fadedpurple rounded-full baseline font-semibold text-lg">Report Prompt</button>
                 </div>
         <?php endforeach; ?>
     </article>
     <script>
         let report = document.querySelectorAll("#reportButton");
-            //add eventlistener to every button
 
             report.forEach(function(button){
                 button.addEventListener("click", reportPrompt);
             });
 
-        //report.addEventListener("click", reportPrompt);
         function reportPrompt(event){
             console.log(event);
             event.preventDefault();
             console.log("reportPrompt");
-            /*hoe juiste promptid vinden?*/
             let promptid = event.target.dataset.promptid;
             console.log(promptid);
             let formData = new FormData();
@@ -183,8 +169,9 @@ include_once("bootstrap.php");
                 return response.json();
             })
             .then(function(result){
-                console.log("test");
-                item.innerHTML = "Reported prompt";
+                if(result.status == "success"){
+                    item.innerHTML = result.message;
+                }
             });
         }
     </script>
