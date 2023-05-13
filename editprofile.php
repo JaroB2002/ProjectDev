@@ -23,6 +23,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" integrity="sha512-PmkEJHmZvcwdeUDzL5Z+K9QGQxxbivn5nMxvM5rPLnAR
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -84,3 +86,35 @@
     </main>
 </body>
 </html>
+
+<?php
+include('classes/Profile.php');
+
+// Maak een nieuwe Profile object aan
+$profile = new Profile();
+
+// Controleer of de gebruiker een profielfoto wilt uploaden
+if (isset($_POST['uploadPhoto'])) {
+  $result = $profile->setProfilePhoto($_FILES['image']);
+  echo $result;
+}
+
+// Controleer of de gebruiker de profielfoto wilt verwijderen
+if (isset($_POST['deletePhoto'])) {
+  $result = $profile->deleteProfilePhoto();
+  echo $result;
+}
+
+// Laat de geüploade afbeelding zien als deze al bestaat
+if ($profile->getProfilePhoto() != '') {
+  echo '<img src="' . $profile->getProfilePhoto() . '">';
+}
+?>
+
+<form action="" method="post" enctype="multipart/form-data" class="ml-10">
+  <label>Selecteer een afbeelding:</label>
+  <input type="file" name="image" required>
+  <br><br>
+  <input type="submit" name="uploadPhoto" value="Uploaden" class="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded">
+<input type="submit" name="deletePhoto" value="Verwijderen" class="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded">
+</form>
