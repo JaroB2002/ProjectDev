@@ -118,3 +118,4 @@ if ($profile->getProfilePhoto() != '') {
   <input type="submit" name="uploadPhoto" value="Uploaden" class="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded">
 <input type="submit" name="deletePhoto" value="Verwijderen" class="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded">
 </form>
+<?php include_once("footer.php");?>
