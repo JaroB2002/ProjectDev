@@ -179,4 +179,15 @@ class User{
         $statement->bindValue(":prompts_id", $_GET["buy"]);
         $statement->execute();
     }
+
+    //show total amount of credits user
+    public function showCredits(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT credits FROM users WHERE email = :email");
+        $statement->bindValue(":email", $_SESSION['username']);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
 }
