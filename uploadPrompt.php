@@ -97,3 +97,4 @@ if(!empty($_POST)){
     </form>
     <p class="font-semibold text-fadedblue mx-5 text-xl"><?php echo $succes?></p>
 </body>
+<?php include_once("footer.php");?>
