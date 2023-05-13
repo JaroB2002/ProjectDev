@@ -19,11 +19,14 @@
             $error=$e->getMessage();
         }
     }
+
+    $allCredits = $user->showCredits();
+    $credits = $allCredits['credits'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" integrity="sha512-PmkEJHmZvcwdeUDzL5Z+K9QGQxxbivn5nMxvM5rPLnAR
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" integrity="sha512-PmkEJHmZvcwdeUDzL5Z+K9QGQxxbivn5nMxvM5rPLnAR">
 
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -70,6 +73,7 @@
     <main class="ml-10 mt-10">
       <h1 class="text-5xl mb-10 font-semibold">Profile</h1>
       <h2 class="text-3xl text-fadedblue mb-5">Hi it's <?php echo htmlspecialchars($username); ?>!</h2>
+      <h3 class="text-2xl mb-3"><?php echo "My credits:" . " " . htmlspecialchars($credits);?></h3>
       <div class="bg-offwhite rounded w-96 p-5">
       <h3 class="text-2xl mb-3">My biography:</h3>
       <p class="text-8sm mb-3"><?php echo htmlspecialchars($biography); ?></p> 
