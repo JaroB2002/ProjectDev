@@ -6,7 +6,7 @@ $username = $_SESSION['username'];
 if(!isset($_SESSION['username'])){
     header('Location: index.php');
 }
-
+$succes = "";
 if(!empty($_POST)){
     try{
         $prompt = new Prompt();
