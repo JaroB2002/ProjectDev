@@ -41,21 +41,24 @@ class Report{
         }
     }
 
-    public static function reportCountPrompt(){
+    /*public function reportCountPrompt(){
         $conn = Db::getInstance();
-        $statement = $conn->prepare("SELECT COUNT(promptid) AS count FROM reports WHERE promptid = :promptid");
-        $statement->bindValue(":promptid", $_GET['id']);
+        $statement = $conn->prepare("SELECT COUNT(*) AS report_count FROM reports WHERE promptid = :promptid");
+        $statement->bindValue(":promptid", $this->getPromptid());
         $statement->execute();
-        /*$result = $statement->fetch();
-        return $result;*/
         $result = $statement->fetch(PDO::FETCH_ASSOC);
-        return $result['count'];
-        if( $result['count'] >= 5){
+        
+        return $result['report_count'] > 5;
+    }
+    public function deletePrompt($reported){
+        if($reported){
+            $conn = Db::getInstance();
             $statement = $conn->prepare("DELETE FROM prompts WHERE id = :id");
             $statement->bindValue(":id", $_GET['id']);
             $statement->execute();
         }
-    }
+    }*/
+
 
     public static function getAllReportedPrompts(){
         $conn = Db::getInstance();

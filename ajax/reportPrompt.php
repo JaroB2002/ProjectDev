@@ -7,23 +7,18 @@ if(!empty($_POST)){
     $report->setReporter($_SESSION['username']);
     $report->setPromptid($_POST['promptid']);
 
-    $report->reportPrompt();
-    $response = [
-        'status' => 'success',
-        'message' => 'Prompt reported.',
-    ];
-    echo json_encode($response);
-    /*if($report->isPromptReported()){
+    if($report->isPromptReported()){
         $response = [
             'status' => 'success',
-            'message' => 'You have already reported this prompt.',
+            'message' => 'You already reported this prompt before.',
         ];
-    }
-    else{
+    }else{
         $report->reportPrompt();
         $response = [
             'status' => 'success',
             'message' => 'Prompt reported.',
         ];
-    }*/
+    }
+
+    echo json_encode($response);
 }
