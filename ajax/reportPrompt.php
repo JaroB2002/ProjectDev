@@ -4,7 +4,7 @@ session_start();
 
 if(!empty($_POST)){
     $report = new Report();
-    $report->setReporter($_SESSION['user']);
+    $report->setReporter($_SESSION['username']);
     $report->setPromptid($_POST['promptid']);
 
     $report->reportPrompt();
