@@ -199,4 +199,25 @@ class User{
             $statement->execute();
         }
     }
+    /* laten nakijken op sql injectie op feedback*/
+    public function checkVerify(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT COUNT(*) AS approved_count FROM prompts WHERE email = :email AND approved = :approved");
+        $statement->bindValue(":email", $this->getEmail());
+        $statement->bindValue(":approved", 1);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        
+        return $result['approved_count'] > 3;
+    }
+    
+    public function verifyUser($verified){
+        if($verified){
+            $conn = Db::getInstance();
+            $statement = $conn->prepare("UPDATE users SET users.verified = 1 WHERE email = :email");
+            $statement->bindValue(":email", $_SESSION['username']);
+            $statement->execute();
+        }
+    }
+
 }

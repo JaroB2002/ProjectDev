@@ -9,6 +9,10 @@
     $userDetails = $user->getUserDetails();
     $biography = $userDetails['biography'];
 
+    if($user->checkVerify()){
+      $user->verifyUser(true);
+     }
+
     if(!empty($_POST)){
         try{
             $user->setBiography($_POST['biography']);
@@ -73,6 +77,9 @@
     <main class="ml-10 mt-10">
       <h1 class="text-5xl mb-10 font-semibold">Profile</h1>
       <h2 class="text-3xl text-fadedblue mb-5">Hi it's <?php echo htmlspecialchars($username); ?>!</h2>
+      <?php if($user->checkVerify()): ?>
+        <h2 class="text-2xl text-fadedpurple mb-5">I am a verified user.</h2>
+      <?php endif; ?>
       <h3 class="text-2xl mb-3"><?php echo "My credits:" . " " . htmlspecialchars($credits);?></h3>
       <div class="bg-offwhite rounded w-96 p-5">
       <h3 class="text-2xl mb-3">My biography:</h3>
