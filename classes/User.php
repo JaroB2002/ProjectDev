@@ -190,4 +190,13 @@ class User{
         return $result;
     }
 
+    //add credits if prompt of user is approved
+    public function addCreditsIfApproved($approved){
+        if($approved){
+            $conn = Db::getInstance();
+            $statement = $conn->prepare("UPDATE users SET users.credits = users.credits + 1 WHERE email = :email");
+            $statement->bindValue(":email", $_SESSION['username']);
+            $statement->execute();
+        }
+    }
 }
