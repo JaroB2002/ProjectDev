@@ -152,11 +152,41 @@ include_once("bootstrap.php");
                     <p class="mb-3 text-lg text-offwhite"><strong>Type:</strong> <?php echo htmlspecialchars($prompt["type"]); ?></p>
                     <p class="mb-3 text-lg text-offwhite"><strong>Price:</strong> <?php echo htmlspecialchars($prompt["price"]); ?></p>
                     <button class="report-button" data-prompt-id="<?php echo $prompt["id"]; ?>">Report user</button>
-                    
+                    <button id="reportButton" data-promptid="<?php echo $prompt['id'];?>" class="p-3 px-6 pt-2 text-white bg-fadedpurple rounded-full baseline font-semibold text-lg">Report Prompt</button>
                 </div>
         <?php endforeach; ?>
     </article>
-    
+    <script>
+        let report = document.querySelectorAll("#reportButton");
+
+        report.forEach(function(button){
+            button.addEventListener("click", reportPrompt);
+        });
+
+        function reportPrompt(event){
+        console.log(event);
+        event.preventDefault();
+        console.log("reportPrompt");
+        let promptid = event.target.dataset.promptid;
+        console.log(promptid);
+        let formData = new FormData();
+        formData.append("promptid", promptid);
+
+        let item = this;
+        fetch("ajax/reportPrompt.php", {
+            method: "POST",
+            body: formData
+        })
+        .then(function(response){
+            return response.json();
+        })
+        .then(function(result){
+            if(result.status == "success"){
+                item.innerHTML = result.message;
+            }
+        });
+        }
+    </script>
 </body>
 </html>
 
