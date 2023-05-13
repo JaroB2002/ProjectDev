@@ -58,7 +58,6 @@ include_once("bootstrap.php");
         $errorMessage = $e->getMessage();
     }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -168,7 +167,31 @@ include_once("bootstrap.php");
                 
         <?php endforeach; ?>
     </article>
+    <?php
+include_once(__DIR__ . "/classes/Comment.php");
+$allComments = Comment::getAll(3);
+//var_dump($allComments);
+?>
+<div class="post">  
+  <div class="post__comments">
+      <div class="post__comments__form">
+        <input type="text" id="commentText" placeholder="What's on your mind">
+        <a href="#" class="btn" id="btnAddComment" data-postid="3">Add comment</a>
+      </div>  
     
+      <ul class="post__comments__list">
+        <?php foreach($allComments as $c): ?>
+          <li><?php echo $c['text']; ?></li>
+        <?php endforeach; ?>
+      </ul>
+  </div>
+
+  
+</div>
+  <script src="index.css"></script>
+  <script src="app.js"></script>
+
+
 </body>
 </html>
 
