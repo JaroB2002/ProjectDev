@@ -49,6 +49,7 @@ include_once("bootstrap.php");
             /*var_dump($canBuy);*/
             if($canBuy['can_buy'] === '1'){
                 $user->buyPrompt();
+                $user->sellPrompt();
             }else{
                 throw new Exception("You don't have enough credits.");
             }

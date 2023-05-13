@@ -40,11 +40,12 @@ class User{
         //get connection
         $conn = Db::getInstance();
         //prepare statement
-        $statement = $conn->prepare("INSERT INTO users (email, password, is_admin) VALUES (:email, :password, :is_admin)");
+        $statement = $conn->prepare("INSERT INTO users (email, password, is_admin, credits) VALUES (:email, :password, :is_admin, :credits)");
         //binden
         $statement->bindValue(":email", $this->getEmail()); 
         $statement->bindValue(":password", $this->getPassword());
         $statement->bindValue(":is_admin", 0);
+        $statement->bindValue(":credits", 0);
         //execute
         return $statement->execute(); 
     }
@@ -169,6 +170,13 @@ class User{
         $statement = $conn->prepare("UPDATE users SET users.credits = users.credits - (SELECT prompts.price FROM prompts WHERE prompts.id = :prompts_id) WHERE users.email = :email");
         $statement->bindValue(":prompts_id", $_GET["buy"]);
         $statement->bindValue(":email", $_SESSION['username']);
+        $statement->execute();
+    }
+
+    public function sellPrompt(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("UPDATE users SET users.credits = users.credits + (SELECT prompts.price FROM prompts WHERE prompts.id = :prompts_id) WHERE users.email = (SELECT prompts.email FROM prompts WHERE prompts.id = :prompts_id)");
+        $statement->bindValue(":prompts_id", $_GET["buy"]);
         $statement->execute();
     }
 }
