@@ -44,6 +44,20 @@ include_once("bootstrap.php");
     //$allApprovedPrompts = Prompt::getAllApproved();
     $filter = Prompt::filter($pricing, $type, $date, $search);
 
+    try {
+        $user = new User();
+        if(isset($_GET['buy'])){
+            $canBuy = $user->checkIfCanBuy();
+            /*var_dump($canBuy);*/
+            if($canBuy['can_buy'] === '1'){
+                $user->buyPrompt();
+            }else{
+                throw new Exception("You don't have enough credits.");
+            }
+        }
+    } catch (Exception $e) {
+        $errorMessage = $e->getMessage();
+    }
 
     /*verhuizen naar functie filter in class prompts
     if(!empty($_POST["search"])){
@@ -153,6 +167,16 @@ include_once("bootstrap.php");
                     <p class="mb-3 text-lg text-offwhite"><strong>Price:</strong> <?php echo htmlspecialchars($prompt["price"]); ?></p>
                     <button class="report-button" data-prompt-id="<?php echo $prompt["id"]; ?>">Report user</button>
                     <button id="reportButton" data-promptid="<?php echo $prompt['id'];?>" class="p-3 px-6 pt-2 text-white bg-fadedpurple rounded-full baseline font-semibold text-lg">Report Prompt</button>
+                    <div>
+                        <?php if (isset($errorMessage) && $_GET["buy"] == $prompt["id"]): ?>
+                            <div class="error-message" id="<?php echo 'error-' . $prompt["id"]; ?>">
+                                <?php echo $errorMessage; ?>
+                            </div>
+                        <?php endif; ?>
+                        <form action="" class="mt-3">
+                            <button class="bg-fadedpurple px-5 py-3 rounded font-semibold ml-5" type="submit" name="buy" value="<?php echo $prompt['id'];?>">Buy</button>
+                        </form>
+                    </div>
                 </div>
         <?php endforeach; ?>
     </article>
