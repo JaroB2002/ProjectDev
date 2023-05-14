@@ -40,14 +40,29 @@ class User{
         //get connection
         $conn = Db::getInstance();
         //prepare statement
-        $statement = $conn->prepare("INSERT INTO users (email, password, is_admin, credits) VALUES (:email, :password, :is_admin, :credits)");
+        $statement = $conn->prepare("INSERT INTO users (email, password, is_admin, credits, verified) VALUES (:email, :password, :is_admin, :credits, :verified)");
         //binden
         $statement->bindValue(":email", $this->getEmail()); 
         $statement->bindValue(":password", $this->getPassword());
         $statement->bindValue(":is_admin", 0);
         $statement->bindValue(":credits", 0);
+        $statement->bindValue(":verified", 0);
         //execute
         return $statement->execute(); 
+    }
+    /*login*/
+    public function canLogin($email, $password) {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT email, password FROM users WHERE email = :email");
+        $statement->bindValue(":email", $email);
+        $statement->execute();
+        $row = $statement->fetch();
+
+        if ($row) {
+            return password_verify($password, $row['password']);
+        }
+
+        return false;
     }
 
     public static function getAll()

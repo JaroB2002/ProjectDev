@@ -1,5 +1,25 @@
 <?php 
-function canLogin($username, $password){
+  include_once("bootstrap.php");
+  if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $user = new User();
+
+    $email = $_POST["username"];
+    $password = $_POST["password"];
+
+    $user->setEmail($email);
+    $user->setPassword($password);
+
+    if ($user->canLogin($email, $password)) {
+        session_start();
+        $_SESSION['username'] = $email;
+        header("Location: dashboard.php");
+    } else {
+        header("Location: index.php");
+    }
+}
+
+
+/*function canLogin($username, $password){
   require_once 'classes/Db.php'; // Include the file containing the definition of the Db class
   $conn = Db::getInstance(); // Create an instance of the Db class
   $statement = $conn->prepare("select * from users where email= :email");
@@ -11,7 +31,7 @@ function canLogin($username, $password){
   }  
 
  
-}
+}*/
 
 
 /*
@@ -87,7 +107,7 @@ public function canLogin($username, $password){
          <div>
            <img class="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Logo project">
            <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">Log in</h2>
-           <p class="mt-2 text-center text-sm text-gray-600"> Of <a href="register.php" class="font-medium text-indigo-600 hover:text-indigo-500">registreer</a> je nu
+           <p class="mt-2 text-center text-sm text-gray-600"> Or <a href="register.php" class="font-medium text-indigo-600 hover:text-indigo-500">sign up here</a>
            </p>
          </div>
          <form class="mt-8 space-y-6" action="#" method="POST">
