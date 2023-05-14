@@ -10,37 +10,9 @@ function canLogin($username, $password){
     return false;
   }  
 
-  $hash = $user['password'];
-
-  if(password_verify($password, $hash) ){
-    return true;
-  } else{
-    return false;
-  }
+ 
 }
 
-if(!empty($_POST)){
-  //er is verzonden
-  $username= $_POST['username'];
-  $password= $_POST['password'];
-  $rememberMe = isset($_POST['remember-me']) ? true : false; // Check if the checkbox is checked
-
-  if(canLogin($username, $password)){
-    //inloggen
-    session_start();
-    $_SESSION['username'] = $username;
-
-    if ($rememberMe) {
-      // Store the value in a cookie
-      setcookie("remember_me", "1", time() + (86400 * 30), "/"); // 30 days expiration time
-    }
-
-    header("Location: dashboard.php");
-  } else{
-    //error
-    $error = true;
-  }
-}
 
 /*
 require_once 'classes/Db.php'; // Include the file containing the definition of the Db class
@@ -65,34 +37,7 @@ public function canLogin($username, $password){
 ?>
 
 */
-if(!empty($_POST)){
-  try{
-    //er is verzonden
-    $user = new User();
-    $user->setEmail($_POST["email"]);
-    $user->setPassword($_POST["password"]);
 
-    if($user->canLogin()){
-      //inloggen
-      session_start();
-      $_SESSION['email'] = $user->getEmail();
-
-      $rememberMe = isset($_POST['remember-me']) ? true : false; // Check if the checkbox is checked
-      if ($rememberMe) {
-        // Store the value in a cookie
-        setcookie("remember_me", "1", time() + (86400 * 30), "/"); // 30 days expiration time
-      }
-
-      header("Location: dashboard.php");
-    } else{
-      //error
-      $error = true;
-    }
-  }
-  catch (Throwable $e){
-    $error = $e->getMessage();
-  }
-}
 ?>
 
 <!DOCTYPE html>
