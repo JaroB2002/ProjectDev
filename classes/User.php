@@ -179,45 +179,4 @@ class User{
         $statement->bindValue(":prompts_id", $_GET["buy"]);
         $statement->execute();
     }
-
-    //show total amount of credits user
-    public function showCredits(){
-        $conn = Db::getInstance();
-        $statement = $conn->prepare("SELECT credits FROM users WHERE email = :email");
-        $statement->bindValue(":email", $_SESSION['username']);
-        $statement->execute();
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
-        return $result;
-    }
-
-    //add credits if prompt of user is approved
-    public function addCreditsIfApproved($approved){
-        if($approved){
-            $conn = Db::getInstance();
-            $statement = $conn->prepare("UPDATE users SET users.credits = users.credits + 1 WHERE email = :email");
-            $statement->bindValue(":email", $_SESSION['username']);
-            $statement->execute();
-        }
-    }
-    /* laten nakijken op sql injectie op feedback*/
-    public function checkVerify(){
-        $conn = Db::getInstance();
-        $statement = $conn->prepare("SELECT COUNT(*) AS approved_count FROM prompts WHERE email = :email AND approved = :approved");
-        $statement->bindValue(":email", $this->getEmail());
-        $statement->bindValue(":approved", 1);
-        $statement->execute();
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
-        
-        return $result['approved_count'] > 3;
-    }
-    
-    public function verifyUser($verified){
-        if($verified){
-            $conn = Db::getInstance();
-            $statement = $conn->prepare("UPDATE users SET users.verified = 1 WHERE email = :email");
-            $statement->bindValue(":email", $_SESSION['username']);
-            $statement->execute();
-        }
-    }
-
 }
