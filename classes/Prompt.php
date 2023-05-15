@@ -6,7 +6,7 @@ class Prompt{
     private $image;
     private $type;
     private $price;
-
+    //test
     public function setName($name){
         if (empty($name)) {
             throw new Exception("Name cannot be empty.");
