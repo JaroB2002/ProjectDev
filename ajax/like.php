@@ -1,7 +1,7 @@
 <?php
  spl_autoload_register(function($class){
     require_once("../classes" . DIRECTORY_SEPARATOR . $class . ".php");
-});
+}); //test
 session_start();
     if(!empty($_POST)){
          //nieuwe like aanmaken
