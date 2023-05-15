@@ -47,6 +47,7 @@ include_once("bootstrap.php");
 
     //$allApprovedPrompts = Prompt::getAllApproved();
     $filter = Prompt::filter($pricing, $type, $date, $search);
+    $likes = new Prompt();
 
     try {
         $user = new User();
@@ -159,7 +160,6 @@ include_once("bootstrap.php");
                     <p class="mb-3 text-lg text-offwhite"><strong>Price:</strong> <?php echo htmlspecialchars($prompt["price"]); ?></p>
 
                     <div>
-                    <a href="#" data-id="<?php echo $prompt['id']; ?>" class="like">Like <span class='likes' id="likes"><?php echo $likes->getLikes($prompt['id']) ?> people like this</span> </a>
                         <button class="report-button" data-prompt-id="<?php echo $prompt["id"]; ?>" data-error-id="<?php echo 'error-' . $prompt["id"]; ?>">Report user</button>
                         <?php if (isset($errorMessage) && $_GET["buy"] == $prompt["id"]): ?>
                             <div class="error-message" id="<?php echo 'error-' . $prompt["id"]; ?>">
@@ -169,6 +169,9 @@ include_once("bootstrap.php");
                         <form action="" class="mt-3">
                             <button class="bg-fadedpurple px-5 py-3 rounded font-semibold ml-5" type="submit" name="buy" value="<?php echo $prompt['id'];?>">Buy</button>
                         </form>
+                        <div>
+                        <a href="#" data-id="<?php echo $prompt['id']; ?>" class="like">Like <span class='likes' id="likes"><?php echo $likes->getLikes($prompt['id']) ?> people like this</span> </a>
+                    </div>
                     </div>
                 </div>
                 
