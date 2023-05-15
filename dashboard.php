@@ -2,12 +2,7 @@
 include_once("bootstrap.php");
 
     session_start();
-    $report = new Report();
-    /*if($report->reportCountPrompt()){
-        $reportCount = $report->deletePrompt(true);
-        echo "done";
-    };*/
-
+    
     //niet via url binnen raken
     if(!isset($_SESSION['username'])){
         header("location: index.php");
@@ -40,10 +35,12 @@ include_once("bootstrap.php");
     else{
         $search = "all";
     }
+
+    //var_dump($search);
     
+
     //$allApprovedPrompts = Prompt::getAllApproved();
     $filter = Prompt::filter($pricing, $type, $date, $search);
-    $likes = new Prompt();
 
     try {
         $user = new User();
@@ -52,6 +49,7 @@ include_once("bootstrap.php");
             /*var_dump($canBuy);*/
             if($canBuy['can_buy'] === '1'){
                 $user->buyPrompt();
+                $user->sellPrompt();
             }else{
                 throw new Exception("You don't have enough credits.");
             }
@@ -59,21 +57,7 @@ include_once("bootstrap.php");
     } catch (Exception $e) {
         $errorMessage = $e->getMessage();
     }
-
-    /*verhuizen naar functie filter in class prompts
-    if(!empty($_POST["search"])){
-        $conn = Db::getInstance();
-        $statement = $conn->prepare("SELECT * FROM `prompts` WHERE name LIKE CONCAT('%', :title, '%')");
-        $statement->bindValue(":title", $_POST["search"]);
-        $statement->execute();
-        $search = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-        if (empty($search)) {
-            echo "No results found.";
-        }
-    }*/
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -104,10 +88,9 @@ include_once("bootstrap.php");
       }
     }
   </script>
-
 </head>
 
-
+<body class="mx-10">
     <nav class="relative container mx-auto p-6 bg-offwhite rounded-md">
     <div class="flex items-center justify-between">
         <div class=" md:flex space-x-6">
@@ -170,6 +153,7 @@ include_once("bootstrap.php");
                     <p class="mb-3 text-lg text-offwhite"><strong>Price:</strong> <?php echo htmlspecialchars($prompt["price"]); ?></p>
 
                     <div>
+                        <button class="report-button" data-prompt-id="<?php echo $prompt["id"]; ?>" data-error-id="<?php echo 'error-' . $prompt["id"]; ?>">Report user</button>
                         <?php if (isset($errorMessage) && $_GET["buy"] == $prompt["id"]): ?>
                             <div class="error-message" id="<?php echo 'error-' . $prompt["id"]; ?>">
                                 <?php echo $errorMessage; ?>
@@ -179,47 +163,38 @@ include_once("bootstrap.php");
                             <button class="bg-fadedpurple px-5 py-3 rounded font-semibold ml-5" type="submit" name="buy" value="<?php echo $prompt['id'];?>">Buy</button>
                         </form>
                     </div>
-
-                    <div>
-                        <a href="#" data-id="<?php echo $prompt['id']; ?>" class="like">Like <span class='likes' id="likes"><?php echo $likes->getLikes($prompt['id']) ?> people like this</span> </a>
-                    </div>
                 </div>
+                
         <?php endforeach; ?>
     </article>
-    <script>
-        let report = document.querySelectorAll("#reportButton");
+    <?php
+include_once(__DIR__ . "/classes/Comment.php");
+$allComments = Comment::getAll(3);
+//var_dump($allComments);
+?>
+<div class="post">  
+  <div class="post__comments">
+      <div class="post__comments__form">
+        <input type="text" id="commentText" placeholder="What's on your mind">
+        <a href="#" class="btn" id="btnAddComment" data-postid="3">Add comment</a>
+      </div>  
+    
+      <ul class="post__comments__list">
+        <?php foreach($allComments as $c): ?>
+          <li><?php echo $c['text']; ?></li>
+        <?php endforeach; ?>
+      </ul>
+  </div>
 
-        report.forEach(function(button){
-            button.addEventListener("click", reportPrompt);
-        });
+  
+</div>
+  <script src="index.css"></script>
+  <script src="app.js"></script>
 
-        function reportPrompt(event){
-        console.log(event);
-        event.preventDefault();
-        console.log("reportPrompt");
-        let promptid = event.target.dataset.promptid;
-        console.log(promptid);
-        let formData = new FormData();
-        formData.append("promptid", promptid);
 
-        let item = this;
-        fetch("ajax/reportPrompt.php", {
-            method: "POST",
-            body: formData
-        })
-        .then(function(response){
-            return response.json();
-        })
-        .then(function(result){
-            if(result.status == "success"){
-                item.innerHTML = result.message;
-            }
-        });
-        }
-    </script>
 </body>
 </html>
-
+<a href="#" data-id="<?php echo $prompt['id']; ?>" class="like">Like <span class='likes' id="likes"><?php echo $likes->getLikes($prompt['id']) ?> people like this</span> </a>
 <?php
 // START DELETE ACCOUNT CODE
 
@@ -298,116 +273,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
 	<title>Dashboard</title>
 </head>
+
+
+
+</html>
+<body class="mx-1">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
 <body>
-	<h1>Dashboard</h1>
-	
-	<form method="post" enctype="multipart/form-data">
-		<label for="file">Selecteer een afbeelding:</label>
-		<input type="file" name="file" id="file"><br><br>
-		<input type="submit" name="submit" value="Uploaden">
-	</form>
+<?php include_once("footer.php");?>
 
-	<?php
-require_once('classes/ProfilePic.php');
+</body>
+</html>
 
-// Check if form is submitted
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Check if file was uploaded without errors
-    if(isset($_FILES["profile_picture"]) && $_FILES["profile_picture"]["error"] == 0){
-        $allowed = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "png" => "image/png");
-        $filename = $_FILES["profile_picture"]["name"];
-        $filetype = $_FILES["profile_picture"]["type"];
-        $filesize = $_FILES["profile_picture"]["size"];
-
-        // Verify file extension
-        $ext = pathinfo($filename, PATHINFO_EXTENSION);
-        if(!array_key_exists($ext, $allowed)) die("Error: Please select a valid file format.");
-
-        // Verify file size - 5MB maximum
-        $maxsize = 10 * 1024 * 1024; // 10MB
-        if($filesize > $maxsize) die("Error: File size is larger than the allowed limit.");
-
-        // Verify MYME type of the file
-        if(in_array($filetype, $allowed)){
-            // Check if file exists
-            if(file_exists("upload/" . $_FILES["profile_picture"]["name"])){
-                // Remove the line that displays the error message for existing file
-                // echo $_FILES["profile_picture"]["name"] . " is already exists.";
-            } else{
-                $user_id = $_POST['user_id'];
-                $stmt = $conn->prepare("UPDATE profile_pictures SET filename = :filename WHERE user_id = :user_id");
-                $stmt->bindParam(':user_id', $user_id);
-                $stmt->bindParam(':filename', $filename);
-                $button_text = "Upload";
-
-                if($stmt->execute()){
-                    move_uploaded_file($_FILES["profile_picture"]["tmp_name"], "upload/" . $_FILES["profile_picture"]["name"]);
-                    echo "Your profile picture was uploaded successfully.";
-                    header("Refresh:2");
-                } else {
-                    echo "Error: There was a problem uploading your file. Please try again."; 
-                }
-            }
-        } else{
-            echo "Error: Please select a valid file format.";
-        }
-    } else{
-        echo "Error: " . $_FILES["profile_picture"]["error"];
-    }
-    // delete profile picture
-// Delete profile picture
-if(isset($_POST['delete_profile_picture'])){
-    // Get user ID
-    $user_id = $_POST['user_id'];
-
-    // Fetch the filename of the profile picture from the database
-    $stmt = $conn->prepare("SELECT filename FROM profile_pictures WHERE user_id = :user_id");
-    $stmt->bindParam(':user_id', $user_id);
-    $stmt->execute();
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    $filename = $row['filename'];
-
-    // Delete the profile picture file from the server
-    $file_path = "upload/" . $filename;
-    if(file_exists($file_path)){
-        unlink($file_path);
-    }
-
-    // Update the filename in the database to empty string or null, depending on your database schema
-    $stmt = $conn->prepare("UPDATE profile_pictures SET filename = '' WHERE user_id = :user_id");
-    $stmt->bindParam(':user_id', $user_id);
-    if($stmt->execute()){
-        echo "Your profile picture was deleted successfully.";
-        header("Refresh:2");
-    } else {
-        echo "Error: There was a problem deleting your file. Please try again."; 
-    }
-}
-}
-
-// Get user's profile picture filename
-$user_id = 1; // change this to the user_id of the user whose profile picture you want to display
-$stmt = $conn->prepare("SELECT filename FROM profile_pictures WHERE user_id = :user_id");
-$stmt->bindParam(':user_id', $user_id);
-$stmt->execute();
-$row = $stmt->fetch(PDO::FETCH_ASSOC);
-if (isset($_FILES["profile_picture"]["error"]) && $_FILES["profile_picture"]["error"] !== false) {
-    echo "Error: " . $_FILES["profile_picture"]["error"];
-} else {
-    echo "Error: There was a problem uploading your file. Please try again."; 
-}
-?>
-
-<!-- Display user's profile picture -->
-<img src="upload/<?php echo $filename; ?>" alt="Profile Picture">
-<img src="delete/<?php echo $filename; ?>" alt="Delete Picture">
-
-<!-- Form to upload profile picture -->
-<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
-    <input type="file" name="profile_picture">
-    <input type="submit" value="Upload">
-    <input type="submit" value="Delete"> 
-</form>
-
-<script src="js/like.js"></script>
