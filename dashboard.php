@@ -38,7 +38,7 @@ include_once("bootstrap.php");
 
     //$allApprovedPrompts = Prompt::getAllApproved();
     $filter = Prompt::filter($pricing, $type, $date, $search);
-    $likes = Prompt::getLikes();
+    $likes = new Prompt();
 ?>
 
 <!DOCTYPE html>
@@ -140,8 +140,8 @@ include_once("bootstrap.php");
                     <p class="mb-3 text-lg text-offwhite"><strong>Price:</strong> <?php echo htmlspecialchars($prompt["price"]); ?></p>
 
                     <div>
-                        <a href="#" data-id="<?php echo $prompt['id']; ?>" class="like">Like</a>
-                        <span class='likes' id="likes <?php echo $prompt['id']; ?>"> <?php echo $likes ?> people like this</span> 
+                        <a href="#" data-id="<?php echo $prompt['id']; ?>" class="like">Like <span class='likes' id="likes"><?php echo $likes->getLikes($prompt['id']) ?> people like this</span> </a>
+                        
                     </div>
                 </div>
         <?php endforeach; ?>
