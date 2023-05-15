@@ -173,6 +173,10 @@ include_once("bootstrap.php");
                         <a href="#" data-id="<?php echo $prompt['id']; ?>" class="like">Like <span class='likes' id="likes"><?php echo $likes->getLikes($prompt['id']) ?> people like this</span> </a>
                         
                     </div>
+
+                    <div>
+                        <a href="#" data-id="<?php echo $prompt['id']; ?>" class="like">Like <span class='likes' id="likes"><?php echo $likes->getLikes($prompt['id']) ?> people like this</span> </a>
+                    </div>
                 </div>
         <?php endforeach; ?>
     </article>
