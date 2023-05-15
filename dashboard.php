@@ -43,6 +43,7 @@ include_once("bootstrap.php");
     
     //$allApprovedPrompts = Prompt::getAllApproved();
     $filter = Prompt::filter($pricing, $type, $date, $search);
+    $likes = new Prompt();
 
     try {
         $user = new User();
@@ -72,6 +73,7 @@ include_once("bootstrap.php");
         }
     }*/
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -102,6 +104,7 @@ include_once("bootstrap.php");
       }
     }
   </script>
+
 </head>
 
 
@@ -165,8 +168,7 @@ include_once("bootstrap.php");
                     <p class="mb-3 text-lg text-offwhite"><strong>Description:</strong> <?php echo htmlspecialchars($prompt["description"]); ?></p>
                     <p class="mb-3 text-lg text-offwhite"><strong>Type:</strong> <?php echo htmlspecialchars($prompt["type"]); ?></p>
                     <p class="mb-3 text-lg text-offwhite"><strong>Price:</strong> <?php echo htmlspecialchars($prompt["price"]); ?></p>
-                    <button class="report-button" data-prompt-id="<?php echo $prompt["id"]; ?>">Report user</button>
-                    <button id="reportButton" data-promptid="<?php echo $prompt['id'];?>" class="p-3 px-6 pt-2 text-white bg-fadedpurple rounded-full baseline font-semibold text-lg">Report Prompt</button>
+
                     <div>
                         <?php if (isset($errorMessage) && $_GET["buy"] == $prompt["id"]): ?>
                             <div class="error-message" id="<?php echo 'error-' . $prompt["id"]; ?>">
@@ -176,6 +178,10 @@ include_once("bootstrap.php");
                         <form action="" class="mt-3">
                             <button class="bg-fadedpurple px-5 py-3 rounded font-semibold ml-5" type="submit" name="buy" value="<?php echo $prompt['id'];?>">Buy</button>
                         </form>
+                    </div>
+
+                    <div>
+                        <a href="#" data-id="<?php echo $prompt['id']; ?>" class="like">Like <span class='likes' id="likes"><?php echo $likes->getLikes($prompt['id']) ?> people like this</span> </a>
                     </div>
                 </div>
         <?php endforeach; ?>
@@ -284,4 +290,124 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 
-<?php include_once("footer.php");?>
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dashboard</title>
+</head>
+<body>
+	<h1>Dashboard</h1>
+	
+	<form method="post" enctype="multipart/form-data">
+		<label for="file">Selecteer een afbeelding:</label>
+		<input type="file" name="file" id="file"><br><br>
+		<input type="submit" name="submit" value="Uploaden">
+	</form>
+
+	<?php
+require_once('classes/ProfilePic.php');
+
+// Check if form is submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Check if file was uploaded without errors
+    if(isset($_FILES["profile_picture"]) && $_FILES["profile_picture"]["error"] == 0){
+        $allowed = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "png" => "image/png");
+        $filename = $_FILES["profile_picture"]["name"];
+        $filetype = $_FILES["profile_picture"]["type"];
+        $filesize = $_FILES["profile_picture"]["size"];
+
+        // Verify file extension
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        if(!array_key_exists($ext, $allowed)) die("Error: Please select a valid file format.");
+
+        // Verify file size - 5MB maximum
+        $maxsize = 10 * 1024 * 1024; // 10MB
+        if($filesize > $maxsize) die("Error: File size is larger than the allowed limit.");
+
+        // Verify MYME type of the file
+        if(in_array($filetype, $allowed)){
+            // Check if file exists
+            if(file_exists("upload/" . $_FILES["profile_picture"]["name"])){
+                // Remove the line that displays the error message for existing file
+                // echo $_FILES["profile_picture"]["name"] . " is already exists.";
+            } else{
+                $user_id = $_POST['user_id'];
+                $stmt = $conn->prepare("UPDATE profile_pictures SET filename = :filename WHERE user_id = :user_id");
+                $stmt->bindParam(':user_id', $user_id);
+                $stmt->bindParam(':filename', $filename);
+                $button_text = "Upload";
+
+                if($stmt->execute()){
+                    move_uploaded_file($_FILES["profile_picture"]["tmp_name"], "upload/" . $_FILES["profile_picture"]["name"]);
+                    echo "Your profile picture was uploaded successfully.";
+                    header("Refresh:2");
+                } else {
+                    echo "Error: There was a problem uploading your file. Please try again."; 
+                }
+            }
+        } else{
+            echo "Error: Please select a valid file format.";
+        }
+    } else{
+        echo "Error: " . $_FILES["profile_picture"]["error"];
+    }
+    // delete profile picture
+// Delete profile picture
+if(isset($_POST['delete_profile_picture'])){
+    // Get user ID
+    $user_id = $_POST['user_id'];
+
+    // Fetch the filename of the profile picture from the database
+    $stmt = $conn->prepare("SELECT filename FROM profile_pictures WHERE user_id = :user_id");
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $filename = $row['filename'];
+
+    // Delete the profile picture file from the server
+    $file_path = "upload/" . $filename;
+    if(file_exists($file_path)){
+        unlink($file_path);
+    }
+
+    // Update the filename in the database to empty string or null, depending on your database schema
+    $stmt = $conn->prepare("UPDATE profile_pictures SET filename = '' WHERE user_id = :user_id");
+    $stmt->bindParam(':user_id', $user_id);
+    if($stmt->execute()){
+        echo "Your profile picture was deleted successfully.";
+        header("Refresh:2");
+    } else {
+        echo "Error: There was a problem deleting your file. Please try again."; 
+    }
+}
+}
+
+// Get user's profile picture filename
+$user_id = 1; // change this to the user_id of the user whose profile picture you want to display
+$stmt = $conn->prepare("SELECT filename FROM profile_pictures WHERE user_id = :user_id");
+$stmt->bindParam(':user_id', $user_id);
+$stmt->execute();
+$row = $stmt->fetch(PDO::FETCH_ASSOC);
+if (isset($_FILES["profile_picture"]["error"]) && $_FILES["profile_picture"]["error"] !== false) {
+    echo "Error: " . $_FILES["profile_picture"]["error"];
+} else {
+    echo "Error: There was a problem uploading your file. Please try again."; 
+}
+?>
+
+<!-- Display user's profile picture -->
+<img src="upload/<?php echo $filename; ?>" alt="Profile Picture">
+<img src="delete/<?php echo $filename; ?>" alt="Delete Picture">
+
+<!-- Form to upload profile picture -->
+<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
+    <input type="file" name="profile_picture">
+    <input type="submit" value="Upload">
+    <input type="submit" value="Delete"> 
+</form>
+
+<script src="js/like.js"></script>
