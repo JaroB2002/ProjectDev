@@ -1,6 +1,8 @@
+
 <?php
     include_once("bootstrap.php");
-    
+    $profileLink = "http://example.com/profile.php?user=" . urlencode($username);
+
     session_start();
     $username = $_SESSION['username'];
     
@@ -75,6 +77,8 @@
     </div>
   </nav>
   <main class="ml-10 mt-10">
+  <a href="<?php echo $profileLink; ?>">Deel mijn profiel</a>
+
     <h1 class="text-5xl mb-10 font-semibold">Profile</h1>
     <h2 class="text-3xl text-fadedblue mb-5">Hi it's <?php echo htmlspecialchars($username); ?>!</h2>
     <?php if($user->checkVerify()): ?>
@@ -96,7 +100,49 @@
     </form>
   </main>
 </body>
+<h2>Delete Your Account</h2>
+<p>Please confirm your email address to delete your account and all associated data.</p>
+<form method="post" action="dashboard.php">
+  <label for="email">Email:</label>
+  <input type="email" name="email" required>
+  <br>
+  <label for="confirm_delete">Confirm your email address:</label>
+  <input type="email" name="confirm_delete" required>
+  <br>
+  <p>To delete your account, type "delete my account" below:</p>
+  <input type="text" name="delete_confirmation" required>
+  <br>
+  <button type="submit" name="delete_account" onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">Delete Account</button>
+</form>
 
+<h2>Download Your Data</h2>
+<p>You can download a copy of your data by clicking the button below.</p>
+<a href="download_data.php">Download My Data</a>
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dashboard</title>
+</head>
+
+
+</html>
+<body class="mx-1">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<?php include_once("footer.php");?>
+
+</body>
+</html>
 <form action="" method="post" enctype="multipart/form-data" class="ml-10">
   <label>Selecteer een afbeelding:</label>
   <input type="file" name="image" required>
