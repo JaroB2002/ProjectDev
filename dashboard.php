@@ -169,8 +169,8 @@ include_once("bootstrap.php");
                         <form action="" class="mt-3">
                             <button class="bg-fadedpurple px-5 py-3 rounded font-semibold ml-5" type="submit" name="buy" value="<?php echo $prompt['id'];?>">Buy</button>
                         </form>
-                        <div>
-                        <a href="#" data-id="<?php echo $prompt['id']; ?>" class="like">Like <span class='likes' id="likes"><?php echo $likes->getLikes($prompt['id']) ?> people like this</span> </a>
+                        <div class="mt-5">
+                        <a href="#" data-id="<?php echo $prompt['id']; ?>" class="like bg-fadedpurple px-5 py-3 rounded font-semibold ml-5 mt-5">Like <span class='likes' id="likes"><?php echo $likes->getLikes($prompt['id']) ?> people like this</span> </a>
                     </div>
                     </div>
                 </div>
