@@ -18,46 +18,6 @@
     }
 }
 
-
-/*function canLogin($username, $password){
-  require_once 'classes/Db.php'; // Include the file containing the definition of the Db class
-  $conn = Db::getInstance(); // Create an instance of the Db class
-  $statement = $conn->prepare("select * from users where email= :email");
-  $statement->bindValue(":email", $username);
-  $statement->execute();
-  $user = $statement->fetch(PDO::FETCH_ASSOC); // Fetch as associative array
-  if(!$user){
-    return false;
-  }  
-
- 
-}*/
-
-
-/*
-require_once 'classes/Db.php'; // Include the file containing the definition of the Db class
-public function canLogin($username, $password){
-  $conn = Db::getInstance(); // Create an instance of the Db class
-  $statement = $conn->prepare("select * from users where email= :email");
-  $statement->bindValue(":email", $this->getEmail());
-  $statement->execute();
-  $user = $statement->fetch(PDO::FETCH_ASSOC); // Fetch as associative array
-  if(!$user){
-    return false;
-  }
-
-  $hash = $user[$this->getPassword()];
-
-  if(password_verify($password, $hash) ){
-    return true;
-  } else{
-    return false;
-  }
-}
-?>
-
-*/
-
 ?>
 
 <!DOCTYPE html>
@@ -148,39 +108,6 @@ public function canLogin($username, $password){
    </div>
  </div>
  </div>
-
-<!-- partial -->
-
-  
+ 
 </body>
 </html>
-
-<!--if(!empty($_POST)){
-    try{
-      //er is verzonden
-      $user = new User();
-      $user->setEmail($_POST["email"]);
-      $user->setPassword($_POST["password"]);
-      $user->canLogin();
-
-      $rememberMe = isset($_POST['remember-me']) ? true : false; // Check if the checkbox is checked
-
-      if($user->canLogin()){
-        //inloggen
-        session_start();
-        $_SESSION['username'] = $username;
-    
-        if ($rememberMe) {
-          // Store the value in a cookie
-          setcookie("remember_me", "1", time() + (86400 * 30), "/"); // 30 days expiration time
-        }
-    
-        header("Location: dashboard.php");
-      } 
-    }
-    catch (Throwable $e){
-      $error = $e->getMessage();
-    }
-  }
-
-  var_dump($e);!>
