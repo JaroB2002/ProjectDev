@@ -119,26 +119,26 @@ include_once("bootstrap.php");
         <div class="mr-10">
             <h2 class="text-xl font-semibold mt-7 mb-2">Pricing</h2>
             <select name="price">
-                <option value="all">All</option>
-                <option value="paid">Paid</option>
-                <option value="free">Free</option>
+                <option value="all" <?php if ($pricing == "all") echo "selected";?>>All</option>
+                <option value="paid" <?php if ($pricing == "paid") echo "selected";?>>Paid</option>
+                <option value="free" <?php if ($pricing == "free") echo "selected";?>>Free</option>
             </select>
         </div>
         <div class="mr-10">
             <h2 class="text-xl font-semibold mt-7 mb-2">Category</h2>
             <select name="type">
-                <option value="all">All</option>
-                <option value="lineArt">Line art</option>
-                <option value="realistic">Realistic</option>
-                <option value="cartoon">Cartoon</option>
+                <option value="all" <?php if ($type == "all") echo "selected"; ?>>All</option>
+                <option value="lineArt" <?php if ($type == "lineArt") echo "selected"; ?>>Line art</option>
+                <option value="realistic" <?php if ($type == "realistic") echo "selected"; ?>>Realistic</option>
+                <option value="cartoon" <?php if ($type == "cartoon") echo "selected"; ?>>Cartoon</option>
             </select>
         </div>
         <div>
             <h2 class="text-xl font-semibold mt-7 mb-2">Date</h2>
             <select name="date">
-                <option value="all">All</option>
-                <option value="new">New</option>
-                <option value="old">Old</option>
+                <option value="all" <?php if ($date == "all") echo "selected"; ?>>All</option>
+                <option value="new" <?php if ($date == "new") echo "selected"; ?>>New</option>
+                <option value="old" <?php if ($date == "old") echo "selected"; ?>>Old</option>
             </select>
         </div>
         </article>
@@ -147,6 +147,9 @@ include_once("bootstrap.php");
         </div>
     </form>
     <h2 class="text-3xl font-semibold mt-5">Prompt overview</h2>
+    <?php if($filter == null): ?>
+        <p class="text-xl font-semibold mt-5 text-fadedpurple">No prompts found</p>
+    <?php endif; ?>
     <article class="flex flex-wrap">
         <?php foreach ($filter as $prompt): ?>
                 <div class="my-5 bg-offblack mr-10 px-8 py-8 rounded max-w-sm">
@@ -158,7 +161,7 @@ include_once("bootstrap.php");
                     <p class="mb-3 text-lg text-offwhite"><strong>Description:</strong> <?php echo htmlspecialchars($prompt["description"]); ?></p>
                     <p class="mb-3 text-lg text-offwhite"><strong>Type:</strong> <?php echo htmlspecialchars($prompt["type"]); ?></p>
                     <p class="mb-3 text-lg text-offwhite"><strong>Price:</strong> <?php echo htmlspecialchars($prompt["price"]); ?></p>
-
+                    <button id="reportButton" data-promptid="<?php echo $prompt['id'];?>" class="p-3 px-6 pt-2 text-white bg-fadedpurple rounded-full baseline font-semibold text-lg">Report Prompt</button>
                     <div>
                         <button class="report-button" data-prompt-id="<?php echo $prompt["id"]; ?>" data-error-id="<?php echo 'error-' . $prompt["id"]; ?>">Report user</button>
                         <?php if (isset($errorMessage) && $_GET["buy"] == $prompt["id"]): ?>
@@ -200,11 +203,39 @@ $allComments = Comment::getAll(3);
 </div>
   <script src="index.css"></script>
   <script src="app.js"></script>
+  <script>
+        let report = document.querySelectorAll("#reportButton");
 
+        report.forEach(function(button){
+            button.addEventListener("click", reportPrompt);
+        });
 
+        function reportPrompt(event){
+        console.log(event);
+        event.preventDefault();
+        console.log("reportPrompt");
+        let promptid = event.target.dataset.promptid;
+        console.log(promptid);
+        let formData = new FormData();
+        formData.append("promptid", promptid);
+
+        let item = this;
+        fetch("ajax/reportPrompt.php", {
+            method: "POST",
+            body: formData
+        })
+        .then(function(response){
+            return response.json();
+        })
+        .then(function(result){
+            if(result.status == "success"){
+                item.innerHTML = result.message;
+            }
+        });
+        }
+    </script>
 </body>
 </html>
-<a href="#" data-id="<?php echo $prompt['id']; ?>" class="like">Like <span class='likes' id="likes"><?php echo $likes->getLikes($prompt['id']) ?> people like this</span> </a>
 <?php
 // START DELETE ACCOUNT CODE
 
