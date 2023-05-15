@@ -9,10 +9,6 @@
     $userDetails = $user->getUserDetails();
     $biography = $userDetails['biography'];
 
-    if($user->checkVerify()){
-      $user->verifyUser(true);
-     }
-
     if(!empty($_POST)){
         try{
             $user->setBiography($_POST['biography']);
@@ -23,15 +19,10 @@
             $error=$e->getMessage();
         }
     }
-
-    $allCredits = $user->showCredits();
-    $credits = $allCredits['credits'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" integrity="sha512-PmkEJHmZvcwdeUDzL5Z+K9QGQxxbivn5nMxvM5rPLnAR">
-
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -77,10 +68,6 @@
     <main class="ml-10 mt-10">
       <h1 class="text-5xl mb-10 font-semibold">Profile</h1>
       <h2 class="text-3xl text-fadedblue mb-5">Hi it's <?php echo htmlspecialchars($username); ?>!</h2>
-      <?php if($user->checkVerify()): ?>
-        <h2 class="text-2xl text-fadedpurple mb-5">I am a verified user.</h2>
-      <?php endif; ?>
-      <h3 class="text-2xl mb-3"><?php echo "My credits:" . " " . htmlspecialchars($credits);?></h3>
       <div class="bg-offwhite rounded w-96 p-5">
       <h3 class="text-2xl mb-3">My biography:</h3>
       <p class="text-8sm mb-3"><?php echo htmlspecialchars($biography); ?></p> 
@@ -97,36 +84,3 @@
     </main>
 </body>
 </html>
-
-<?php
-include('classes/Profile.php');
-
-// Maak een nieuwe Profile object aan
-$profile = new Profile();
-
-// Controleer of de gebruiker een profielfoto wilt uploaden
-if (isset($_POST['uploadPhoto'])) {
-  $result = $profile->setProfilePhoto($_FILES['image']);
-  echo $result;
-}
-
-// Controleer of de gebruiker de profielfoto wilt verwijderen
-if (isset($_POST['deletePhoto'])) {
-  $result = $profile->deleteProfilePhoto();
-  echo $result;
-}
-
-// Laat de geüploade afbeelding zien als deze al bestaat
-if ($profile->getProfilePhoto() != '') {
-  echo '<img src="' . $profile->getProfilePhoto() . '">';
-}
-?>
-
-<form action="" method="post" enctype="multipart/form-data" class="ml-10">
-  <label>Selecteer een afbeelding:</label>
-  <input type="file" name="image" required>
-  <br><br>
-  <input type="submit" name="uploadPhoto" value="Uploaden" class="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded">
-<input type="submit" name="deletePhoto" value="Verwijderen" class="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded">
-</form>
-<?php include_once("footer.php");?>

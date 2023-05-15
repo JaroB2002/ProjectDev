@@ -194,7 +194,7 @@ $allComments = Comment::getAll(3);
 
 </body>
 </html>
-<a href="#" data-id="<?php echo $prompt['id']; ?>" class="like">Like <span class='likes' id="likes"><?php echo $likes->getLikes($prompt['id']) ?> people like this</span> </a>
+
 <?php
 // START DELETE ACCOUNT CODE
 

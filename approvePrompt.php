@@ -8,7 +8,6 @@
 
     if(isset($_GET["approve"])){
         $approve->approvePrompt();
-        $addCredit = $admin->addCreditsIfApproved(true);
     }
     if(isset($_GET["disapprove"])){
         $approve->unapprovePrompt();

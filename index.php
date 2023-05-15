@@ -1,25 +1,5 @@
 <?php 
-  include_once("bootstrap.php");
-  if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $user = new User();
-
-    $email = $_POST["username"];
-    $password = $_POST["password"];
-
-    $user->setEmail($email);
-    $user->setPassword($password);
-
-    if ($user->canLogin($email, $password)) {
-        session_start();
-        $_SESSION['username'] = $email;
-        header("Location: dashboard.php");
-    } else {
-        header("Location: index.php");
-    }
-}
-
-
-/*function canLogin($username, $password){
+function canLogin($username, $password){
   require_once 'classes/Db.php'; // Include the file containing the definition of the Db class
   $conn = Db::getInstance(); // Create an instance of the Db class
   $statement = $conn->prepare("select * from users where email= :email");
@@ -30,9 +10,37 @@
     return false;
   }  
 
- 
-}*/
+  $hash = $user['password'];
 
+  if(password_verify($password, $hash) ){
+    return true;
+  } else{
+    return false;
+  }
+}
+
+if(!empty($_POST)){
+  //er is verzonden
+  $username= $_POST['username'];
+  $password= $_POST['password'];
+  $rememberMe = isset($_POST['remember-me']) ? true : false; // Check if the checkbox is checked
+
+  if(canLogin($username, $password)){
+    //inloggen
+    session_start();
+    $_SESSION['username'] = $username;
+
+    if ($rememberMe) {
+      // Store the value in a cookie
+      setcookie("remember_me", "1", time() + (86400 * 30), "/"); // 30 days expiration time
+    }
+
+    header("Location: dashboard.php");
+  } else{
+    //error
+    $error = true;
+  }
+}
 
 /*
 require_once 'classes/Db.php'; // Include the file containing the definition of the Db class
@@ -57,7 +65,34 @@ public function canLogin($username, $password){
 ?>
 
 */
+if(!empty($_POST)){
+  try{
+    //er is verzonden
+    $user = new User();
+    $user->setEmail($_POST["email"]);
+    $user->setPassword($_POST["password"]);
 
+    if($user->canLogin()){
+      //inloggen
+      session_start();
+      $_SESSION['email'] = $user->getEmail();
+
+      $rememberMe = isset($_POST['remember-me']) ? true : false; // Check if the checkbox is checked
+      if ($rememberMe) {
+        // Store the value in a cookie
+        setcookie("remember_me", "1", time() + (86400 * 30), "/"); // 30 days expiration time
+      }
+
+      header("Location: dashboard.php");
+    } else{
+      //error
+      $error = true;
+    }
+  }
+  catch (Throwable $e){
+    $error = $e->getMessage();
+  }
+}
 ?>
 
 <!DOCTYPE html>
@@ -107,7 +142,7 @@ public function canLogin($username, $password){
          <div>
            <img class="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Logo project">
            <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">Log in</h2>
-           <p class="mt-2 text-center text-sm text-gray-600"> Or <a href="register.php" class="font-medium text-indigo-600 hover:text-indigo-500">sign up here</a>
+           <p class="mt-2 text-center text-sm text-gray-600"> Of <a href="register.php" class="font-medium text-indigo-600 hover:text-indigo-500">registreer</a> je nu
            </p>
          </div>
          <form class="mt-8 space-y-6" action="#" method="POST">

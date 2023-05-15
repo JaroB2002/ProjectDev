@@ -1,74 +1,412 @@
-<?php 
-    include_once("bootstrap.php");
-    session_start();
+<?php
 
-    if(!isset($_SESSION['username'])){
-        header("location: index.php");
-    }
+// Next line will load dependencies to run this example
+// Please refer to the README how to use in your project
+require_once __DIR__ . '/../../sendgrid-php.php';
 
-    if(!empty($_GET["id"])){
-      $u = new User();
-      $user_prompts = $u->getUserPrompts();
-    }
+$apiKey = getenv('SENDGRID_API_KEY');
+$sg = new \SendGrid($apiKey);
 
-?>
+////////////////////////////////////////////////////
+// Get a user's account information. #
+// GET /user/account #
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
+try {
+    $response = $sg->client->user()->account()->get();
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-    tailwind.config = {
-      theme: {
-        screens: {
-            sm: '480px',
-            md: '768px',
-            lg: '1024px',
-            xl: '1280px',
-        },
-        extend: {
-          colors: {
-            fadedpurple: '#C688F4',
-            fadedblue: '#5C69AA',
-            offgrey: '#fdfcfd',
-            offblack: '#313639',
-            offwhite: '#f9f9f9'
-          }
-        }
-      }
-    }
-  </script>
-</head>
+////////////////////////////////////////////////////
+// Retrieve your credit balance #
+// GET /user/credits #
 
-<body class="ml-10">
-  <nav class="relative container mx-auto p-6 bg-offwhite rounded-md">
-    <div class="flex items-center justify-between">
-        <div class=" md:flex space-x-6">
-            <a href="dashboard.php" class="text-lg font-bold hover:text-fadedpurple">Home</a>
-            <a href="editprofile.php" class="text-lg font-bold hover:text-fadedpurple">Profile</a>
-            <a href="uploadPrompt.php" class="text-lg font-bold hover:text-fadedpurple">Upload</a>
-        </div>
-        <a href="logout.php" class="hidden md:block p-3 px-6 pt-2 text-white bg-fadedpurple rounded-full baseline font-semibold text-lg">Log out</a>
-    </div>
-    </nav>
-    <h1 class="text-3xl font-semibold mt-5"> <?php echo $_GET["id"]; ?> </h1>
-  <article class="flex flex-wrap">
-      <?php if(!empty($user_prompts)) : ?>
-          <?php foreach($user_prompts as $prompt): ?>
-              <div class="my-5 bg-offblack mr-10 px-8 py-8 rounded max-w-sm">
-                  <p class="mb-5 text-lg text-offwhite"> <strong>Name: </strong> <?php echo $prompt["name"];?></p>
-                  <img class="mb-5" src="<?php echo $prompt["image"]; ?>" alt="input image">
-                  <p class="mb-3 text-lg text-offwhite"> <strong>description: </strong> <?php echo $prompt["description"];?></p>
-                  <p class="mb-3 text-lg text-offwhite"> <strong>type: </strong> <?php echo $prompt["type"]?>  </p>
-                  <p class="mb-3 text-lg text-offwhite"> <strong>price: </strong> <?php echo $prompt["price"];?></p>
-              </div>
-          <?php endforeach; ?>
-      <?php endif; ?>
-    </article>
-</body>
-</html>
+try {
+    $response = $sg->client->user()->credits()->get();
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
+
+////////////////////////////////////////////////////
+// Update your account email address #
+// PUT /user/email #
+
+$request_body = json_decode('{
+  "email": "example@example.com"
+}');
+
+try {
+    $response = $sg->client->user()->email()->put($request_body);
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
+
+////////////////////////////////////////////////////
+// Retrieve your account email address #
+// GET /user/email #
+
+try {
+    $response = $sg->client->user()->email()->get();
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
+
+////////////////////////////////////////////////////
+// Update your password #
+// PUT /user/password #
+
+$request_body = json_decode('{
+  "new_password": "new_password",
+  "old_password": "old_password"
+}');
+
+try {
+    $response = $sg->client->user()->password()->put($request_body);
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
+
+////////////////////////////////////////////////////
+// Update a user's profile #
+// PATCH /user/profile #
+
+$request_body = json_decode('{
+  "city": "Orange",
+  "first_name": "Example",
+  "last_name": "User"
+}');
+
+try {
+    $response = $sg->client->user()->profile()->patch($request_body);
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
+
+////////////////////////////////////////////////////
+// Get a user's profile #
+// GET /user/profile #
+
+
+try {
+    $response = $sg->client->user()->profile()->get();
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
+
+////////////////////////////////////////////////////
+// Cancel or pause a scheduled send #
+// POST /user/scheduled_sends #
+
+$request_body = json_decode('{
+  "batch_id": "YOUR_BATCH_ID",
+  "status": "pause"
+}');
+
+try {
+    $response = $sg->client->user()->scheduled_sends()->post($request_body);
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
+
+////////////////////////////////////////////////////
+// Retrieve all scheduled sends #
+// GET /user/scheduled_sends #
+
+try {
+    $response = $sg->client->user()->scheduled_sends()->get();
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
+
+////////////////////////////////////////////////////
+// Update user scheduled send information #
+// PATCH /user/scheduled_sends/{batch_id} #
+
+$request_body = json_decode('{
+  "status": "pause"
+}');
+$batch_id = "test_url_param";
+
+try {
+    $response = $sg->client->user()->scheduled_sends()->_($batch_id)->patch($request_body);
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
+
+////////////////////////////////////////////////////
+// Retrieve scheduled send #
+// GET /user/scheduled_sends/{batch_id} #
+
+$batch_id = "test_url_param";
+
+try {
+    $response = $sg->client->user()->scheduled_sends()->_($batch_id)->get();
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
+
+////////////////////////////////////////////////////
+// Delete a cancellation or pause of a scheduled send #
+// DELETE /user/scheduled_sends/{batch_id} #
+
+$batch_id = "test_url_param";
+
+try {
+    $response = $sg->client->user()->scheduled_sends()->_($batch_id)->delete();
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
+
+////////////////////////////////////////////////////
+// Update Enforced TLS settings #
+// PATCH /user/settings/enforced_tls #
+
+$request_body = json_decode('{
+  "require_tls": true,
+  "require_valid_cert": false
+}');
+
+try {
+    $response = $sg->client->user()->settings()->enforced_tls()->patch($request_body);
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
+
+////////////////////////////////////////////////////
+// Retrieve current Enforced TLS settings. #
+// GET /user/settings/enforced_tls #
+
+try {
+    $response = $sg->client->user()->settings()->enforced_tls()->get();
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
+
+////////////////////////////////////////////////////
+// Update your username #
+// PUT /user/username #
+
+$request_body = json_decode('{
+  "username": "test_username"
+}');
+
+try {
+    $response = $sg->client->user()->username()->put($request_body);
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
+
+////////////////////////////////////////////////////
+// Retrieve your username #
+// GET /user/username #
+
+try {
+    $response = $sg->client->user()->username()->get();
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
+
+////////////////////////////////////////////////////
+// Update Event Notification Settings #
+// PATCH /user/webhooks/event/settings #
+
+$request_body = json_decode('{
+  "bounce": true,
+  "click": true,
+  "deferred": true,
+  "delivered": true,
+  "dropped": true,
+  "enabled": true,
+  "group_resubscribe": true,
+  "group_unsubscribe": true,
+  "open": true,
+  "processed": true,
+  "spam_report": true,
+  "unsubscribe": true,
+  "url": "url"
+}');
+
+try {
+    $response = $sg->client->user()->webhooks()->event()->settings()->patch($request_body);
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
+
+////////////////////////////////////////////////////
+// Retrieve Event Webhook settings #
+// GET /user/webhooks/event/settings #
+
+try {
+    $response = $sg->client->user()->webhooks()->event()->settings()->get();
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
+
+////////////////////////////////////////////////////
+// Test Event Notification Settings  #
+// POST /user/webhooks/event/test #
+
+$request_body = json_decode('{
+  "url": "url"
+}');
+
+try {
+    $response = $sg->client->user()->webhooks()->event()->test()->post($request_body);
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
+
+////////////////////////////////////////////////////
+// Create a parse setting #
+// POST /user/webhooks/parse/settings #
+
+$request_body = json_decode('{
+  "hostname": "myhostname.com",
+  "send_raw": false,
+  "spam_check": true,
+  "url": "http://email.myhosthame.com"
+}');
+
+try {
+    $response = $sg->client->user()->webhooks()->parse()->settings()->post($request_body);
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
+
+////////////////////////////////////////////////////
+// Retrieve all parse settings #
+// GET /user/webhooks/parse/settings #
+
+try {
+    $response = $sg->client->user()->webhooks()->parse()->settings()->get();
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
+
+////////////////////////////////////////////////////
+// Update a parse setting #
+// PATCH /user/webhooks/parse/settings/{hostname} #
+
+$request_body = json_decode('{
+  "send_raw": true,
+  "spam_check": false,
+  "url": "http://newdomain.com/parse"
+}');
+$hostname = "test_url_param";
+
+try {
+    $response = $sg->client->user()->webhooks()->parse()->settings()->_($hostname)->patch($request_body);
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
+
+////////////////////////////////////////////////////
+// Retrieve a specific parse setting #
+// GET /user/webhooks/parse/settings/{hostname} #
+
+$hostname = "test_url_param";
+
+try {
+    $response = $sg->client->user()->webhooks()->parse()->settings()->_($hostname)->get();
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
+
+////////////////////////////////////////////////////
+// Delete a parse setting #
+// DELETE /user/webhooks/parse/settings/{hostname} #
+
+$hostname = "test_url_param";
+
+try {
+    $response = $sg->client->user()->webhooks()->parse()->settings()->_($hostname)->delete();
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}
+
+////////////////////////////////////////////////////
+// Retrieves Inbound Parse Webhook statistics. #
+// GET /user/webhooks/parse/stats #
+
+$query_params = json_decode('{"aggregated_by": "day", "limit": "test_string", "start_date": "2016-01-01", "end_date": "2016-04-01", "offset": "test_string"}');
+
+try {
+    $response = $sg->client->user()->webhooks()->parse()->stats()->get(null, $query_params);
+    print $response->statusCode() . "\n";
+    print_r($response->headers());
+    print $response->body() . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
+}

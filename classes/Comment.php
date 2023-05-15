@@ -1,5 +1,4 @@
 <?php
-include_once("bootstrap.php");
     class Comment{
         private $text;
         private $postId;
@@ -65,7 +64,7 @@ include_once("bootstrap.php");
                 return $this;
         }
         public function save(){
-            $conn = Db::getInstance();
+            $conn = new PDO("mysql:host=localhost;dbname=demo", "root", "");
             $statement = $conn->prepare("INSERT INTO comments (text, postId, userId) VALUES (:text, :postId, :userId)");
             
             $text = $this->getText();
@@ -80,7 +79,7 @@ include_once("bootstrap.php");
             return $result;
         }
         public static function getAll($postId){
-                $conn = Db::getInstance();
+                $conn = new PDO("mysql:host=localhost;dbname=demo", "root", "");
                 $statement = $conn->prepare("SELECT * FROM comments WHERE postId = :postId");
                 $statement->bindValue(":postId", $postId);
                 $result = $statement->execute();

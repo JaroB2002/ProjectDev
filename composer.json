@@ -1,17 +1,22 @@
 {
-    "name": "yadina/project-dev",
-    "autoload": {
-        "psr-4": {
-            "Yadina\\ProjectDev\\": "src/"
-        }
-    },
+    "name": "starkbank/ecdsa",
+    "version": "0.0.5",
+    "type": "library",
+    "description": "fast openSSL-compatible implementation of the Elliptic Curve Digital Signature Algorithm (ECDSA)",
+    "homepage": "https://github.com/starkbank/ecdsa-php",
+    "license": "MIT",
     "authors": [
         {
-            "name": "YadinaM",
-            "email": "yadina.moreira@gmail.com"
+            "name": "StarkBank",
+            "email": "developers@starkbank.com",
+            "homepage": "https://starkbank.com",
+            "role": "Developer"
         }
     ],
     "require": {
-        "sendgrid/sendgrid": "^8.0"
+        "php" : ">=5.5"
+    },
+    "autoload": {
+        "files": ["src/ellipticcurve.php"]
     }
 }
