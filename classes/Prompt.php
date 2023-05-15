@@ -1,5 +1,4 @@
 <?php
-include_once("bootstrap.php");
 class Prompt{
     private $name; 
     private $description;
@@ -172,6 +171,16 @@ class Prompt{
         $result->execute();
         $filter = $result->fetchAll(PDO::FETCH_ASSOC);
         return $filter;
+
+        self::getLikes();
     }
 
+    public function getLikes($prompt_id){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("select count(*) as count from likes where prompts_id = :promptsid");
+        $statement->bindValue(":promptsid", $prompt_id);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        return $result['count'];
+    }
 }
