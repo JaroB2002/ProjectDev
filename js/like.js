@@ -36,7 +36,9 @@ for (let i = 0; i < links.length; i++) {
             })
 
             .then(function (json) {
+                link.innerHTML = json.status;
                 span.innerHTML = json.likes + " people like this";
+
             })
 
             .catch(function (error) {

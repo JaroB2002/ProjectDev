@@ -9,15 +9,22 @@ session_start();
         $l->setPromptId($_POST['promptId']);
         $l->setUser($_SESSION["username"]);
 
+        if (Like::getAll($_POST['promptId'])) {
+            $l->remove($_POST['promptId']);
+            $status = 'Like';
+        } else {
          //save()
-        $l->save($_POST['promptId']);
+         $status = 'Unlike';
+         $l->save($_POST['promptId']);
+        }
+
 
         $p = new Prompt();
         $likes = $p->getLikes($_POST['promptId']);
 
          //succesboodschap teruggeven
          $respons = [
-             'status' => 'succes',
+             'status' => $status,
              'message' => 'like saved',
              "likes" => $likes
          ];
