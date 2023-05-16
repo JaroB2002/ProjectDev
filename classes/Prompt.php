@@ -183,4 +183,13 @@ class Prompt{
         $result = $statement->fetch(PDO::FETCH_ASSOC);
         return $result['count'];
     }
+
+    public static function getAllFollowing(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT prompts.* FROM prompts JOIN follow ON prompts.email = follow.user_id WHERE follow.username = :username");
+        $statement->bindValue(":username", $_SESSION["username"]);        
+        $statement->execute();
+        $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $prompts;
+    }
 }
