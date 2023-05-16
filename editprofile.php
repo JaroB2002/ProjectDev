@@ -1,7 +1,6 @@
 
 <?php
     include_once("bootstrap.php");
-    $profileLink = "http://example.com/profile.php?user=" . urlencode($username);
 
     session_start();
     $username = $_SESSION['username'];
@@ -10,6 +9,7 @@
     $user->setEmail($username);
     $userDetails = $user->getUserDetails();
     $biography = $userDetails['biography'];
+    
 
     if($user->checkVerify()){
       $user->verifyUser(true);
@@ -139,7 +139,6 @@
     <title>Document</title>
 </head>
 <body>
-<?php include_once("footer.php");?>
 
 </body>
 </html>
