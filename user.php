@@ -59,9 +59,11 @@
     </div>
     </nav>
     <h1 class="text-3xl font-semibold mt-5"> <?php echo $_GET["id"]; ?> </h1>
-    <div class="mt-10">
-      <a href="#" data-id="<?php echo $_GET['id']; ?>" class="follow bg-fadedpurple px-5 py-3 rounded font-semibold ml-5 mt-5"><?php if(Follow::getAll($_GET['id']) == true) { echo 'Unfollow'; } else { echo 'Follow';}?></a>
-    </div>
+    <?php if ($_SESSION['username'] !== $_GET['id']): ?>
+      <div class="mt-10">
+        <a href="#" data-id="<?php echo $_GET['id']; ?>" class="follow bg-fadedpurple px-5 py-3 rounded font-semibold ml-5 mt-5"><?php if(Follow::getAll($_GET['id']) == true) { echo 'Unfollow'; } else { echo 'Follow';}?></a>
+      </div>
+    <?php endif; ?>
   <article class="flex flex-wrap">
       <?php if(!empty($user_prompts)) : ?>
           <?php foreach($user_prompts as $prompt): ?>
