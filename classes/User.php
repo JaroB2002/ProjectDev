@@ -172,7 +172,7 @@ class User{
     public function checkIfCanBuy(){
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT users.credits >= prompts.price AS can_buy FROM users, prompts WHERE prompts.id = :prompts_id AND users.email = :email");
-        $statement->bindValue(":prompts_id", $_GET[ "buy"]);
+        $statement->bindValue(":prompts_id", $_GET["buy"]);
         $statement->bindValue(":email", $_SESSION['username']);
         $statement->execute();
         $result = $statement->fetch(PDO::FETCH_ASSOC);

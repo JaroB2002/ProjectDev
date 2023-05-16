@@ -11,6 +11,8 @@
       $user_prompts = $u->getUserPrompts();
     }
 
+    $f = new Follow();
+
 ?>
 
 <!DOCTYPE html>
@@ -57,6 +59,9 @@
     </div>
     </nav>
     <h1 class="text-3xl font-semibold mt-5"> <?php echo $_GET["id"]; ?> </h1>
+    <div class="mt-10">
+      <a href="#" data-id="<?php echo $_GET['id']; ?>" class="follow bg-fadedpurple px-5 py-3 rounded font-semibold ml-5 mt-5"><?php if(Follow::getAll($_GET['id']) == true) { echo 'Unfollow'; } else { echo 'Follow';}?></a>
+    </div>
   <article class="flex flex-wrap">
       <?php if(!empty($user_prompts)) : ?>
           <?php foreach($user_prompts as $prompt): ?>
@@ -70,5 +75,7 @@
           <?php endforeach; ?>
       <?php endif; ?>
     </article>
+
+    <script src="js/follow.js"></script>
 </body>
 </html>
