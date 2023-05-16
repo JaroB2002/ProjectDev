@@ -48,6 +48,7 @@ include_once("bootstrap.php");
     //$allApprovedPrompts = Prompt::getAllApproved();
     $filter = Prompt::filter($pricing, $type, $date, $search);
     $likes = new Prompt();
+    $favorites = new Favorite();
 
     try {
         $user = new User();
@@ -173,31 +174,34 @@ include_once("bootstrap.php");
                             <button class="bg-fadedpurple px-5 py-3 rounded font-semibold ml-5" type="submit" name="buy" value="<?php echo $prompt['id'];?>">Buy</button>
                         </form>
                         <div class="mt-5">
-                        <a href="#" data-id="<?php echo $prompt['id']; ?>" class="like bg-fadedpurple px-5 py-3 rounded font-semibold ml-5 mt-5"><?php if(Like::getAll($prompt['id']) == true) { echo 'Unlike '; } else { echo 'Like ';}?> <span class='likes' id="likes"><?php echo $likes->getLikes($prompt['id']) ?> people like this</span> </a>
-                    </div>
+                            <a href="#" data-id="<?php echo $prompt['id']; ?>" class="like bg-fadedpurple px-5 py-3 rounded font-semibold ml-5 mt-5"><?php if(Like::getAll($prompt['id']) == true) { echo 'Unlike '; } else { echo 'Like ';}?> <span class='likes' id="likes"><?php echo $likes->getLikes($prompt['id']) ?> people like this</span> </a>
+                        </div>
+                        <div class="mt-8">
+                            <a href="#" data-id="<?php echo $prompt['id']; ?>" class="favorite bg-fadedpurple px-5 py-3 rounded font-semibold ml-5 mt-5"><?php if(Favorite::getAll($prompt['id']) == true) { echo 'remove from favorites '; } else { echo 'add to favorites ';}?></a>
+                        </div>
                     </div>
                 </div>
                 
         <?php endforeach; ?>
     </article>
     <?php
-include_once(__DIR__ . "/classes/Comment.php");
-$allComments = Comment::getAll(3);
-//var_dump($allComments);
-?>
-<div class="post">  
-  <div class="post__comments">
-      <div class="post__comments__form">
-        <input type="text" id="commentText" placeholder="What's on your mind">
-        <a href="#" class="btn" id="btnAddComment" data-postid="3">Add comment</a>
-      </div>  
-    
-      <ul class="post__comments__list">
-        <?php foreach($allComments as $c): ?>
-          <li><?php echo $c['text']; ?></li>
-        <?php endforeach; ?>
-      </ul>
-  </div>
+        include_once(__DIR__ . "/classes/Comment.php");
+        $allComments = Comment::getAll(3);
+        //var_dump($allComments);
+        ?>
+        <div class="post">  
+        <div class="post__comments">
+            <div class="post__comments__form">
+                <input type="text" id="commentText" placeholder="What's on your mind">
+                <a href="#" class="btn" id="btnAddComment" data-postid="3">Add comment</a>
+            </div>  
+            
+            <ul class="post__comments__list">
+                <?php foreach($allComments as $c): ?>
+                <li><?php echo $c['text']; ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
 
   
 </div>
@@ -235,37 +239,35 @@ $allComments = Comment::getAll(3);
         }
     </script>
     <script>
-        //console.log("link");
+    let links = document.querySelectorAll(".like");
+    for (let i = 0; i < links.length; i++) {
+        links[i].addEventListener("click", function (e) {
+            e.preventDefault();
+            //console.log("geklikt😅");
 
-let links = document.querySelectorAll(".like");
-for (let i = 0; i < links.length; i++) {
-    links[i].addEventListener("click", function (e) {
-        e.preventDefault();
-        //console.log("geklikt😅");
+            // Get the clicked <a> element
+            let link = e.target;
 
-        // Get the clicked <a> element
-        let link = e.target;
+            // Find the parent <a> element if the clicked element is the <span> element
+            if (link.tagName !== "A") {
+                link = link.closest("a");
+            }
 
-        // Find the parent <a> element if the clicked element is the <span> element
-        if (link.tagName !== "A") {
-            link = link.closest("a");
-        }
+            // Get the <span> element inside the clicked <a> element
+            let span = link.querySelector("span.likes");
+            console.log(span);
 
-        // Get the <span> element inside the clicked <a> element
-        let span = link.querySelector("span.likes");
-        console.log(span);
+            //krijg de id voor de prompt
+            let promptId = this.getAttribute("data-id");
 
-        //krijg de id voor de prompt
-        let promptId = this.getAttribute("data-id");
+            //post naar database AJAX
+            let formData = new FormData();
+            formData.append("promptId", promptId);
 
-        //post naar database AJAX
-        let formData = new FormData();
-        formData.append("promptId", promptId);
-
-        fetch("ajax/like.php", {
-            method: "POST", // or 'PUT'
-            body: formData
-        })
+            fetch("ajax/like.php", {
+                method: "POST", // or 'PUT'
+                body: formData
+            })
 
             //.then(response => response.json())
             .then(function (response) {
@@ -279,12 +281,10 @@ for (let i = 0; i < links.length; i++) {
             .catch(function (error) {
                 console.log(error);
             });
-
-
-        //aantal likes tonen 
     });
 }
     </script>
+      <script src="js/favorite.js"></script>
 </body>
 </html>
 <?php
