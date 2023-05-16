@@ -3,6 +3,25 @@
       session_start();
       
       $followPrompts = Prompt::getAllFollowing();
+
+      $likes = new Prompt();
+      $favorites = new Favorite();
+  
+      try {
+          $user = new User();
+          if(isset($_GET['buy'])){
+              $canBuy = $user->checkIfCanBuy();
+              /*var_dump($canBuy);*/
+              if($canBuy['can_buy'] === '1'){
+                  $user->buyPrompt();
+                  $user->sellPrompt();
+              }else{
+                  throw new Exception("You don't have enough credits.");
+              }
+          }
+      } catch (Exception $e) {
+          $errorMessage = $e->getMessage();
+      }
 ?>
 
 <!DOCTYPE html>
@@ -49,7 +68,25 @@
                 <p class="mb-3 text-lg text-offwhite">  <strong>description: </strong> <?php echo htmlspecialchars($prompt["description"]);?></p>
                 <p class="mb-3 text-lg text-offwhite"> <strong>type: </strong> <?php echo htmlspecialchars($prompt["type"])?> </p>
                 <p class="mb-3 text-lg text-offwhite"><strong>price: </strong> <?php echo htmlspecialchars($prompt["price"]);?></p>
+
+                <div>
+                    <?php if (isset($errorMessage) && $_GET["buy"] == $prompt["id"]): ?>
+                        <div class="error-message text-red-500" id="<?php echo 'error-' . $prompt["id"]; ?>">
+                            <?php echo $errorMessage; ?>
+                        </div>
+                    <?php endif; ?>
+                    <form action="" class="mt-3">
+                        <button class="bg-fadedpurple px-5 py-3 rounded font-semibold ml-5" type="submit" name="buy" value="<?php echo $prompt['id'];?>">Buy</button>
+                    </form>
+                    <div class="mt-5">
+                        <a href="#" data-id="<?php echo $prompt['id']; ?>" class="like bg-fadedpurple px-5 py-3 rounded font-semibold ml-5 mt-5"><?php if(Like::getAll($prompt['id']) == true) { echo 'Unlike '; } else { echo 'Like ';}?> <span class='likes' id="likes"><?php echo $likes->getLikes($prompt['id']) ?> people like this</span> </a>
+                    </div>
+                    <div class="mt-8">
+                        <a href="#" data-id="<?php echo $prompt['id']; ?>" class="favorite bg-fadedpurple px-5 py-3 rounded font-semibold ml-5 mt-5"><?php if(Favorite::getAll($prompt['id']) == true) { echo 'remove from favorites '; } else { echo 'add to favorites ';}?></a>
+                    </div>
+                </div>
             </div>
+
         <?php endforeach; ?>
     </article>
 </body>
