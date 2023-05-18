@@ -1,5 +1,10 @@
 <?php
-    include_once("bootstrap.php");
+    //include_once("bootstrap.php");
+    include_once(__DIR__ . "/classes/User.php");
+    include_once(__DIR__ . "/classes/Db.php");
+    require_once("vendor/autoload.php");
+    //Zolang er geen namespace is classes hier appart includen
+    
     if(!empty($_POST)){
       try{
         $user = new User();
@@ -8,7 +13,7 @@
         // Check if email is available before saving
         if ($user->checkMailAvailable()) {
           $user->save();
-          /*$user->sendMail();*/
+          $user->sendMail();
           header("Location: index.php");
         } else {
           $error = "Email was already taken. Registration failed.";
