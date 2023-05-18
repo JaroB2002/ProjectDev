@@ -88,18 +88,18 @@ class User{
         return $count;
     }
     /*Email versturen*/
-    /*public function sendMail(){
+    public function sendMail(){
         $config = parse_ini_file('config/config.ini', true);
         $key = $config['keys']['SENDGRID_API_KEY'];
         //var_dump($key);
         
         $email = new \SendGrid\Mail\Mail();
-        $email->setFrom("r0784273@student.thomasmore.be", "Fred Kroket");
-        $email->setSubject("Sending with Twilio SendGrid is Fun");
-        $email->addTo("yadina.moreira@gmail.com", "Yadina");
-        $email->addContent("text/plain", "and easy to do anywhere, even with PHP");
+        $email->setFrom("r0784273@student.thomasmore.be", "PromptBaes");
+        $email->setSubject("Confirm email");
+        $email->addTo($_POST["email"], $_POST["email"]);
+        $email->addContent("text/plain", "Please confirm your email by clicking the link below");
         $email->addContent(
-           "text/html", "<strong>and easy to do anywhere, even with PHP</strong>"
+           "text/html", "Please confirm your email by clicking the link <a> https://promptbaesxd.azurewebsites.net/index.php </a>"
         );
 
         $options = array(
@@ -117,7 +117,7 @@ class User{
         } catch (Exception $e) {
             echo 'Caught exception: '. $e->getMessage() ."\n";
         }
-    }*/
+    }
 
     public function setBiography($biography){
         $this->biography=$biography;
