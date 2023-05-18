@@ -99,7 +99,7 @@ class User{
         $email->addTo($_POST["email"], $_POST["email"]);
         $email->addContent("text/plain", "Please confirm your email by clicking the link below");
         $email->addContent(
-           "text/html", "Please confirm your email by clicking the link <a> https://promptbaesxd.azurewebsites.net/index.php </a>"
+           "text/html", "Please confirm your email by clicking the link <a>https://promptbaesxd.azurewebsites.net/index.php</a>"
         );
 
         $options = array(
