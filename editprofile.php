@@ -1,32 +1,35 @@
 <?php
-    include_once("bootstrap.php");
+include_once("bootstrap.php");
 
-    session_start();
-    $username = $_SESSION['username'];
-    
-    $user = new User();
-    $user->setEmail($username);
-    $userDetails = $user->getUserDetails();
-    $biography = $userDetails['biography'];
-    
+session_start();
+$username = $_SESSION['username'];
 
-    if($user->checkVerify()){
-      $user->verifyUser(true);
-     }
+$user = new User();
+$user->setEmail($username);
+$userDetails = $user->getUserDetails();
+$biography = $userDetails['biography'];
 
-    if(!empty($_POST)){
-        try{
-            $user->setBiography($_POST['biography']);
-            $biography = $user->getBiography();
-            $user->updateProfile();
-        } 
-        catch(Throwable $e){
-            $error=$e->getMessage();
-        }
+// Profiel delen
+$currentDomain = $_SERVER['HTTP_HOST'];
+$profileLink = "https://" . $currentDomain . "/user.php?id=" . urlencode($username);
+
+if($user->checkVerify()){
+  $user->verifyUser(true);
+ }
+
+if(!empty($_POST)){
+    try{
+        $user->setBiography($_POST['biography']);
+        $biography = $user->getBiography();
+        $user->updateProfile();
+    } 
+    catch(Throwable $e){
+        $error=$e->getMessage();
     }
+}
 
-    $allCredits = $user->showCredits();
-    $credits = $allCredits['credits'];
+$allCredits = $user->showCredits();
+$credits = $allCredits['credits'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -61,36 +64,32 @@
   </script>
 </head>
 <body>
-  <!--mx margin left right, my margin top bottom-->
   <nav class="relative container mx-auto p-6 bg-offgrey rounded-md">
-    <!--flex container-->
     <div class="flex items-center justify-between">
-      <!--menu-->
       <div class="hidden md:flex space-x-6">
         <a href="dashboard.php" class="text-lg font-bold hover:text-fadedpurple">Home</a>
         <a href="editprofile.php" class="text-lg font-bold hover:text-fadedpurple">Profile</a>
         <a href="uploadPrompt.php" class="text-lg font-bold hover:text-fadedpurple">Upload</a>
       </div>
-      <!--button-->
       <a href="logout.php" class="hidden md:block p-3 px-6 pt-2 text-white bg-fadedpurple rounded-full baseline">Log out</a>
     </div>
   </nav>
   <main class="ml-10 mt-10">
-  <a href="<?php echo $profileLink; ?>">Deel mijn profiel</a>
+    <a href="<?php echo $profileLink; ?>">Deel mijn profiel</a>
 
     <h1 class="text-5xl mb-10 font-semibold">Profile</h1>
-    <h2 class="text-3xl text-fadedblue mb-5">Hi it's <?php echo htmlspecialchars($username); ?>!</h2>
+    <h2 class="text-3xl text-fadedblue mb-5">Hi, it's <?php echo htmlspecialchars($username); ?>!</h2>
     <?php if($user->checkVerify()): ?>
       <h2 class="text-2xl text-fadedpurple mb-5">I am a verified user.</h2>
     <?php endif; ?>
-    <h3 class="text-2xl mb-3"><?php echo "My credits:" . " " . htmlspecialchars($credits);?></h3>
+    <h3 class="text-2xl mb-3"><?php echo "My credits: " . htmlspecialchars($credits);?></h3>
     <div class="bg-offwhite rounded w-96 p-5">
       <h3 class="text-2xl mb-3">My biography:</h3>
       <p class="text-8sm mb-3"><?php echo htmlspecialchars($biography); ?></p> 
     </div>
     <form action="#" method="post">
       <div>
-        <label class="underline text-fadedblue text-1xl" for="biography">Update your biography here: </label>
+        <label class="underline text-fadedblue text-1xl" for="biography">Update your biography here:</label>
         <input id="biography" name="biography" type="text" placeholder="Biography">
       </div>
       <div>
@@ -118,29 +117,6 @@
 <p>You can download a copy of your data by clicking the button below.</p>
 <a href="download_data.php">Download My Data</a>
 
-
-
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Dashboard</title>
-</head>
-
-
-</html>
-<body class="mx-1">
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-
-</body>
-</html>
 <form action="" method="post" enctype="multipart/form-data" class="ml-10">
   <label>Selecteer een afbeelding:</label>
   <input type="file" name="image" required>
@@ -153,22 +129,18 @@
 <?php
 include('classes/Profile.php');
 
-// Maak een nieuwe Profile object aan
 $profile = new Profile();
 
-// Controleer of de gebruiker een profielfoto wilt uploaden
 if (isset($_POST['uploadPhoto'])) {
   $result = $profile->setProfilePhoto($_FILES['image']);
   echo $result;
 }
 
-// Controleer of de gebruiker de profielfoto wilt verwijderen
 if (isset($_POST['deletePhoto'])) {
   $result = $profile->deleteProfilePhoto();
   echo $result;
 }
 
-// Laat de geüploade afbeelding zien als deze al bestaat
 if ($profile->getProfilePhoto() != '') {
   echo '<img src="' . $profile->getProfilePhoto() . '">';
 }
