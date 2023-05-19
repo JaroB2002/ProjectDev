@@ -66,7 +66,7 @@
                 </div>
                 <form action="" class="mt-3">
                     <button class="bg-sky-500 px-5 py-3 rounded font-semibold" type="submit" name="approve" value="<?php echo $prompt['id']; ?>">Approve</button>
-                    <button class="bg-sky-500/50 px-5 py-3 rounded font-semibold" type="submit" name="disapprove" value="<?php echo $prompt['id']; ?>">Unapprove</button>
+                    <button class="bg-sky-500/50 px-5 py-3 rounded font-semibold" type="submit" name="disapprove" value="<?php echo $prompt['id']; ?>">Deny content</button>
                 </form>
             </div>
         <?php endforeach; ?>
