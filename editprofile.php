@@ -10,22 +10,20 @@ $userDetails = $user->getUserDetails();
 $biography = $userDetails['biography'];
 
 // Profiel delen
-$currentDomain = $_SERVER['HTTP_HOST'];
-$profileLink = "https://" . $currentDomain . "/user.php?id=" . urlencode($username);
+$profileLink = "https://promptbaesxd.azurewebsites.net/user.php?id=" . urlencode($username);
 
-if($user->checkVerify()){
+if ($user->checkVerify()) {
   $user->verifyUser(true);
- }
+}
 
-if(!empty($_POST)){
-    try{
-        $user->setBiography($_POST['biography']);
-        $biography = $user->getBiography();
-        $user->updateProfile();
-    } 
-    catch(Throwable $e){
-        $error=$e->getMessage();
-    }
+if (!empty($_POST)) {
+  try {
+    $user->setBiography($_POST['biography']);
+    $biography = $user->getBiography();
+    $user->updateProfile();
+  } catch (Throwable $e) {
+    $error = $e->getMessage();
+  }
 }
 
 $allCredits = $user->showCredits();
@@ -33,22 +31,24 @@ $credits = $allCredits['credits'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" integrity="sha512-PmkEJHmZvcwdeUDzL5Z+K9QGQxxbivn5nMxvM5rPLnAR">
 
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
+    integrity="sha512-PmkEJHmZvcwdeUDzL5Z+K9QGQxxbivn5nMxvM5rPLnAR">
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
     tailwind.config = {
       theme: {
         screens: {
-            sm: '480px',
-            md: '768px',
-            lg: '1024px',
-            xl: '1280px',
+          sm: '480px',
+          md: '768px',
+          lg: '1024px',
+          xl: '1280px',
         },
         extend: {
           colors: {
@@ -63,6 +63,7 @@ $credits = $allCredits['credits'];
     }
   </script>
 </head>
+
 <body>
   <nav class="relative container mx-auto p-6 bg-offgrey rounded-md">
     <div class="flex items-center justify-between">
@@ -71,13 +72,17 @@ $credits = $allCredits['credits'];
         <a href="editprofile.php" class="text-lg font-bold hover:text-fadedpurple">Profile</a>
         <a href="uploadPrompt.php" class="text-lg font-bold hover:text-fadedpurple">Upload</a>
       </div>
-      <a href="logout.php" class="hidden md:block p-3 px-6 pt-2 text-white bg-fadedpurple rounded-full baseline">Log out</a>
+      <a href="logout.php"
+        class="hidden md:block p-3 px-6 pt-2 text-white bg-fadedpurple rounded-full baseline">Log out</a>
     </div>
   </nav>
   <main class="ml-10 mt-10">
     <a href="<?php echo $profileLink; ?>">Deel mijn profiel</a>
 
     <h1 class="text-5xl mb-10 font-semibold">Profile</h1>
+Hier gaat de code verder met de rest van de HTML- en PHP-inhoud:
+
+```php
     <h2 class="text-3xl text-fadedblue mb-5">Hi, it's <?php echo htmlspecialchars($username); ?>!</h2>
     <?php if($user->checkVerify()): ?>
       <h2 class="text-2xl text-fadedpurple mb-5">I am a verified user.</h2>
