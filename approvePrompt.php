@@ -57,12 +57,13 @@ $allPrompts = Prompt::getAllUnapproved();
                     <p><strong>Name: </strong><?php echo htmlspecialchars($prompt["name"]);?></p>
                     <img class="mb-5" src="<?php echo htmlspecialchars($prompt["image"]); ?>" alt="input image">
                     <p><strong>Description: </strong><?php echo htmlspecialchars($prompt["description"]);?></p>
+                    <p><strong>tags: </strong><?php echo htmlspecialchars($prompt["tags"]);?></p>
                     <p><strong>Type: </strong><?php echo htmlspecialchars($prompt["type"])?></p>
                     <p><strong>Price: </strong><?php echo htmlspecialchars($prompt["price"]);?></p>
                 </div>
                 <form action="" class="mt-3">
                     <button class="bg-sky-500 px-5 py-3 rounded font-semibold" type="submit" name="approve" value="<?php echo $prompt['id']; ?>">Approve</button>
-                    <input type="text" name="reason" placeholder="Reason for denial" required class="text-black">
+                    <input type="text" name="reason" placeholder="Reason for denial" class="text-black">
                     <button class="bg-sky-500/50 px-5 py-3 rounded font-semibold" type="submit" name="disapprove" value="<?php echo $prompt['id']; ?>">Deny content</button>
                 </form>
             </div>
