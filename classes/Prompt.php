@@ -6,6 +6,7 @@ class Prompt{
     private $image;
     private $type;
     private $price;
+    private $tag;
     //test
     public function setName($name){
         if (empty($name)) {
@@ -31,6 +32,21 @@ class Prompt{
     }
     public function getDescription(){
         return $this->description;
+    }
+
+    public function getTag()
+    {
+        return $this->tag;
+    }
+
+    public function setTag($tag)
+    {
+        if (empty($tag)) {
+            throw new Exception("tags cannot be empty.");
+        }
+        else{ 
+        $this->tag = $tag;
+        }
     }
 
     public function setEmail($email){
@@ -88,7 +104,7 @@ class Prompt{
     //prompts in databank opslaan
     public function save(){
         $conn = Db::getInstance();
-        $statement = $conn->prepare("INSERT INTO prompts (name, description, email, image, type, price, date, approved) VALUES (:name, :description, :email, :image, :type, :price, now(), :approved)");
+        $statement = $conn->prepare("INSERT INTO prompts (name, description, email, image, type, price, date, approved, tags) VALUES (:name, :description, :email, :image, :type, :price, now(), :approved, :tags)");
         $statement->bindValue(":name", $this->getName()); 
         $statement->bindValue(":description", $this->getDescription());
         $statement->bindValue(":email", $this->getEmail());
@@ -96,6 +112,7 @@ class Prompt{
         $statement->bindValue(":type", $this->getType());
         $statement->bindValue(":price", $this->getPrice());
         $statement->bindValue(":approved", 0);
+        $statement->bindValue(":tags", $this->getTag());
         return $statement->execute(); 
     }
     //alle prompts los van specificaties
