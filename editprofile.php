@@ -10,45 +10,45 @@ $userDetails = $user->getUserDetails();
 $biography = $userDetails['biography'];
 
 // Profiel delen
-$profileLink = "https://promptbaesxd.azurewebsites.net/user.php?id=" . urlencode($username);
+$currentDomain = $_SERVER['HTTP_HOST'];
+$profileLink = "https://" . $currentDomain . "/user.php?id=" . urlencode($username);
 
-if ($user->checkVerify()) {
+if($user->checkVerify()){
   $user->verifyUser(true);
 }
 
-if (!empty($_POST)) {
-  try {
-    $user->setBiography($_POST['biography']);
-    $biography = $user->getBiography();
-    $user->updateProfile();
-  } catch (Throwable $e) {
-    $error = $e->getMessage();
-  }
+if(!empty($_POST)){
+    try{
+        $user->setBiography($_POST['biography']);
+        $biography = $user->getBiography();
+        $user->updateProfile();
+    } 
+    catch(Throwable $e){
+        $error=$e->getMessage();
+    }
 }
 
 $allCredits = $user->showCredits();
 $credits = $allCredits['credits'];
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
-    integrity="sha512-PmkEJHmZvcwdeUDzL5Z+K9QGQxxbivn5nMxvM5rPLnAR">
-
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profile</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" integrity="sha512-PmkEJHmZvcwdeUDzL5Z+K9QGQxxbivn5nMxvM5rPLnAR">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
     tailwind.config = {
       theme: {
         screens: {
-          sm: '480px',
-          md: '768px',
-          lg: '1024px',
-          xl: '1280px',
+            sm: '480px',
+            md: '768px',
+            lg: '1024px',
+            xl: '1280px',
         },
         extend: {
           colors: {
@@ -63,7 +63,6 @@ $credits = $allCredits['credits'];
     }
   </script>
 </head>
-
 <body>
   <nav class="relative container mx-auto p-6 bg-offgrey rounded-md">
     <div class="flex items-center justify-between">
@@ -72,17 +71,13 @@ $credits = $allCredits['credits'];
         <a href="editprofile.php" class="text-lg font-bold hover:text-fadedpurple">Profile</a>
         <a href="uploadPrompt.php" class="text-lg font-bold hover:text-fadedpurple">Upload</a>
       </div>
-      <a href="logout.php"
-        class="hidden md:block p-3 px-6 pt-2 text-white bg-fadedpurple rounded-full baseline">Log out</a>
+      <a href="logout.php" class="hidden md:block p-3 px-6 pt-2 text-white bg-fadedpurple rounded-full baseline">Log out</a>
     </div>
   </nav>
   <main class="ml-10 mt-10">
     <a href="<?php echo $profileLink; ?>">Deel mijn profiel</a>
 
     <h1 class="text-5xl mb-10 font-semibold">Profile</h1>
-Hier gaat de code verder met de rest van de HTML- en PHP-inhoud:
-
-```php
     <h2 class="text-3xl text-fadedblue mb-5">Hi, it's <?php echo htmlspecialchars($username); ?>!</h2>
     <?php if($user->checkVerify()): ?>
       <h2 class="text-2xl text-fadedpurple mb-5">I am a verified user.</h2>
@@ -101,34 +96,14 @@ Hier gaat de code verder met de rest van de HTML- en PHP-inhoud:
         <button class="bg-fadedpurple px-5 py-3 mt-5 rounded font-semibold text-white" type="submit" name="updateProfile">Add bio</button>
       </div>
     </form>
+
+    <form action="reportedUsers.php" method="post">
+  <input type="hidden" name="reportedUser" value="<?php echo $username; ?>">
+  <button class="bg-red-500 px-5 py-3 mt-5 rounded font-semibold text-white" type="submit" name="reportUser">Report User</button>
+</form>
+
   </main>
 </body>
-<h2>Delete Your Account</h2>
-<p>Please confirm your email address to delete your account and all associated data.</p>
-<form method="post" action="dashboard.php">
-  <label for="email">Email:</label>
-  <input type="email" name="email" required>
-  <br>
-  <label for="confirm_delete">Confirm your email address:</label>
-  <input type="email" name="confirm_delete" required>
-  <br>
-  <p>To delete your account, type "delete my account" below:</p>
-  <input type="text" name="delete_confirmation" required>
-  <br>
-  <button type="submit" name="delete_account" onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">Delete Account</button>
-</form>
-
-<h2>Download Your Data</h2>
-<p>You can download a copy of your data by clicking the button below.</p>
-<a href="download_data.php">Download My Data</a>
-
-<form action="" method="post" enctype="multipart/form-data" class="ml-10">
-  <label>Selecteer een afbeelding:</label>
-  <input type="file" name="image" required>
-  <br><br>
-  <input type="submit" name="uploadPhoto" value="Uploaden" class="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded">
-  <input type="submit" name="deletePhoto" value="Verwijderen" class="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded">
-</form>
 </html>
 
 <?php
