@@ -13,6 +13,24 @@
 
     $f = new Follow();
 
+    $user = new User();
+$user->setEmail($_SESSION['username']);
+$userDetails = $user->getUserDetails();
+$isModerator = $userDetails['is_admin'] == 1;
+
+if ($isModerator) {
+    if (isset($_POST['add'])) {
+        $moderator = new Moderator();
+        $moderator->addModerator($_POST['add']);
+        $success = "Moderator added";
+    }
+
+    if (isset($_POST['remove'])) {
+        $moderator = new Moderator();
+        $moderator->removeModerator($_POST['remove']);
+        $success = "Moderator removed";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -61,8 +79,22 @@
     <h1 class="text-3xl font-semibold mt-5"> <?php echo $_GET["id"]; ?> </h1>
     <?php if ($_SESSION['username'] !== $_GET['id']): ?>
       <div class="mt-10">
-        <a href="#" data-id="<?php echo $_GET['id']; ?>" class="follow bg-fadedpurple px-5 py-3 rounded font-semibold ml-5 mt-5"><?php if(Follow::getAll($_GET['id']) == true) { echo 'Unfollow'; } else { echo 'Follow';}?></a>
+        <a href="#" data-id="<?php echo $_GET['id']; ?>" class="follow bg-fadedpurple px-5 py-3 rounded font-semibold mt-5"><?php if(Follow::getAll($_GET['id']) == true) { echo 'Unfollow'; } else { echo 'Follow';}?></a>
       </div>
+    <?php endif; ?>
+    <?php if ($isModerator) : ?>
+      <div class="flex">
+        <form method="post">
+            <button class="bg-fadedblue px-5 py-3 mt-5 rounded font-semibold text-white mr-5" type="submit" name="add" value="<?= isset($_GET['id']) ? $_GET['id'] : '' ?>">Add Moderator</button>
+        </form>
+
+        <form method="post">
+            <button class="bg-fadedblue px-5 py-3 mt-5 rounded font-semibold text-white mr-5" type="submit" name="remove" value="<?= isset($_GET['id']) ? $_GET['id'] : '' ?>">Remove Moderator</button>
+        </form>
+      </div>
+    <?php endif; ?>
+    <?php if (isset($success)) : ?>
+        <p><?php echo htmlspecialchars($success) ?></p>
     <?php endif; ?>
   <article class="flex flex-wrap">
       <?php if(!empty($user_prompts)) : ?>
