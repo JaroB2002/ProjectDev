@@ -113,8 +113,8 @@ include_once("bootstrap.php");
     <!--search-->
     <form method="get" action=""> <!--veranderd nr get-->
         <div>
-            <h2 class="text-xl font-semibold mt-7">Filter on title</h2>
-            <input name="search" type="text" placeholder="Search by title">
+            <h2 class="text-xl font-semibold mt-7">Search title or tag</h2>
+            <input name="search" type="text" placeholder="Search by title or tag">
         </div>
         <article class="flex flex-row">
         <div class="mr-10">
@@ -163,7 +163,7 @@ include_once("bootstrap.php");
                     <p class="mb-3 text-lg text-offwhite"><strong>Type:</strong> <?php echo htmlspecialchars($prompt["type"]); ?></p>
                     <p class="mb-3 text-lg text-offwhite"><strong>Price:</strong> <?php echo htmlspecialchars($prompt["price"]); ?></p>
                     <button id="reportButton" data-promptid="<?php echo $prompt['id'];?>" class="p-3 px-6 pt-2 text-white bg-fadedpurple rounded-full baseline font-semibold text-lg">Report Prompt</button>
-                    <div>
+                <div>
                         <button class="report-button" data-prompt-id="<?php echo $prompt["id"]; ?>" data-error-id="<?php echo 'error-' . $prompt["id"]; ?>">Report user</button>
                         <?php if (isset($errorMessage) && $_GET["buy"] == $prompt["id"]): ?>
                             <div class="error-message text-red-500" id="<?php echo 'error-' . $prompt["id"]; ?>">
