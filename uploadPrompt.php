@@ -16,6 +16,7 @@ if(!empty($_POST)){
         $prompt->setImage($_POST['image']);
         $prompt->setType($_POST['type']);
         $prompt->setPrice($_POST['price']);
+        $prompt->setTag($_POST['tag']);
 
         $name = $prompt->getName();
         $description = $prompt->getDescription();
@@ -23,6 +24,7 @@ if(!empty($_POST)){
         $image = $prompt->getImage();
         $type = $prompt->getType();
         $price = $prompt->getPrice();
+        $tag = $prompt->getTag();
 
         $prompt->save();
         //header('Location: dashboard.php');
@@ -74,6 +76,10 @@ if(!empty($_POST)){
         <div class="my-2">
           <label for="description">Description</label>
           <input class="bg-offgrey" id="description" name="description" type="text" placeholder="Description">
+        </div>
+        <div class="my-2">
+          <label for="tag">tags</label>
+          <input class="bg-offgrey" id="tag" name="tag" type="text" placeholder="tags">
         </div>
         <div class="my-2">
           <label for="image">Image</label>
