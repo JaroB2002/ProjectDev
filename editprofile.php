@@ -100,10 +100,9 @@ $credits = $allCredits['credits'];
     <form action="reportedUsers.php" method="post">
   <input type="hidden" name="reportedUser" value="<?php echo $username; ?>">
   <button class="bg-red-500 px-5 py-3 mt-5 rounded font-semibold text-white" type="submit" name="reportUser">Report User</button>
-</form>
+  </form>
 
-</main>
-</body>
+
 <h2>Delete Your Account</h2>
 <p>Please confirm your email address to delete your account and all associated data.</p>
 <form method="post" action="dashboard.php">
@@ -129,11 +128,10 @@ $credits = $allCredits['credits'];
   <br><br>
   <input type="submit" name="uploadPhoto" value="Uploaden" class="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded">
   <input type="submit" name="deletePhoto" value="Verwijderen" class="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded">
-</body>
+</body></main>
 </html>
 
 <?php
-include('classes/Profile.php');
 
 $profile = new Profile();
 
