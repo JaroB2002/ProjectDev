@@ -177,13 +177,14 @@ class Prompt{
             case "all":
                 break;
             default:
-                $statement .= " and name LIKE :title";
+                $statement .= " and name LIKE :title or tags LIKE :tags";
                 break;
         }
         $result = $conn->prepare($statement);
         $result->bindValue(":approved", 1);
         if($search != "all"){
             $result->bindValue(":title", "%$search%");
+            $result->bindValue(":tags", "%$search%");
         }
         $result->execute();
         $filter = $result->fetchAll(PDO::FETCH_ASSOC);
