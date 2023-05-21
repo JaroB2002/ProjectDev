@@ -100,39 +100,46 @@ $credits = $allCredits['credits'];
     <form action="reportedUsers.php" method="post">
   <input type="hidden" name="reportedUser" value="<?php echo $username; ?>">
   <button class="bg-red-500 px-5 py-3 mt-5 rounded font-semibold text-white" type="submit" name="reportUser">Report User</button>
-  </form>
-
-
-<h2>Delete Your Account</h2>
-<p>Please confirm your email address to delete your account and all associated data.</p>
-<form method="post" action="dashboard.php">
-  <label for="email">Email:</label>
-  <input type="email" name="email" required>
-  <br>
-  <label for="confirm_delete">Confirm your email address:</label>
-  <input type="email" name="confirm_delete" required>
-  <br>
-  <p>To delete your account, type "delete my account" below:</p>
-  <input type="text" name="delete_confirmation" required>
-  <br>
-  <button type="submit" name="delete_account" onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">Delete Account</button>
 </form>
 
-<h2>Download Your Data</h2>
-<p>You can download a copy of your data by clicking the button below.</p>
-<a href="download_data.php">Download My Data</a>
 
-<form action="" method="post" enctype="multipart/form-data" class="ml-10">
-  <label>Selecteer een afbeelding:</label>
-  <input type="file" name="image" required>
-  <br><br>
-  <input type="submit" name="uploadPhoto" value="Uploaden" class="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded">
-  <input type="submit" name="deletePhoto" value="Verwijderen" class="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded">
-</body></main>
+    <form action="banUser.php" method="post">
+  <input type="hidden" name="blockedUser" value="<?php echo $username; ?>">
+  <button class="bg-red-500 px-5 py-3 mt-5 rounded font-semibold text-white" type="submit" name="blockUser">Block User</button>
+</form>
+
+
+    <h2>Delete Your Account</h2>
+    <p>Please confirm your email address to delete your account and all associated data.</p>
+    <form method="post" action="dashboard.php">
+      <label for="email">Email:</label>
+      <input type="email" name="email" required>
+      <br>
+      <label for="confirm_delete">Confirm your email address:</label>
+      <input type="email" name="confirm_delete" required>
+      <br>
+      <p>To delete your account, type "delete my account" below:</p>
+      <input type="text" name="delete_confirmation" required>
+      <br>
+      <button type="submit" name="delete_account" onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">Delete Account</button>
+    </form>
+
+    <h2>Download Your Data</h2>
+    <p>You can download a copy of your data by clicking the button below.</p>
+    <a href="download_data.php">Download My Data</a>
+
+    <form action="" method="post" enctype="multipart/form-data" class="ml-10">
+      <label>Selecteer een afbeelding:</label>
+      <input type="file" name="image" required>
+      <br><br>
+      <input type="submit" name="uploadPhoto" value="Uploaden" class="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded">
+      <input type="submit" name="deletePhoto" value="Verwijderen" class="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded">
+    </form>
+</main>
+</body>
 </html>
 
 <?php
-
 $profile = new Profile();
 
 if (isset($_POST['uploadPhoto'])) {
@@ -148,6 +155,10 @@ if (isset($_POST['deletePhoto'])) {
 if ($profile->getProfilePhoto() != '') {
   echo '<img src="' . $profile->getProfilePhoto() . '">';
 }
-?>
 
-<?php include_once("footer.php");?>
+if (isset($_POST['blockUser'])) {
+  // Voeg hier de code toe om de gebruiker te blokkeren
+}
+
+include_once("footer.php");
+?>
