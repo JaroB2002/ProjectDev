@@ -42,7 +42,7 @@ class Prompt{
     public function setTag($tag)
     {
         if (empty($tag)) {
-            throw new Exception("tags cannot be empty.");
+            throw new Exception("Tags cannot be empty.");
         }
         else{ 
         $this->tag = $tag;
@@ -101,7 +101,7 @@ class Prompt{
         return $this->price;
     }
 
-    //prompts in databank opslaan
+    //prompts in database opslaan
     public function save(){
         $conn = Db::getInstance();
         $statement = $conn->prepare("INSERT INTO prompts (name, description, email, image, type, price, date, approved, tags) VALUES (:name, :description, :email, :image, :type, :price, now(), :approved, :tags)");
@@ -154,17 +154,6 @@ class Prompt{
         if (isset($typeConditions[$type])) {
             $statement .= " AND " . $typeConditions[$type];
         }
-        /*switch($type){
-            case "lineArt":
-                $statement .= " and type = 'line art'";
-                break;
-            case "cartoon":
-                $statement .= " and type = 'cartoon'";
-                break;
-            case "realistic":
-                $statement .= " and type = 'realistic'";
-                break;
-        }*/
         switch($date){
             case "new":
                 $statement .= " order by date desc";
@@ -189,8 +178,6 @@ class Prompt{
         $result->execute();
         $filter = $result->fetchAll(PDO::FETCH_ASSOC);
         return $filter;
-
-        self::getLikes();
     }
 
     public function getLikes($prompt_id){
@@ -210,4 +197,13 @@ class Prompt{
         $prompts = $statement->fetchAll(PDO::FETCH_ASSOC);
         return $prompts;
     }
+
+    public function ratePrompt($promptId, $rating){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("INSERT INTO ratings (prompt_id, rating) VALUES (:promptId, :rating)");
+        $statement->bindValue(":promptId", $promptId);
+        $statement->bindValue(":rating", $rating);
+        return $statement->execute();
+    }
+    
 }

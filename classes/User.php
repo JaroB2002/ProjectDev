@@ -5,7 +5,23 @@ class User{
     private $email;
     private $password;
     private $biography;
+    public function blockUser() {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("UPDATE users SET is_blocked = 1 WHERE email = :email");
+        $statement->bindValue(":email", $this->getEmail());
+        $statement->execute();
+    }
 
+        // Existing properties and methods
+        
+        public function unblockUser() {
+            $conn = Db::getInstance();
+            $statement = $conn->prepare("UPDATE users SET is_blocked = 0 WHERE email = :email");
+            $statement->bindValue(":email", $this->getEmail());
+            $statement->execute();
+        }
+    
+    
     public function setEmail($email){
         if(strpos($email, '@') === false || empty($email)){
             throw new Exception("Email is not valid.");

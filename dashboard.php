@@ -147,67 +147,186 @@ include_once("bootstrap.php");
             <button class="bg-fadedblue text-white px-5 py-2 mt-5 rounded font-semibold text-lg" type="submit" value="Search">Search</button>
         </div>
     </form>
+    <?php
+include_once("bootstrap.php");
+
+session_start();
+
+$report = new Report();
+/*if($report->reportCountPrompt()){
+    $reportCount = $report->deletePrompt(true);
+    echo "done";
+};*/
+
+//niet via url binnen raken
+if (!isset($_SESSION['username'])) {
+    header("location: index.php");
+}
+//price filter
+if (!empty($_GET['price'])) {
+    $pricing = $_GET['price'];
+} else {
+    $pricing = "all";
+}
+//type filter
+if (!empty($_GET['type'])) {
+    $type = $_GET['type'];
+} else {
+    $type = "all";
+}
+//date filter
+if (!empty($_GET['date'])) {
+    $date = $_GET['date'];
+} else {
+    $date = "all";
+}
+//text filter
+if (!empty($_GET['search'])) {
+    $search = $_GET['search'];
+} else {
+    $search = "all";
+}
+
+//$allApprovedPrompts = Prompt::getAllApproved();
+$filter = Prompt::filter($pricing, $type, $date, $search);
+$likes = new Prompt();
+$favorites = new Favorite();
+
+try {
+    $user = new User();
+    if (isset($_GET['buy'])) {
+        $canBuy = $user->checkIfCanBuy();
+        /*var_dump($canBuy);*/
+        if ($canBuy['can_buy'] === '1') {
+            $user->buyPrompt();
+            $user->sellPrompt();
+        } else {
+            throw new Exception("You don't have enough credits.");
+        }
+    }
+} catch (Exception $e) {
+    $errorMessage = $e->getMessage();
+}
+
+// Handle prompt rating
+if (isset($_POST['rating']) && isset($_POST['promptId'])) {
+    $rating = $_POST['rating'];
+    $promptId = $_POST['promptId'];
+    
+    $prompt = new Prompt();
+    $prompt->ratePrompt($promptId, $rating);
+}
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+            screens: {
+                sm: '480px',
+                md: '768px',
+                lg: '1024px',
+                xl: '1280px',
+            },
+            extend: {
+                colors: {
+                    fadedpurple: '#C688F4',
+                    fadedblue: '#5C69AA',
+                    offgrey: '#fdfcfd',
+                    offblack: '#313639',
+                    offwhite: '#f9f9f9'
+                }
+            }
+        }
+    }
+    </script>
+</head>
+
+<body class="mx-10">
+    <!-- Rest of your HTML code -->
+
     <h2 class="text-3xl font-semibold mt-5">Prompt overview</h2>
-    <?php if($filter == null): ?>
+    <?php if ($filter == null): ?>
         <p class="text-xl font-semibold mt-5 text-fadedpurple">No prompts found</p>
     <?php endif; ?>
     <article class="flex flex-wrap">
         <?php foreach ($filter as $prompt): ?>
-                <div class="my-5 bg-offblack mr-10 px-8 py-8 rounded max-w-sm">
-                    <h3 class="font-semibold text-xl text-fadedpurple"><?php echo htmlspecialchars($prompt["name"]); ?></h3>
-                    <a href="user.php?id=<?php echo $prompt["email"]; ?>">
-                        <p class="mb-5 text-lg text-offwhite hover:text-fadedpurple"><strong>User:</strong> <?php echo $prompt["email"]; ?></p>
-                    </a>
-                    <img class="mb-5" src="<?php echo htmlspecialchars($prompt["image"]); ?>" alt="input image">
-                    <p class="mb-3 text-lg text-offwhite"><strong>Description:</strong> <?php echo htmlspecialchars($prompt["description"]); ?></p>
-                    <p class="mb-3 text-lg text-offwhite"><strong>Type:</strong> <?php echo htmlspecialchars($prompt["type"]); ?></p>
-                    <p class="mb-3 text-lg text-offwhite"><strong>Price:</strong> <?php echo htmlspecialchars($prompt["price"]); ?></p>
-                    <button id="reportButton" data-promptid="<?php echo $prompt['id'];?>" class="p-3 px-6 pt-2 text-white bg-fadedpurple rounded-full baseline font-semibold text-lg">Report Prompt</button>
+            <div class="my-5 bg-offblack mr-10 px-8 py-8 rounded max-w-sm">
+                <h3 class="font-semibold text-xl text-fadedpurple"><?php echo htmlspecialchars($prompt["name"]); ?></h3>
+                <a href="user.php?id=<?php echo $prompt["email"]; ?>">
+                    <p class="mb-5 text-lg text-offwhite hover:text-fadedpurple"><strong>User:</strong> <?php echo $prompt["email"]; ?></p>
+                </a>
+                <img class="mb-5" src="<?php echo htmlspecialchars($prompt["image"]); ?>" alt="input image">
+                <p class="mb-3 text-lg text-offwhite"><strong>Description:</strong> <?php echo htmlspecialchars($prompt["description"]); ?></p>
+                <p class="mb-3 text-lg text-offwhite"><strong>Type:</strong> <?php echo htmlspecialchars($prompt["type"]); ?></p>
+                <p class="mb-3 text-lg text-offwhite"><strong>Price:</strong> <?php echo htmlspecialchars($prompt["price"]); ?></p>
+                <form method="post" class="mt-4">
+                    <input type="hidden" name="promptId" value="<?php echo $prompt['id']; ?>">
+                    <div class="flex items-center">
+                        <label for="rating" class="mr-2">Rate prompt:</label>
+                        <select name="rating" id="rating" class="border border-gray-300 rounded p-1">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <button type="submit" class="ml-2 bg-fadedpurple text-white font-semibold px-4 py-2 rounded">Rate</button>
+                    </div>
+                </form>
+                <button id="reportButton" data-promptid="<?php echo $prompt['id']; ?>" class="p-3 px-6 pt-2 text-white bg-fadedpurple rounded-full baseline font-semibold text-lg">Report Prompt</button>
                 <div>
-                        <button class="report-button" data-prompt-id="<?php echo $prompt["id"]; ?>" data-error-id="<?php echo 'error-' . $prompt["id"]; ?>">Report user</button>
-                        <?php if (isset($errorMessage) && $_GET["buy"] == $prompt["id"]): ?>
-                            <div class="error-message text-red-500" id="<?php echo 'error-' . $prompt["id"]; ?>">
-                                <?php echo $errorMessage; ?>
-                            </div>
-                        <?php endif; ?>
-                        <form action="" class="mt-3">
-                            <button class="bg-fadedpurple px-5 py-3 rounded font-semibold ml-5" type="submit" name="buy" value="<?php echo $prompt['id'];?>">Buy</button>
-                        </form>
-                        <div class="mt-5">
-                            <a href="#" data-id="<?php echo $prompt['id']; ?>" class="like bg-fadedpurple px-5 py-3 rounded font-semibold ml-5 mt-5"><?php if(Like::getAll($prompt['id']) == true) { echo 'Unlike '; } else { echo 'Like ';}?> <span class='likes' id="likes"><?php echo $likes->getLikes($prompt['id']) ?> people like this</span> </a>
+                    <button class="report-button" data-prompt-id="<?php echo $prompt["id"]; ?>" data-error-id="<?php echo 'error-' . $prompt["id"]; ?>">Report user</button>
+                    <?php if (isset($errorMessage) && $_GET["buy"] == $prompt["id"]): ?>
+                        <div class="error-message text-red-500" id="<?php echo 'error-' . $prompt["id"]; ?>">
+                            <?php echo $errorMessage; ?>
                         </div>
-                        <div class="mt-8">
-                            <a href="#" data-id="<?php echo $prompt['id']; ?>" class="favorite bg-fadedpurple px-5 py-3 rounded font-semibold ml-5 mt-5"><?php if(Favorite::getAll($prompt['id']) == true) { echo 'remove from favorites '; } else { echo 'add to favorites ';}?></a>
-                        </div>
+                    <?php endif; ?>
+                    <form action="" class="mt-3">
+                        <button class="bg-fadedpurple px-5 py-3 rounded font-semibold ml-5" type="submit" name="buy" value="<?php echo $prompt['id']; ?>">Buy</button>
+                    </form>
+                    <div class="mt-5">
+                        <a href="#" data-id="<?php echo $prompt['id']; ?>" class="like bg-fadedpurple px-5 py-3 rounded font-semibold ml-5 mt-5"><?php if (Like::getAll($prompt['id']) == true) { echo 'Unlike '; } else { echo 'Like ';}?> <span class='likes' id="likes"><?php echo $likes->getLikes($prompt['id']) ?> people like this</span> </a>
+                    </div>
+                    <div class="mt-8">
+                        <a href="#" data-id="<?php echo $prompt['id']; ?>" class="favorite bg-fadedpurple px-5 py-3 rounded font-semibold ml-5 mt-5"><?php if (Favorite::getAll($prompt['id']) == true) { echo 'remove from favorites '; } else { echo 'add to favorites ';}?></a>
                     </div>
                 </div>
-                
+            </div>
         <?php endforeach; ?>
     </article>
+
     <?php
-        include_once(__DIR__ . "/classes/Comment.php");
-        $allComments = Comment::getAll(3);
-        //var_dump($allComments);
-        ?>
-        <div class="post">  
+    include_once(__DIR__ . "/classes/Comment.php");
+    $allComments = Comment::getAll(3);
+    //var_dump($allComments);
+    ?>
+    <div class="post">
         <div class="post__comments">
             <div class="post__comments__form">
                 <input type="text" id="commentText" placeholder="What's on your mind">
                 <a href="#" class="btn" id="btnAddComment" data-postid="3">Add comment</a>
-            </div>  
-            
+            </div>
             <ul class="post__comments__list">
                 <?php foreach($allComments as $c): ?>
-                <li><?php echo $c['text']; ?></li>
+                    <li><?php echo $c['text']; ?></li>
                 <?php endforeach; ?>
             </ul>
         </div>
+    </div>
 
-  
-</div>
-  <script src="index.css"></script>
-  <script src="app.js"></script>
-  <script>
+    <script src="index.css"></script>
+    <script src="app.js"></script>
+    <script>
         let report = document.querySelectorAll("#reportButton");
 
         report.forEach(function(button){
@@ -215,74 +334,74 @@ include_once("bootstrap.php");
         });
 
         function reportPrompt(event){
-        console.log(event);
-        event.preventDefault();
-        console.log("reportPrompt");
-        let promptid = event.target.dataset.promptid;
-        console.log(promptid);
-        let formData = new FormData();
-        formData.append("promptid", promptid);
+            console.log(event);
+            event.preventDefault();
+            console.log("reportPrompt");
+            let promptid = event.target.dataset.promptid;
+            console.log(promptid);
+            let formData = new FormData();
+            formData.append("promptid", promptid);
 
-        let item = this;
-        fetch("ajax/reportPrompt.php", {
-            method: "POST",
-            body: formData
-        })
-        .then(function(response){
-            return response.json();
-        })
-        .then(function(result){
-            if(result.status == "success"){
-                item.innerHTML = result.message;
-            }
-        });
+            let item = this;
+            fetch("ajax/reportPrompt.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(function(response){
+                return response.json();
+            })
+            .then(function(result){
+                if(result.status == "success"){
+                    item.innerHTML = result.message;
+                }
+            });
         }
     </script>
     <script>
-    let links = document.querySelectorAll(".like");
-    for (let i = 0; i < links.length; i++) {
-        links[i].addEventListener("click", function (e) {
-            e.preventDefault();
-            //console.log("geklikt😅");
+        let links = document.querySelectorAll(".like");
+        for (let i = 0; i < links.length; i++) {
+            links[i].addEventListener("click", function (e) {
+                e.preventDefault();
+                //console.log("geklikt😅");
 
-            // Get the clicked <a> element
-            let link = e.target;
+                // Get the clicked <a> element
+                let link = e.target;
 
-            // Find the parent <a> element if the clicked element is the <span> element
-            if (link.tagName !== "A") {
-                link = link.closest("a");
-            }
+                // Find the parent <a> element if the clicked element is the <span> element
+                if (link.tagName !== "A") {
+                    link = link.closest("a");
+                }
 
-            // Get the <span> element inside the clicked <a> element
-            let span = link.querySelector("span.likes");
-            console.log(span);
+                // Get the <span> element inside the clicked <a> element
+                let span = link.querySelector("span.likes");
+                console.log(span);
 
-            //krijg de id voor de prompt
-            let promptId = this.getAttribute("data-id");
+                //krijg de id voor de prompt
+                let promptId = this.getAttribute("data-id");
 
-            //post naar database AJAX
-            let formData = new FormData();
-            formData.append("promptId", promptId);
+                //post naar database AJAX
+                let formData = new FormData();
+                formData.append("promptId", promptId);
 
-            fetch("ajax/like.php", {
-                method: "POST", // or 'PUT'
-                body: formData
-            })
+                fetch("ajax/like.php", {
+                    method: "POST", // or 'PUT'
+                    body: formData
+                })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (json) {
+                    link.innerHTML = json.status + " " +  json.likes + " people like this";
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        });
+    }
+    </script>
+</body>
+</html>
 
-            //.then(response => response.json())
-            .then(function (response) {
-                return response.json();
-            })
-
-            .then(function (json) {
-                link.innerHTML = json.status + " " +  json.likes + " people like this";
-            })
-
-            .catch(function (error) {
-                console.log(error);
-            });
-    });
-}
     </script>
       <script src="js/favorite.js"></script>
 </body>
