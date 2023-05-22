@@ -185,6 +185,15 @@ class User{
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function showUserPrompts(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT * FROM `prompts` WHERE email = :email and approved = :approved");
+        $statement->bindValue(":email", $_SESSION['username']);
+        $statement->bindValue(":approved", 1);
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function checkIfCanBuy(){
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT users.credits >= prompts.price AS can_buy FROM users, prompts WHERE prompts.id = :prompts_id AND users.email = :email");

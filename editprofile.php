@@ -30,6 +30,9 @@ if(!empty($_POST)){
 
 $allCredits = $user->showCredits();
 $credits = $allCredits['credits'];
+
+$u = new User();
+$user_prompts = $u->showUserPrompts();
 ?>
 
 <!DOCTYPE html>
@@ -101,6 +104,20 @@ $credits = $allCredits['credits'];
   <input type="hidden" name="reportedUser" value="<?php echo $username; ?>">
   <button class="bg-red-500 px-5 py-3 mt-5 rounded font-semibold text-white" type="submit" name="reportUser">Report User</button>
 </form>
+
+<article class="flex flex-wrap">
+      <?php if(!empty($user_prompts)) : ?>
+          <?php foreach($user_prompts as $prompt): ?>
+              <div class="my-5 bg-offblack mr-10 px-8 py-8 rounded max-w-sm">
+                  <p class="mb-5 text-lg text-offwhite"> <strong>Name: </strong> <?php echo $prompt["name"];?></p>
+                  <img class="mb-5" src="<?php echo $prompt["image"]; ?>" alt="input image">
+                  <p class="mb-3 text-lg text-offwhite"> <strong>description: </strong> <?php echo $prompt["description"];?></p>
+                  <p class="mb-3 text-lg text-offwhite"> <strong>type: </strong> <?php echo $prompt["type"]?>  </p>
+                  <p class="mb-3 text-lg text-offwhite"> <strong>price: </strong> <?php echo $prompt["price"];?></p>
+              </div>
+          <?php endforeach; ?>
+      <?php endif; ?>
+    </article>
 
 
     <form action="banUser.php" method="post">
