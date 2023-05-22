@@ -65,7 +65,7 @@
             <div class="my-5 mx-5 bg-stone-700 px-8 py-8 rounded max-w-sm">
                 <h3 class="font-semibold text-xl text-fadedpurple"><?php echo htmlspecialchars($prompt["name"]); ?></h3>
                 <a href="user.php?id=<?php echo $prompt["email"]; ?>">
-                    <p class="mb-5 text-lg text-offwhite hover:text-fadedpurple"><strong>User:</strong> <?php echo $prompt["email"]; ?></p>
+                    <p class="mb-5 text-lg text-offwhite hover:text-fadedpurple"><strong>User:</strong> <?php echo htmlspecialchars($prompt["email"]); ?></p>
                 </a>
                 <img class="mb-5" src="<?php echo htmlspecialchars($prompt["image"]); ?>" alt="input image">
                 <p class="mb-3 text-lg text-offwhite">  <strong>description: </strong> <?php echo htmlspecialchars($prompt["description"]);?></p>
