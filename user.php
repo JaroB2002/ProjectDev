@@ -6,6 +6,10 @@
         header("location: index.php");
     }
 
+    if($_SESSION['username'] == $_GET['id']){
+      header("location: editprofile.php");
+    }
+
     if(!empty($_GET["id"])){
       $u = new User();
       $user_prompts = $u->getUserPrompts();
