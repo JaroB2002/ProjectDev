@@ -2,7 +2,9 @@
 // Establish database connection
 // ik moet connectie linken met database, van de database die ik heb gemaakt van Bootstrap.php
 include_once("bootstrap.php");
-
+if(!isset($_SESSION['username'])){
+  header("location: index.php");
+} 
 
 
 try {
