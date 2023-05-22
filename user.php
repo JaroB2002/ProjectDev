@@ -104,11 +104,11 @@ if ($isModerator) {
       <?php if(!empty($user_prompts)) : ?>
           <?php foreach($user_prompts as $prompt): ?>
               <div class="my-5 bg-offblack mr-10 px-8 py-8 rounded max-w-sm">
-                  <p class="mb-5 text-lg text-offwhite"> <strong>Name: </strong> <?php echo $prompt["name"];?></p>
-                  <img class="mb-5" src="<?php echo $prompt["image"]; ?>" alt="input image">
-                  <p class="mb-3 text-lg text-offwhite"> <strong>description: </strong> <?php echo $prompt["description"];?></p>
-                  <p class="mb-3 text-lg text-offwhite"> <strong>type: </strong> <?php echo $prompt["type"]?>  </p>
-                  <p class="mb-3 text-lg text-offwhite"> <strong>price: </strong> <?php echo $prompt["price"];?></p>
+                  <p class="mb-5 text-lg text-offwhite"> <strong>Name: </strong> <?php echo htmlspecialchars($prompt["name"]);?></p>
+                  <img class="mb-5" src="<?php echo htmlspecialchars($prompt["image"]); ?>" alt="input image">
+                  <p class="mb-3 text-lg text-offwhite"> <strong>description: </strong> <?php echo htmlspecialchars($prompt["description"]);?></p>
+                  <p class="mb-3 text-lg text-offwhite"> <strong>type: </strong> <?php echo htmlspecialchars($prompt["type"])?>  </p>
+                  <p class="mb-3 text-lg text-offwhite"> <strong>price: </strong> <?php echo htmlspecialchars($prompt["price"]);?></p>
               </div>
           <?php endforeach; ?>
       <?php endif; ?>

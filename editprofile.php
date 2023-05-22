@@ -81,7 +81,7 @@ $user_prompts = $u->showUserPrompts();
     </div>
   </nav>
   <main class="ml-10 mt-10">
-    <a href="<?php echo $profileLink; ?>">Deel mijn profiel</a>
+    <a href="<?php echo htmlspecialchars($profileLink); ?>">Deel mijn profiel</a>
 
     <h1 class="text-5xl mb-10 font-semibold">Profile</h1>
     <h2 class="text-3xl text-fadedblue mb-5">Hi, it's <?php echo htmlspecialchars($username); ?>!</h2>
