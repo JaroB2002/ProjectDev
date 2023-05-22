@@ -2,7 +2,11 @@
 include_once("bootstrap.php");
 
 session_start();
+if(!isset($_SESSION['username'])){
+    header("location: index.php");
+} 
 $username = $_SESSION['username'];
+
 
 // Check if the user is an administrator or has the necessary permissions to ban users
 // Add your logic here to determine the user's authorization
