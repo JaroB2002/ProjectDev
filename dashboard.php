@@ -150,7 +150,7 @@ include_once("bootstrap.php");
     <?php
 include_once("bootstrap.php");
 
-session_start();
+//session_start();
 
 $report = new Report();
 /*if($report->reportCountPrompt()){
