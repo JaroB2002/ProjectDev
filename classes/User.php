@@ -7,7 +7,8 @@ class User{
     private $biography;
     public function blockUser() {
         $conn = Db::getInstance();
-        $statement = $conn->prepare("UPDATE users SET is_blocked = 1 WHERE email = :email");
+        $statement = $conn->prepare("UPDATE users SET is_blocked = :is_blocked WHERE email = :email");
+        $statement->bindValue(":is_blocked", 1);
         $statement->bindValue(":email", $this->getEmail());
         $statement->execute();
     }
@@ -16,7 +17,8 @@ class User{
         
         public function unblockUser() {
             $conn = Db::getInstance();
-            $statement = $conn->prepare("UPDATE users SET is_blocked = 0 WHERE email = :email");
+            $statement = $conn->prepare("UPDATE users SET is_blocked = :is_blocked WHERE email = :email");
+            $statement->bindValue(":is_blocked", 0);
             $statement->bindValue(":email", $this->getEmail());
             $statement->execute();
         }
