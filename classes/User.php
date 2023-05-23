@@ -255,7 +255,8 @@ class User{
     public function verifyUser($verified){
         if($verified){
             $conn = Db::getInstance();
-            $statement = $conn->prepare("UPDATE users SET users.verified = 1 WHERE email = :email");
+            $statement = $conn->prepare("UPDATE users SET users.verified = :verified WHERE email = :email");
+            $statement = bindValue(":verified", 1);
             $statement->bindValue(":email", $_SESSION['username']);
             $statement->execute();
         }
