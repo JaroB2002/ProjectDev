@@ -39,6 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 <body>
   <div class="container mx-auto py-10">
+  <nav><?php include_once("navigation.php")?></nav>
     <h1 class="text-4xl font-bold mb-8">Reported Users</h1>
 
     <?php if (isset($reportedUser)): ?>
