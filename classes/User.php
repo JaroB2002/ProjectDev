@@ -261,4 +261,12 @@ class User{
             $statement->execute();
         }
     }
+
+    public function getFavorites(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT prompts.* FROM `prompts` JOIN favorites ON prompts.id = favorites.prompts_id WHERE favorites.username = :username");
+        $statement->bindValue(":username", $_SESSION['username']);
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

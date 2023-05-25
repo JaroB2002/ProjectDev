@@ -41,6 +41,7 @@
   //prompts of user
   $u = new User();
   $user_prompts = $u->showUserPrompts();
+  $user_favorites = $u->getFavorites();
 
   //profile photo
   /*$profile = new Profile();
@@ -134,6 +135,22 @@
       <input type="hidden" name="reportedUser" value="<?php echo $username; ?>">
       <button class="bg-red-500 px-5 py-3 mt-5 rounded font-semibold text-white" type="submit" name="reportUser">Report User</button>
     </form>-->
+    <div class="flex justify-center mt-20">
+      <h2 class="text-3xl mb-2 font-semibold">My Favorites</h2>
+    </div>
+    <article class="flex flex-wrap justify-center mt-5 pt-5">
+      <?php if(!empty($user_favorites)) : ?>
+          <?php foreach($user_favorites as $prompt): ?>
+              <div class="my-5 bg-offgrey mr-10 px-8 py-8 rounded max-w-md">
+                  <p class="mb-5 text-lg text-offblack"> <strong>Name: </strong> <?php echo htmlspecialchars($prompt["name"]);?></p>
+                  <img class="object-none h-96 w-96 mb-5" src="<?php echo htmlspecialchars($prompt["image"]); ?>" alt="input image">
+                  <p class="mb-3 text-lg text-offblack"> <strong>Description: </strong> <?php echo htmlspecialchars($prompt["description"]);?></p>
+                  <p class="mb-3 text-lg text-offblack"> <strong>Type: </strong> <?php echo htmlspecialchars($prompt["type"])?>  </p>
+                  <p class="mb-3 text-lg text-offblack"> <strong>Price: </strong> <?php echo htmlspecialchars($prompt["price"]);?></p>
+              </div>
+          <?php endforeach; ?>
+      <?php endif; ?>
+    </article>
     <div class="flex justify-center mt-20">
       <h2 class="text-3xl mb-2 font-semibold">My Prompts</h2>
     </div>
