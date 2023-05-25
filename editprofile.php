@@ -122,6 +122,7 @@
           </div>
           <div>
             <button class="bg-fadedpurple px-5 py-3 mt-5 rounded font-semibold text-white" type="submit" name="updateProfile">Add bio</button>
+            <a class="bg-fadedpurple px-3.5 py-3.5 mt-5 rounded font-semibold text-white" href="following.php">View Following</a>
           </div>
         </form>
         <a href="<?php echo htmlspecialchars($profileLink); ?>" class="text-fadedblue pt-5">Share my profile</a>
