@@ -65,7 +65,7 @@
      <div class="md:flex md:items-center md:justify-center w-full  md:h-full sm:rounded-lg md:rounded-none bg-white px-6">
        <div class="max-w-md w-full mx-auto">
          <div>
-           <img class="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Logo project">
+           <img class="mx-auto h-12 w-auto" src="PromptBaes.svg" alt="Logo PromptBaes">
            <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">Log in</h2>
            <p class="mt-2 text-center text-sm text-gray-600"> Or <a href="register.php" class="font-medium text-indigo-600 hover:text-indigo-500">sign up here</a>
            </p>
