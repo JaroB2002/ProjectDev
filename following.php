@@ -56,6 +56,7 @@
   </script>
 </head>
 <body>
+<nav><?php include_once("navigation.php")?></nav>
 <h1 class="text-2xl mx-5 font-semibold mt-7" > Following</h1>
     <article class="text-white flex flex-wrap">
         <?php foreach($followPrompts as $prompt): ?>
