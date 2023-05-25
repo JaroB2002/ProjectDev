@@ -191,9 +191,8 @@ if (!empty($_GET['search'])) {
 $filter = Prompt::filter($pricing, $type, $date, $search);
 $likes = new Prompt();
 $favorites = new Favorite();
-$promptId = 22; // Replace 123 with the actual value of $promptId
-$comments = Comment::getAll($promptId);
-var_dump($comments);
+//$promptId = $_POST["promptId"];
+//var_dump($comments);
 
 try {
     $user = new User();
@@ -305,11 +304,14 @@ if (isset($_POST['rating']) && isset($_POST['promptId'])) {
                     </div>
                     <form action="" class="mt-3">
                         <input class="text" type="text" placeholder="write a comment".>
-                        <button class="comments bg-fadedpurple px-5 py-3 rounded font-semibold ml-5" type="submit" name="comment" data-promptid="<?php echo $prompt['id']; ?>">Add comment</button>
+                        <button class="comments bg-fadedpurple px-5 py-3 rounded font-semibold ml-5" type="submit" name="comment" data-id="<?php echo $prompt['id']; ?>">Add comment</button>
                     </form>
+                    <?php $comments = Comment::getAll($prompt['id']); ?>
 
                     <ul class="list">
-                        <li></li>
+                        <?php foreach ($comments as $comment): ?>
+                            <li><?php echo htmlspecialchars($comment['comment']); ?></li>
+                        <?php endforeach; ?>
                     </ul>
                 </div>
             </div>

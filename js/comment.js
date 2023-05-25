@@ -1,40 +1,56 @@
 //console.log('link');
 
-document.querySelector(".comments").addEventListener("click", function(e){
-    e.preventDefault();
+let com = document.querySelectorAll(".comments")
 
-    //console.log('geklikt');
+for (let i = 0; i < com.length; i++) 
+{
+    com[i].addEventListener("click", function (e){
+        e.preventDefault();
+        
+        //postid
+        let promptId = this.getAttribute("data-id");
+        //let text = document.querySelector(".text").value;
 
-    //postid
-    let promptId = this.dataset.promptid;
-    let text = document.querySelector(".text").value;
+        let form = this.closest('form');
 
-    //console.log(promptId);
-    //console.log(text);
+        // Selecteer het tekstveld binnen de geselecteerde form
+        let input = form.querySelector('input[type="text"]');
 
-    //comment naar databank
-    let formData = new FormData();
-    formData.append("promptId", promptId);
-    formData.append("text", text);
+        // Doe iets met het geselecteerde invoerveld (bijv. toegang krijgen tot de waarde)
+        let commentText = input.value;
+        console.log(commentText);
 
-    fetch("ajax/comment.php", {
-        method: "POST",
-        body: formData
-    })
+        var ul = form.nextElementSibling;
+        console.log(ul);
 
-    .then(function (response) {
-        return response.json();
-    })
-    .then(result => {
-        let comment = document.createElement('li');
-        comment.innerHTML = result.body;
-        document.querySelector('.list').appendChild(comment);
-    })
-    .catch(error => {
-        console.log("error", error);
+    
+        console.log(promptId);
+        //console.log(text);
+    
+        //comment naar databank
+        let formData = new FormData();
+        formData.append("promptId", promptId);
+        formData.append("text", commentText);
+    
+        fetch("ajax/comment.php", {
+            method: "POST",
+            body: formData
+        })
+    
+        .then(function (response) {
+            return response.json();
+        })
+        .then(result => {
+            let comment = document.createElement('li');
+            comment.innerHTML = result.body;
+            ul.appendChild(comment);
+        })
+        .catch(error => {
+            console.log("error", error);
+        });
+    
     });
-
-});
+}
 
 /*document.getElementById("btnAddComment").addEventListener("click", addComment);
 

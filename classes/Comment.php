@@ -65,21 +65,20 @@
         }
         public function save(){
             $conn = Db::getInstance();
-            $statement = $conn->prepare("INSERT INTO comments (text, postId, userId) VALUES (:text, :postId, :userId)");
-            $statement->bindValue(":text",  $this->getText());
+            $statement = $conn->prepare("INSERT INTO comments (comment, postId, userId) VALUES (:comment, :postId, :userId)");
+            $statement->bindValue(":comment",  $this->getText());
             $statement->bindValue(":postId", $this->getPromptId());
             $statement->bindValue(":userId", $this->getUserId());
             $result = $statement->execute();
-            return $result;
         }
         public static function getAll($promptId)
         {
                 $conn = Db::getInstance();
-                $statement = $conn->prepare("SELECT * FROM comments WHERE postId = :postId AND username = :username");
+                $statement = $conn->prepare("SELECT * FROM comments WHERE postId = :postId");
                 $statement->bindValue(":postId", $promptId);
-                $statement->bindValue(":username", $_SESSION['username']);
                 $statement->execute();
                 $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+                return $result;
         }
     }
     ?>
