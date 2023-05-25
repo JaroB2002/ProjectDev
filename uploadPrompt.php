@@ -58,8 +58,9 @@ if(!empty($_POST)){
           colors: {
             fadedpurple: '#C688F4',
             fadedblue: '#5C69AA',
-            offgrey: '#D9D9D9',
-            offblack: '#D9D9D9',
+            offgrey: '#faf9f6',
+            offblack: '#313639',
+            offwhite: '#f9f9f9'
           }
         }
       }
@@ -67,6 +68,7 @@ if(!empty($_POST)){
   </script>
 </head>
 <body>
+  <nav><?php include_once("navigation.php")?></nav>
     <h1 class="text-4xl mx-5 font-semibold mt-7"> Share your prompt! </h1>
     <form action="#" method="post" class="my-5 mx-5 bg-offgrey px-8 py-8 rounded max-w-sm">
         <div class="my-2">
@@ -103,4 +105,4 @@ if(!empty($_POST)){
     </form>
     <p class="font-semibold text-fadedblue mx-5 text-xl"><?php echo $succes?></p>
 </body>
-<?php include_once("footer.php");?>
+<footer><?php include_once("footer.php");?></footer>

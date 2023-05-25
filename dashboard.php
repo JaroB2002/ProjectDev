@@ -99,16 +99,7 @@ include_once("bootstrap.php");
 </head>
 
 <body class="mx-10">
-    <nav class="relative container mx-auto p-6 bg-offwhite rounded-md">
-    <div class="flex items-center justify-between">
-        <div class=" md:flex space-x-6">
-            <a href="dashboard.php" class="text-lg font-bold hover:text-fadedpurple">Home</a>
-            <a href="editprofile.php" class="text-lg font-bold hover:text-fadedpurple">Profile</a>
-            <a href="uploadPrompt.php" class="text-lg font-bold hover:text-fadedpurple">Upload</a>
-        </div>
-        <a href="logout.php" class="hidden md:block p-3 px-6 pt-2 text-white bg-fadedpurple rounded-full baseline font-semibold text-lg">Log out</a>
-    </div>
-    </nav>
+    <nav><?php include_once("navigation.php")?></nav>
     <h1 class="text-4xl font-semibold">Homepage</h1>
     <!--search-->
     <form method="get" action=""> <!--veranderd nr get-->
