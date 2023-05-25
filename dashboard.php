@@ -293,15 +293,15 @@ if (isset($_POST['rating']) && isset($_POST['promptId'])) {
                     <div class="mt-8">
                         <a href="#" data-id="<?php echo $prompt['id']; ?>" class="favorite bg-fadedpurple px-5 py-3 rounded font-semibold ml-5 mt-5"><?php if (Favorite::getAll($prompt['id']) == true) { echo 'remove from favorites '; } else { echo 'add to favorites ';}?></a>
                     </div>
-                    <form action="" class="mt-3">
+                    <form action="" class="mt-10 flex rounded">
                         <input class="text" type="text" placeholder="write a comment".>
-                        <button class="comments bg-fadedpurple px-5 py-3 rounded font-semibold ml-5" type="submit" name="comment" data-id="<?php echo $prompt['id']; ?>">Add comment</button>
+                        <button class="comments bg-fadedpurple px-5 py-3 rounded font-semibold ml-5" type="submit" name="comment" data-id="<?php echo $prompt['id']; ?>">Comment</button>
                     </form>
                     <?php $comments = Comment::getAll($prompt['id']); ?>
 
-                    <ul class="list">
+                    <ul class="list mt-5 text-offwhite bg-fadedblue pt-3 pb-3 pl-5 pr-5 rounded">
                         <?php foreach ($comments as $comment): ?>
-                            <li><?php echo htmlspecialchars($comment['comment']); ?></li>
+                            <li><?php echo htmlspecialchars($comment['userId']) ."<br>" .  htmlspecialchars($comment['comment']); ?></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
