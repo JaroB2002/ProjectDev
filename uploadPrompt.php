@@ -2,10 +2,12 @@
 include_once("bootstrap.php");
 
 session_start();
-$username = $_SESSION['username'];
+
 if(!isset($_SESSION['username'])){
     header('Location: index.php');
+    exit();
 }
+$username = $_SESSION['username'];
 $succes = "";
 if(!empty($_POST)){
     try{
