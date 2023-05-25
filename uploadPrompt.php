@@ -67,42 +67,47 @@ if(!empty($_POST)){
     }
   </script>
 </head>
-<body>
+<body   class="relative bg-cover bg-no-repeat"
+  style="background-image: url('uploads/promptbg.jpg');">
   <nav><?php include_once("navigation.php")?></nav>
-    <h1 class="text-4xl mx-5 font-semibold mt-7"> Share your prompt! </h1>
-    <form action="#" method="post" class="my-5 mx-5 bg-offgrey px-8 py-8 rounded max-w-sm">
+  <main class="flex justify-center">
+    <form action="#" method="post" class="my-5 mx-5 py-8 rounded max-w-lg bg-offgrey px-20">
+      <h1 class="text-4xl font-semibold mt-2"> Share your prompt! </h1>  
         <div class="my-2">
-          <label for="name">Name</label>
-          <input class="bg-offgrey" id="name" name="name" type="text" placeholder="Name">
+          <label class="text-fadedblue font-bold" for="name">Name</label><br>
+          <input class="bg-offgrey px-4 py-2 rounded w-full" id="name" name="name" type="text" placeholder="Name">
         </div>
         <div class="my-2">
-          <label for="description">Description</label>
-          <input class="bg-offgrey" id="description" name="description" type="text" placeholder="Description">
+          <label class="text-fadedblue font-bold" for="description">Description</label><br>
+          <textarea class="bg-offgrey px-4 py-2 h-32 rounded w-full" id="description" name="description" placeholder="Description"></textarea>
         </div>
         <div class="my-2">
-          <label for="tag">tags</label>
-          <input class="bg-offgrey" id="tag" name="tag" type="text" placeholder="tags">
+          <label class="text-fadedblue font-bold" for="tag">Tags</label><br>
+          <input class="bg-offgrey px-4 py-2 rounded w-full" id="tag" name="tag" type="text" placeholder="tags">
         </div>
         <div class="my-2">
-          <label for="image">Image</label>
-          <input class="bg-offgrey" id="image" name="image" type="text" placeholder="Image">
+          <label class="text-fadedblue font-bold" for="image">Image</label><br>
+          <input class="bg-offgrey px-4 py-2 rounded w-full" id="image" name="image" type="text" placeholder="Image">
         </div>
         <div class="my-2">
-          <label for="type">Type</label>
-          <select class="bg-offgrey" name="type">
+          <label class="text-fadedblue font-bold" for="type">Type</label><br>
+          <select class="bg-offgrey px-4 py-2 rounded w-full" name="type">
                 <option value="all">All</option>
                 <option value="line art">Line art</option>
                 <option value="realistic">Realistic</option>
                 <option value="cartoon">Cartoon</option>
             </select>
         </div class="my-2">
-            <label for="price">Price</label>
-            <input class="bg-offgrey" id="price" name="price" type="text" placeholder="Price">
+            <label class="text-fadedblue font-bold" for="price">Price</label><br>
+            <input class="bg-offgrey px-4 py-2 rounded w-full" id="price" name="price" type="text" placeholder="Price">
         </div>
         <div class="my-2">
         <button class="bg-fadedpurple px-5 py-3 mt-5 rounded font-semibold" type="submit" name="uploadPrompt">Upload prompt</button>
         </div>
+        <p class="font-semibold text-fadedblue pt-5 text-xl"><?php echo $succes?></p>
     </form>
-    <p class="font-semibold text-fadedblue mx-5 text-xl"><?php echo $succes?></p>
+  </main>
+  <footer><?php include_once("footer.php");?></footer>
 </body>
-<footer><?php include_once("footer.php");?></footer>
+</html>
+
