@@ -191,6 +191,9 @@ if (!empty($_GET['search'])) {
 $filter = Prompt::filter($pricing, $type, $date, $search);
 $likes = new Prompt();
 $favorites = new Favorite();
+$promptId = 22; // Replace 123 with the actual value of $promptId
+$comments = Comment::getAll($promptId);
+var_dump($comments);
 
 try {
     $user = new User();
@@ -300,32 +303,21 @@ if (isset($_POST['rating']) && isset($_POST['promptId'])) {
                     <div class="mt-8">
                         <a href="#" data-id="<?php echo $prompt['id']; ?>" class="favorite bg-fadedpurple px-5 py-3 rounded font-semibold ml-5 mt-5"><?php if (Favorite::getAll($prompt['id']) == true) { echo 'remove from favorites '; } else { echo 'add to favorites ';}?></a>
                     </div>
+                    <form action="" class="mt-3">
+                        <input class="text" type="text" placeholder="write a comment".>
+                        <button class="comments bg-fadedpurple px-5 py-3 rounded font-semibold ml-5" type="submit" name="comment" data-promptid="<?php echo $prompt['id']; ?>">Add comment</button>
+                    </form>
+
+                    <ul class="list">
+                        <li></li>
+                    </ul>
                 </div>
             </div>
         <?php endforeach; ?>
     </article>
 
-    <?php
-    include_once(__DIR__ . "/classes/Comment.php");
-    $allComments = Comment::getAll(3);
-    //var_dump($allComments);
-    ?>
-    <div class="post">
-        <div class="post__comments">
-            <div class="post__comments__form">
-                <input type="text" id="commentText" placeholder="What's on your mind">
-                <a href="#" class="btn" id="btnAddComment" data-postid="3">Add comment</a>
-            </div>
-            <ul class="post__comments__list">
-                <?php foreach($allComments as $c): ?>
-                    <li><?php echo $c['text']; ?></li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-    </div>
-
-    <script src="index.css"></script>
-    <script src="app.js"></script>
+    <!--<script src="index.css"></script>-->
+    <!--<script src="app.js"></script>-->
     <script>
         let report = document.querySelectorAll("#reportButton");
 
@@ -404,6 +396,7 @@ if (isset($_POST['rating']) && isset($_POST['promptId'])) {
 
     </script>
       <script src="js/favorite.js"></script>
+      <script src="js/comment.js"></script>
 </body>
 </html>
 <?php
