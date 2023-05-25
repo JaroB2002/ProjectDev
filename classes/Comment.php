@@ -1,8 +1,7 @@
 <?php
-include_once("bootstrap.php");
     class Comment{
         private $text;
-        private $postId;
+        private $promptId;
         private $userId;
 
         /**
@@ -28,9 +27,9 @@ include_once("bootstrap.php");
         /**
          * Get the value of postId
          */ 
-        public function getPostId()
+        public function getPromptId()
         {
-                return $this->postId;
+                return $this->promptId;
         }
 
         /**
@@ -38,9 +37,9 @@ include_once("bootstrap.php");
          *
          * @return  self
          */ 
-        public function setPostId($postId)
+        public function setPromptId($promptId)
         {
-                $this->postId = $postId;
+                $this->promptId = $promptId;
 
                 return $this;
         }
@@ -67,24 +66,20 @@ include_once("bootstrap.php");
         public function save(){
             $conn = Db::getInstance();
             $statement = $conn->prepare("INSERT INTO comments (text, postId, userId) VALUES (:text, :postId, :userId)");
-            
-            $text = $this->getText();
-            $postId = $this->getPostId();
-            $userId = $this->getUserId();
-            
-            $statement->bindValue(":text", $text);
-            $statement->bindValue(":postId", $postId);
-            $statement->bindValue(":userId", $userId);
-
+            $statement->bindValue(":text",  $this->getText());
+            $statement->bindValue(":postId", $this->getPromptId());
+            $statement->bindValue(":userId", $this->getUserId());
             $result = $statement->execute();
             return $result;
         }
-        public static function getAll($postId){
+        public static function getAll($promptId)
+        {
                 $conn = Db::getInstance();
-                $statement = $conn->prepare("SELECT * FROM comments WHERE postId = :postId");
-                $statement->bindValue(":postId", $postId);
-                $result = $statement->execute();
-                return $statement->fetchAll(PDO::FETCH_ASSOC);
+                $statement = $conn->prepare("SELECT * FROM comments WHERE postId = :postId AND username = :username");
+                $statement->bindValue(":postId", $promptId);
+                $statement->bindValue(":username", $_SESSION['username']);
+                $statement->execute();
+                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
         }
     }
     ?>
