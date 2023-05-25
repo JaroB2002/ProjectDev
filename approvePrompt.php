@@ -49,6 +49,7 @@ $allPrompts = Prompt::getAllUnapproved();
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
 </head>
 <body class="bg-slate-200">
+<nav><?php include_once("navigation.php")?></nav>
     <h1 class="text-2xl mx-5 font-semibold mt-7">Approve prompts</h1>
     <article class="text-white flex flex-wrap">
         <?php foreach ($allPrompts as $prompt): ?>
