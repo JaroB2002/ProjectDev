@@ -41,7 +41,7 @@
         <a href="uploadPrompt.php" class="text-lg font-bold hover:text-fadedpurple">Upload</a>
         <a href="approvePrompt.php" class="text-lg text-fadedblue font-bold hover:text-fadedpurple">Approve</a>
       </div>
-      <a href="logout.php" class="hidden md:block p-3 px-6 pt-2 text-white bg-fadedpurple rounded-full baseline">Log out</a>
+      <a href="logout.php" class="hidden md:block p-3 px-6 pt-2 font-bold text-white bg-fadedpurple rounded-full baseline">Log out</a>
     </div>
   </nav>
 </body>
