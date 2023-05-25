@@ -65,6 +65,7 @@ if(!empty($_POST)){
   </script>
 </head>
 <body>
+  <nav><?php include_once("navigation.php")?></nav>
     <h1 class="text-4xl mx-5 font-semibold mt-7"> Share your prompt! </h1>
     <form action="#" method="post" class="my-5 mx-5 bg-offgrey px-8 py-8 rounded max-w-sm">
         <div class="my-2">
