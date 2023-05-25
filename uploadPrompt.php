@@ -56,8 +56,9 @@ if(!empty($_POST)){
           colors: {
             fadedpurple: '#C688F4',
             fadedblue: '#5C69AA',
-            offgrey: '#D9D9D9',
-            offblack: '#D9D9D9',
+            offgrey: '#faf9f6',
+            offblack: '#313639',
+            offwhite: '#f9f9f9'
           }
         }
       }
@@ -98,4 +99,4 @@ if(!empty($_POST)){
     </form>
     <p class="font-semibold text-fadedblue mx-5 text-xl"><?php echo $succes?></p>
 </body>
-<?php include_once("footer.php");?>
+<footer><?php include_once("footer.php");?></footer>
