@@ -301,7 +301,7 @@ if (isset($_POST['rating']) && isset($_POST['promptId'])) {
 
                     <ul class="list mt-5 text-offwhite bg-fadedblue pt-3 pb-3 pl-5 pr-5 rounded">
                         <?php foreach ($comments as $comment): ?>
-                            <li><?php echo htmlspecialchars($comment['userId']) ."<br>" .  htmlspecialchars($comment['comment']); ?></li>
+                            <li> <strong> <?php echo htmlspecialchars($comment['userId']); ?></strong> <br> <?php echo htmlspecialchars($comment['comment']);?></li> <br>               
                         <?php endforeach; ?>
                     </ul>
                 </div>
