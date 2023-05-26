@@ -13,6 +13,28 @@ class User{
         $statement->execute();
     }
 
+    public function changePassword($newPassword)
+{
+    if (strlen($newPassword) <= 5 || empty($newPassword)) {
+        throw new Exception("New password is not valid.");
+        return false;
+    }
+
+    $options = [
+        'cost' => 12,
+    ];
+    $this->password = password_hash($newPassword, PASSWORD_DEFAULT, $options);
+
+    $conn = Db::getInstance();
+    $statement = $conn->prepare("UPDATE users SET password = :password WHERE email = :email");
+    $statement->bindValue(":password", $this->getPassword());
+    $statement->bindValue(":email", $this->getEmail());
+    $statement->execute();
+
+    return true;
+}
+
+
         // Existing properties and methods
         
         public function unblockUser() {

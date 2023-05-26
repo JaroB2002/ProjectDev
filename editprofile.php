@@ -26,7 +26,13 @@
         $error=$e->getMessage();
     }
   } 
-
+  if (!empty($_POST['password'])) {
+    $newPassword = $_POST['password'];
+    $user->changePassword($newPassword);
+    // Redirect naar profielpagina of andere pagina
+    header("location: editprofile.php");
+    exit;
+  }
   //share profile
   $currentDomain = $_SERVER['HTTP_HOST'];
   $profileLink = "https://" . $currentDomain . "/user.php?id=" . urlencode($username);
@@ -202,6 +208,15 @@
       <input type="submit" name="uploadPhoto" value="Upload" class="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded">
       <input type="submit" name="deletePhoto" value="Delete" class="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded">
     </form>-->
+    <form action="editprofile.php" method="post">
+  <div>
+    <label for="password">New Password:</label><br>
+    <input type="password" name="password" required>
+  </div>
+  <div>
+    <button type="submit" name="changePassword">Change Password</button>
+  </div>
+</form>
 </main>
 <footer><?php include_once("footer.php");?></footer>
 </body>
