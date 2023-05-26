@@ -56,7 +56,7 @@
 <div class="flex min-h-full items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
   <div class="w-full max-w-md space-y-8">
     <div>
-      <img class="mx-auto h-12 w-auto" src="PromptBaes.svg" alt="PromptBaes">
+      <img class="mx-auto h-12 w-auto" src="uploads/PromptBaes.svg" alt="PromptBaes">
       <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">Register your account</h2>
       <p class="mt-2 text-center text-sm text-gray-600">
         Or
@@ -117,33 +117,6 @@
   </div>
 </div>
 </div>
-<!-- partial -->
-<!--<script src="js/checkMail.js"></script>--> <!--dit werkt niet, hoezo?-->
-<script>
-  function checkMail(){
-    console.log("checkEmail");
-    let email = document.getElementById("email").value;
-    let feedback = document.querySelector("#feedback"); 
-    console.log(email);
-    let formData = new FormData();
-    formData.append("email", email);
-    //..erbij
-    fetch("ajax/checkMail.php", {
-        method: "POST",
-        body: formData
-    })
-    .then(function(response){
-        return response.json();
-    })
-    .then(function(result){
-        if(result.available === 'false'){
-            feedback.innerHTML = "Email is unavailable";
-        } else {
-            feedback.innerHTML = "Email is available";
-        }
-        console.log(result);
-    })
-}
-</script>
+<script src="js/checkMail.js"></script> 
 </body>
 </html>
