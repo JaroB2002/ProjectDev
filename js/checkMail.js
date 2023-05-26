@@ -17,9 +17,11 @@ function checkMail(){
         if(result.available === 'false'){
             feedback.innerHTML = "Email is unavailable";
             feedback.classList.add("text-red-500");
+            feedback.classList.remove("text-green-500");
         } else {
             feedback.innerHTML = "Email is available";
             feedback.classList.add("text-green-500");
+            feedback.classList.remove("text-red-500");
         }
         console.log(result);
     })
