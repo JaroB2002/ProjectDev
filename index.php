@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $_SESSION['username'] = $email;
         header("Location: dashboard.php");
     } else {
-        $error_message = "Ongeldig e-mailadres of wachtwoord."; // Foutmelding toewijzen
+        $error_message = "Invalid email address or password."; // Foutmelding toewijzen
     }
 }
 ?>
