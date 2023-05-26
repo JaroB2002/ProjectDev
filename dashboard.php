@@ -151,7 +151,7 @@ include_once("bootstrap.php");
         <?php foreach ($filter as $prompt): ?>
             <div class="my-5 bg-offgrey mr-10 px-8 py-8 rounded max-w-md">
                 <h3 class="font-semibold text-xl text-fadedpurple"><?php echo htmlspecialchars($prompt["name"]); ?></h3>
-                <a href="user.php?id=<?php echo $prompt["email"]; ?>">
+                <a href="user.php?id=<?php echo htmlspecialchars($prompt["email"]); ?>">
                     <p class="mb-5 text-lg text-offblack hover:text-fadedpurple"><strong>User:</strong> <?php echo $prompt["email"]; ?></p>
                 </a>
                 <img class="object-none h-96 w-96 mb-5" src="<?php echo htmlspecialchars($prompt["image"]); ?>" alt="input image">
@@ -172,7 +172,6 @@ include_once("bootstrap.php");
                         <button type="submit" class="ml-2 bg-fadedpurple text-white font-semibold px-4 py-2 rounded">Rate</button>
                     </div>
                 </form>
-                <button id="reportButton" data-promptid="<?php echo $prompt['id']; ?>" class="p-3 px-6 pt-2 text-white bg-fadedpurple rounded-full baseline font-semibold text-lg">Report Prompt</button>
                 <div>
                     <!--<button class="report-button" data-prompt-id="<?php echo $prompt["id"]; ?>" data-error-id="<?php echo 'error-' . $prompt["id"]; ?>">Report user</button>-->
                     <?php if (isset($errorMessage) && $_GET["buy"] == $prompt["id"]): ?>
@@ -181,25 +180,27 @@ include_once("bootstrap.php");
                         </div>
                     <?php endif; ?>
                     <form action="" class="mt-3">
-                        <button class="bg-fadedpurple px-5 py-3 rounded font-semibold" type="submit" name="buy" value="<?php echo $prompt['id']; ?>">Buy</button>
+                        <button class="bg-gray-900 text-offwhite py-3 rounded font-semibold w-full" type="submit" name="buy" value="<?php echo $prompt['id']; ?>">Buy</button>
                     </form>
-                    <div class="mt-5">
-                        <a href="#" data-id="<?php echo $prompt['id']; ?>" class="like bg-fadedpurple px-5 py-3 rounded font-semibold mt-5"><?php if (Like::getAll($prompt['id']) == true) { echo 'Unlike '; } else { echo 'Like ';}?> <span class='likes' id="likes"><?php echo $likes->getLikes($prompt['id']) ?> people like this</span> </a>
+                    <div class="flex flex-row items-center justify-between">
+                        <div class="mt-5">
+                            <a href="#" data-id="<?php echo $prompt['id']; ?>" class="like text-fadedpurple rounded font-semibold mt-5"><?php if (Like::getAll($prompt['id']) == true) { echo 'Unlike '; } else { echo 'Like ';}?> <span class='likes' id="likes"><?php echo $likes->getLikes($prompt['id']) ?> people like this</span> </a>
+                        </div>
+                        <div class="mt-8">
+                            <a href="#" data-id="<?php echo $prompt['id']; ?>" class="favorite bg-fadedpurple text-offwhite px-5 py-3 rounded font-semibold mt-5"><?php if (Favorite::getAll($prompt['id']) == true) { echo 'Remove from favorites '; } else { echo 'Add to favorites ';}?></a>
+                        </div>
                     </div>
-                    <div class="mt-8">
-                        <a href="#" data-id="<?php echo $prompt['id']; ?>" class="favorite bg-fadedpurple px-5 py-3 rounded font-semibold mt-5"><?php if (Favorite::getAll($prompt['id']) == true) { echo 'remove from favorites '; } else { echo 'add to favorites ';}?></a>
-                    </div>
-                    <form action="" class="mt-10 flex rounded">
-                        <input class="text" type="text" placeholder="write a comment".>
-                        <button class="comments bg-fadedpurple px-5 py-3 rounded font-semibold ml-5" type="submit" name="comment" data-id="<?php echo $prompt['id']; ?>">Comment</button>
+                    <form action="" class="mt-10 flex rounded justify-between">
+                        <input class="text" type="text" placeholder="Write a comment".>
+                        <button class="comments text-offwhite bg-fadedblue px-5 py-3 rounded font-semibold ml-5" type="submit" name="comment" data-id="<?php echo $prompt['id']; ?>">Comment</button>
                     </form>
                     <?php $comments = Comment::getAll($prompt['id']); ?>
-
                     <ul class="list mt-5 text-offwhite bg-fadedblue pt-3 pb-3 pl-5 pr-5 rounded">
                         <?php foreach ($comments as $comment): ?>
                             <li> <strong> <?php echo htmlspecialchars($comment['userId']); ?></strong> <br> <?php echo htmlspecialchars($comment['comment']);?></li> <br>               
                         <?php endforeach; ?>
                     </ul>
+                    <button id="reportButton" data-promptid="<?php echo $prompt['id']; ?>" class="pt-2 text-offblack font-semibold text-lg">Report Prompt</button>
                 </div>
             </div>
         <?php endforeach; ?>
