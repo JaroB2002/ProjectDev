@@ -16,9 +16,11 @@
   //update biography
   if(!empty($_POST)){
     try{
+      if(!empty($_POST['biography'])){
         $user->setBiography($_POST['biography']);
         $biography = $user->getBiography();
         $user->updateProfile();
+      }
     } 
     catch(Throwable $e){
         $error=$e->getMessage();
