@@ -1,125 +1,110 @@
-<?php
-session_start();
+<?php 
+    include_once("bootstrap.php");
+    session_start();
 
-include_once("bootstrap.php");
-
-if (!isset($_SESSION['username'])) {
-    header("location: index.php");
-    exit();
-}
-
-if ($_SESSION['username'] == $_GET['id']) {
-    header("location: editprofile.php");
-    exit();
-}
-
-if (!empty($_GET["id"])) {
-    $u = new User();
-    $user_prompts = $u->getUserPrompts();
-}
-
-$f = new Follow();
-
-$user = new User();
-$user->setEmail($_SESSION['username']);
-$userDetails = $user->getUserDetails();
-$isModerator = $userDetails['is_admin'] == 1;
-
-if ($isModerator) {
-    if (isset($_POST['add'])) {
-        $moderator = new Moderator();
-        $moderator->addModerator($_POST['add']);
-        $success = "Moderator added";
+    if(!isset($_SESSION['username'])){
+        header("location: index.php");
     }
 
-    if (isset($_POST['remove'])) {
-        $moderator = new Moderator();
-        $moderator->removeModerator($_POST['remove']);
-        $success = "Moderator removed";
+    if($_SESSION['username'] == $_GET['id']){
+      header("location: editprofile.php");
     }
-}
 
-if (isset($_POST['report'])) {
-    $reportedUser = $_GET['id'];
-    // Voeg de gebruikersnaam en gegevens toe aan de databank
-    // Code om de gebruiker te rapporteren en op te slaan in de databank
-
-    // Stuur de gebruikersnaam door naar flaggedusers.php via een URL-parameter
-    header("location: flaggedusers.php?user=" . urlencode($reportedUser));
-    exit();
-}
-
-if (isset($_POST['ban'])) {
-    $userToBan = $_GET['id'];
-
-    // Add code to ban the user and mark their account as banned in the database
-    $stmt = $pdo->prepare("UPDATE users SET is_banned = 1 WHERE username = :username");
-    $stmt->execute([':username' => $userToBan]);
-
-    // Delete the user's account if it is banned
-    if ($user->isBanned()) {
-        $user->deleteAccount();
-        header("location: index.php"); // Redirect to the homepage or any other appropriate page
-        exit();
+    if(!empty($_GET["id"])){
+      $u = new User();
+      $user_prompts = $u->getUserPrompts();
     }
-}
 
+    $f = new Follow();
+
+    $user = new User();
+    $user->setEmail($_SESSION['username']);
+    $userDetails = $user->getUserDetails();
+    $isModerator = $userDetails['is_admin'] == 1;
+
+    if ($isModerator) {
+        if (isset($_POST['add'])) {
+            $moderator = new Moderator();
+            $moderator->addModerator($_POST['add']);
+            $success = "Moderator added";
+        }
+
+        if (isset($_POST['remove'])) {
+            $moderator = new Moderator();
+            $moderator->removeModerator($_POST['remove']);
+            $success = "Moderator removed";
+        }
+    }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <!-- Head sectie -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+      theme: {
+        screens: {
+            sm: '480px',
+            md: '768px',
+            lg: '1024px',
+            xl: '1280px',
+        },
+        extend: {
+          colors: {
+            fadedpurple: '#C688F4',
+            fadedblue: '#5C69AA',
+            offgrey: '#fdfcfd',
+            offblack: '#313639',
+            offwhite: '#f9f9f9'
+          }
+        }
+      }
+    }
+  </script>
 </head>
 
 <body class="ml-10">
-    <!-- Navigatiebalk -->
-    <nav>
-        <?php include_once("navigation.php") ?>
-    </nav>
-
-    <h1 class="text-3xl font-semibold mt-5"><?php echo $_GET["id"]; ?></h1>
-
-    <?php if ($_SESSION['username'] !== $_GET['id']) : ?>
-        <div class="mt-10">
-            <a href="#" data-id="<?php echo $_GET['id']; ?>" class="follow bg-fadedpurple px-5 py-3 rounded font-semibold mt-5"><?php if (Follow::getAll($_GET['id']) == true) {
-                                                                                                                                                                echo 'Unfollow';
-                                                                                                                                                            } else {
-                                                                                                                                                                echo 'Follow';
-                                                                                                                                                            } ?></a>
-        </div>
+  <nav><?php include_once("navigation.php")?></nav>
+    <h1 class="text-3xl font-semibold mt-5"> <?php echo htmlspecialchars($_GET["id"]); ?> </h1>
+    <?php if ($_SESSION['username'] !== $_GET['id']): ?>
+      <div class="mt-10">
+        <a href="#" data-id="<?php echo htmlspecialchars($_GET['id']); ?>" class="follow bg-fadedpurple px-5 py-3 rounded font-semibold mt-5"><?php if(Follow::getAll($_GET['id']) == true) { echo htmlspecialchars('Unfollow'); } else { echo htmlspecialchars('Follow');}?></a>
+      </div>
     <?php endif; ?>
-
     <?php if ($isModerator) : ?>
-        <div class="flex">
-            <form method="post">
-                <button class="bg-fadedblue px-5 py-3 mt-5 rounded font-semibold text-white mr-5" type="submit" name="add" value="<?= isset($_GET['id']) ? $_GET['id'] : '' ?>">Add Moderator</button>
-            </form>
+      <div class="flex">
+        <form method="post">
+            <button class="bg-fadedblue px-5 py-3 mt-5 rounded font-semibold text-white mr-5" type="submit" name="add" value="<?= isset($_GET['id']) ? $_GET['id'] : '' ?>">Add Moderator</button>
+        </form>
 
-            <form method="post">
-                <button class="bg-fadedblue px-5 py-3 mt-5 rounded font-semibold text-white mr-5" type="submit" name="remove" value="<?= isset($_GET['id']) ? $_GET['id'] : '' ?>">Remove Moderator</button>
-            </form>
-        </div>
+        <form method="post">
+            <button class="bg-fadedblue px-5 py-3 mt-5 rounded font-semibold text-white mr-5" type="submit" name="remove" value="<?= isset($_GET['id']) ? $_GET['id'] : '' ?>">Remove Moderator</button>
+        </form>
+      </div>
     <?php endif; ?>
-
     <?php if (isset($success)) : ?>
         <p><?php echo htmlspecialchars($success) ?></p>
     <?php endif; ?>
-
-    <form method="post">
-        <button class="bg-fadedblue px-5 py-3 mt-5 rounded font-semibold text-white" type="submit" name="report">Report User</button>
-    </form>
-
-    <form method="post">
-        <button class="bg-red-500 px-5 py-3 mt-5 rounded font-semibold text-white" type="submit" name="ban">Ban User</button>
-    </form>
-
-    <article class="flex flex-wrap">
-        <!-- Artikelen -->
+  <article class="flex flex-wrap">
+      <?php if(!empty($user_prompts)) : ?>
+          <?php foreach($user_prompts as $prompt): ?>
+              <div class="my-5 bg-offblack mr-10 px-8 py-8 rounded max-w-sm">
+                  <p class="mb-5 text-lg text-offwhite"> <strong>Name: </strong> <?php echo htmlspecialchars($prompt["name"]);?></p>
+                  <img class="mb-5" src="<?php echo htmlspecialchars($prompt["image"]); ?>" alt="input image">
+                  <p class="mb-3 text-lg text-offwhite"> <strong>description: </strong> <?php echo htmlspecialchars($prompt["description"]);?></p>
+                  <p class="mb-3 text-lg text-offwhite"> <strong>type: </strong> <?php echo htmlspecialchars($prompt["type"])?>  </p>
+                  <p class="mb-3 text-lg text-offwhite"> <strong>price: </strong> <?php echo htmlspecialchars($prompt["price"]);?></p>
+              </div>
+          <?php endforeach; ?>
+      <?php endif; ?>
     </article>
 
     <script src="js/follow.js"></script>
 </body>
-
 </html>

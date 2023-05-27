@@ -5,7 +5,6 @@ class User{
     private $email;
     private $password;
     private $biography;
-
     public function blockUser() {
         $conn = Db::getInstance();
         $statement = $conn->prepare("UPDATE users SET is_blocked = :is_blocked WHERE email = :email");
@@ -15,51 +14,48 @@ class User{
     }
 
     public function changePassword($newPassword)
-    {
-        if (strlen($newPassword) <= 5 || empty($newPassword)) {
-            throw new Exception("New password is not valid.");
-            return false;
+{
+    if (strlen($newPassword) <= 5 || empty($newPassword)) {
+        throw new Exception("New password is not valid.");
+        return false;
+    }
+
+    $options = [
+        'cost' => 12,
+    ];
+    $this->password = password_hash($newPassword, PASSWORD_DEFAULT, $options);
+
+    $conn = Db::getInstance();
+    $statement = $conn->prepare("UPDATE users SET password = :password WHERE email = :email");
+    $statement->bindValue(":password", $this->getPassword());
+    $statement->bindValue(":email", $this->getEmail());
+    $statement->execute();
+
+    return true;
+}
+
+
+        // Existing properties and methods
+        
+        public function unblockUser() {
+            $conn = Db::getInstance();
+            $statement = $conn->prepare("UPDATE users SET is_blocked = :is_blocked WHERE email = :email");
+            $statement->bindValue(":is_blocked", 0);
+            $statement->bindValue(":email", $this->getEmail());
+            $statement->execute();
         }
-
-        $options = [
-            'cost' => 12,
-        ];
-        $this->password = password_hash($newPassword, PASSWORD_DEFAULT, $options);
-
-        $conn = Db::getInstance();
-        $statement = $conn->prepare("UPDATE users SET password = :password WHERE email = :email");
-        $statement->bindValue(":password", $this->getPassword());
-        $statement->bindValue(":email", $this->getEmail());
-        $statement->execute();
-
-        return true;
-    }
-
-    public function banUser(){
-        $conn = Db::getInstance();
-        $statement = $conn->prepare("UPDATE users SET banned = 1 WHERE email = :email");
-        $statement->bindValue(":email", $this->getEmail());
-        $statement->execute();
-    }
-
-    public function unblockUser() {
-        $conn = Db::getInstance();
-        $statement = $conn->prepare("UPDATE users SET is_blocked = :is_blocked WHERE email = :email");
-        $statement->bindValue(":is_blocked", 0);
-        $statement->bindValue(":email", $this->getEmail());
-        $statement->execute();
-    }
-
+    
+    
     public function setEmail($email){
         if(strpos($email, '@') === false || empty($email)){
             throw new Exception("Email is not valid.");
             return false;
         }
         else{ 
-            $this->email = $email;
+        $this->email = $email;
         }
+        
     }
-
     public function getEmail(){
         return $this->email;
     }
@@ -70,17 +66,15 @@ class User{
             return false;
         }
         else{
-            $options = [
-                'cost' => 12,
+        $options = [
+            'cost' => 12,
             ];
-            $this->password = password_hash($password, PASSWORD_DEFAULT, $options);
+        $this->password = password_hash($password, PASSWORD_DEFAULT, $options);
         }
     }
-
     public function getPassword(){
         return $this->password;
     }
-
     /*registratie*/
     public function save(){
         //get connection
@@ -96,7 +90,6 @@ class User{
         //execute
         return $statement->execute(); 
     }
-
     /*login*/
     public function canLogin($email, $password) {
         $conn = Db::getInstance();
@@ -134,12 +127,12 @@ class User{
         }
         return $count;
     }
-
     /*Email versturen*/
     public function sendMail(){
         $config = parse_ini_file('config/config.ini', true);
         $key = $config['keys']['SENDGRID_API_KEY'];
-
+        //var_dump($key);
+        
         $email = new \SendGrid\Mail\Mail();
         $email->setFrom("r0784273@student.thomasmore.be", "PromptBaes");
         $email->setSubject("Confirm email");
@@ -168,7 +161,6 @@ class User{
     public function getBiography(){
         return $this->biography;
     }
-
     /*profiel updaten*/
     public function updateProfile(){
         $conn = Db::getInstance();
@@ -178,7 +170,7 @@ class User{
         $statement->execute();
     }
 
-    public function getUserDetails(){
+     public function getUserDetails(){
         $conn = Db::getInstance();
         $statement = $conn->prepare("select * from users WHERE email = :email");
         $statement->bindValue(":email", $this->getEmail());
@@ -196,6 +188,8 @@ class User{
         $statement->bindValue(":email", $username); 
         $statement->execute();
         $admins = $statement->fetchAll(PDO::FETCH_ASSOC);
+        //var_dump($admins);
+        //als array leeg is is die persoon geen admin dus mag die niet opdeze pagina
         if (empty($admins)) {
             header("Location: dashboard.php");
         }
@@ -226,6 +220,7 @@ class User{
         $statement->bindValue(":email", $_SESSION['username']);
         $statement->execute();
         $result = $statement->fetch(PDO::FETCH_ASSOC);
+        /*var_dump($result);*/
         return $result;
     }
 
@@ -243,8 +238,8 @@ class User{
         $statement->bindValue(":prompts_id", $_GET["buy"]);
         $statement->execute();
     }
-
-    public function showCredits(){
+     //show total amount of credits user
+     public function showCredits(){
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT credits FROM users WHERE email = :email");
         $statement->bindValue(":email", $_SESSION['username']);
@@ -253,6 +248,7 @@ class User{
         return $result;
     }
 
+    //add credits if prompt of user is approved
     public function addCreditsIfApproved($approved){
         if($approved){
             $conn = Db::getInstance();
@@ -261,7 +257,7 @@ class User{
             $statement->execute();
         }
     }
-
+    /* laten nakijken op sql injectie op feedback*/
     public function checkVerify(){
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT COUNT(*) AS approved_count FROM prompts WHERE email = :email AND approved = :approved");
@@ -269,6 +265,7 @@ class User{
         $statement->bindValue(":approved", 1);
         $statement->execute();
         $result = $statement->fetch(PDO::FETCH_ASSOC);
+        
         return $result['approved_count'] > 3;
     }
     
@@ -289,31 +286,4 @@ class User{
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
-
-    public function addFavorite($id){
-        $conn = Db::getInstance();
-        $statement = $conn->prepare("INSERT INTO favorites (username, prompts_id) VALUES (:username, :prompts_id)");
-        $statement->bindValue(":username", $_SESSION['username']);
-        $statement->bindValue(":prompts_id", $id);
-        $statement->execute();
-    }
-
-    public function removeFavorite($id){
-        $conn = Db::getInstance();
-        $statement = $conn->prepare("DELETE FROM favorites WHERE username = :username AND prompts_id = :prompts_id");
-        $statement->bindValue(":username", $_SESSION['username']);
-        $statement->bindValue(":prompts_id", $id);
-        $statement->execute();
-    }
-
-    public function isFavorite($id){
-        $conn = Db::getInstance();
-        $statement = $conn->prepare("SELECT COUNT(*) AS count FROM favorites WHERE username = :username AND prompts_id = :prompts_id");
-        $statement->bindValue(":username", $_SESSION['username']);
-        $statement->bindValue(":prompts_id", $id);
-        $statement->execute();
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
-        return $result['count'] > 0;
-    }
 }
-?>
