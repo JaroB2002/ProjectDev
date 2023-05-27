@@ -36,11 +36,6 @@
         }
     }
 
-    if (isset($_POST['report'])) {
-        $reportedUser = $_GET['id'];
-        header("location: flaggedusers.php?user=" . urlencode($reportedUser));
-    }
-    
     if (isset($_POST['ban'])) {
         $u = new User();
         $u->banUser();    
