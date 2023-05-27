@@ -257,7 +257,6 @@ class User{
             $statement->execute();
         }
     }
-    /* laten nakijken op sql injectie op feedback*/
     public function checkVerify(){
         $conn = Db::getInstance();
         $statement = $conn->prepare("SELECT COUNT(*) AS approved_count FROM prompts WHERE email = :email AND approved = :approved");
@@ -274,7 +273,7 @@ class User{
             $conn = Db::getInstance();
             $statement = $conn->prepare("UPDATE users SET users.verified = :verified WHERE email = :email");
             $statement->bindValue(":verified", 1);
-            $statement->bindValue(":email", $_SESSION['username']);
+            $statement->bindValue(":email", $this->getEmail());
             $statement->execute();
         }
     }
