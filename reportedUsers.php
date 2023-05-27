@@ -1,6 +1,6 @@
 <?php
 if(!isset($_SESSION['username'])){
-  header("location: reportedUsers.php");
+  header("location: index.php");
 } 
 session_start();
 

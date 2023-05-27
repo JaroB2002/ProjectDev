@@ -217,10 +217,6 @@
     <button type="submit" name="changePassword">Change Password</button>
   </div>
 </form>
-<form action="reportedUsers.php" method="post">
-  <input type="hidden" name="reportedUser" value="<?php echo $username; ?>">
-  <button class="bg-red-500 px-5 py-3 mt-5 rounded font-semibold text-white" type="submit" name="reportUser">Report User</button>
-</form>
 </main>
 <footer><?php include_once("footer.php");?></footer>
 </body>
