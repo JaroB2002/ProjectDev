@@ -53,6 +53,17 @@
   $user_prompts = $u->showUserPrompts();
   $user_favorites = $u->getFavorites();
 
+ 
+
+  try {
+    if(isset($_POST['delete_account'])){
+      $u->deleteAccount($username);
+      header("Location: register.php"); 
+    }
+  } catch (PDOException $e) {
+      echo "Error: " . $e->getMessage();
+  }
+
   //profile photo
   /*$profile = new Profile();
 
@@ -176,17 +187,7 @@
 
     <hr class="h-px my-8 bg-offgrey">
     <h4 class="text-xl text-fadedblue mb-5">Do you want to delete your account?</h4>
-    <p>Please confirm your email address to delete your account and all associated data.</p>
-    <form method="post" action="dashboard.php">
-      <label for="email" class="font-bold">Email:</label><br>
-      <input class="bg-offgrey" type="email" name="email" required>
-      <br>
-      <label for="confirm_delete" class="font-bold">Confirm your email address:</label><br>
-      <input class="bg-offgrey" type="email" name="confirm_delete" required>
-      <br>
-      <p>To delete your account, type "delete my account" below:</p>
-      <input class="bg-offgrey" type="text" name="delete_confirmation" required>
-      <br>
+    <form method="post" action="">
       <button class="text-fadedpurple underline" type="submit" name="delete_account" onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">Delete Account</button>
     </form>
 
