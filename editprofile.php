@@ -110,7 +110,7 @@
     <article class="flex flex-wrap gap-10 justify-center items-end">
       <div>
         <h1 class="text-5xl text-offgrey mb-10 mt-10 font-semibold">Profile</h1>
-        <img src="uploads/profile.jpg" class="rounded-full w-96 h-96" alt="pic">
+        <img src="uploads/promptbg.jpg" class="rounded-full w-96 h-96" alt="pic">
       </div>
       <div>
         <h2 class="text-3xl text-fadedblue mb-5">Hi, it's <?php echo htmlspecialchars($username); ?>!</h2>
