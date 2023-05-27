@@ -63,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <div class="md:flex md:items-center md:justify-center w-full  md:h-full sm:rounded-lg md:rounded-none bg-white px-6">
       <div class="max-w-md w-full mx-auto">
         <div>
-          <img class="mx-auto h-12 w-auto" src="PromptBaes.svg" alt="Logo PromptBaes">
+          <img class="mx-auto h-12 w-auto" src="uploads/PromptBaes.svg" alt="Logo PromptBaes">
           <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">Log in</h2>
           <p class="mt-2 text-center text-sm text-gray-600"> Or <a href="register.php" class="font-medium text-indigo-600 hover:text-indigo-500">sign up here</a>
           </p>
@@ -81,11 +81,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
           </div>
           
-          <?php if (!empty($error_message)): ?>
-            <div class="text-red-500 mt-2"><?php echo $error_message; ?></div>
+          <?php if (isset($error_message)): ?>
+            <div class="text-red-500 mt-2"><?php echo htmlspecialchars($error_message); ?></div>
           <?php endif; ?>
-          
-          <div class="flex items-center justify-between">
+          <!--<div class="flex items-center justify-between">
             <div class="flex items-center">
               <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
               <label for="remember-me" class="ml-2 block text-sm text-gray-900">Onthoud mijn gegevens</label>
@@ -93,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <div class="text-sm">
               <a href="reset_password.php" class="font-medium text-indigo-600 hover:text-indigo-500">Wachtwoord vergeten?</a>
             </div>
-          </div>
+          </div>-->
           <div>
             <button type="submit" class="group relative flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
               <span class="absolute inset-y-0 left-0 flex items-center pl-3">
