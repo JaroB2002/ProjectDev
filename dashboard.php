@@ -117,8 +117,8 @@ include_once("bootstrap.php");
             <h2 class="text-xl font-semibold mt-7 mb-2">Pricing</h2>
             <select name="price">
                 <option value="all" <?php if ($pricing == "all") echo "selected";?>>All</option>
-                <option value="paid" <?php if ($pricing == "paid") echo "selected";?>>Paid</option>
-                <option value="free" <?php if ($pricing == "free") echo "selected";?>>Free</option>
+                <option value="expensive" <?php if ($pricing == "expensive") echo "selected";?>>Expensive</option>
+                <option value="cheap" <?php if ($pricing == "cheap") echo "selected";?>>Cheap</option>
             </select>
         </div>
         <div class="mr-10">

@@ -144,11 +144,11 @@ class Prompt{
             "realistic" => "type = 'realistic'"
         ];
         switch($pricing){
-            case "paid":
+            case "expensive":
                 $statement .= " and price > :price";
                 break;
-            case "free":
-                $statement .= " and price = :price";
+            case "cheap":
+                $statement .= " and price <= :price";
                 break;
         }
         if (isset($typeConditions[$type])) {
@@ -171,8 +171,8 @@ class Prompt{
         }
         $result = $conn->prepare($statement);
         $result->bindValue(":approved", 1);
-        if($pricing === "paid" || $pricing === "free"){
-            $result->bindValue(":price", 0);
+        if($pricing === "expensive" || $pricing === "cheap"){
+            $result->bindValue(":price", 10);
         }
         if($search != "all"){
             $result->bindValue(":title", "%$search%");
