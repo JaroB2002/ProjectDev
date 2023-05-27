@@ -143,7 +143,7 @@ include_once("bootstrap.php");
             <button class="bg-fadedblue text-white px-5 py-2 mt-5 rounded font-semibold text-lg" type="submit" value="Search">Search</button>
         </div>
     </form>
-    <h2 class="text-3xl font-semibold mt-5">Prompt overview</h2>
+    <h2 class="text-3xl font-semibold mt-5 ml-10">Prompt overview</h2>
     <?php if ($filter == null): ?>
         <p class="text-xl font-semibold mt-5 text-fadedpurple">No prompts found</p>
     <?php endif; ?>
