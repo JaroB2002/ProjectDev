@@ -46,6 +46,20 @@
             exit();
         }
     }
+    //verify user
+    if($user->checkVerify()){
+      $user->verifyUser(true);
+    }
+    //show credits
+    $allCredits = $user->showCredits();
+    $credits = $allCredits['credits'];
+
+    //bio
+    $username = $_SESSION['username'];
+    $user->setEmail($username);
+    $userDetails = $user->getUserDetails();
+    $biography = $userDetails['biography'];
+  
 ?>
 
 <!DOCTYPE html>
@@ -82,12 +96,30 @@
 
 <body class="ml-10">
   <nav><?php include_once("navigation.php")?></nav>
+
     <h1 class="text-3xl font-semibold mt-5"> <?php echo htmlspecialchars($_GET["id"]); ?> </h1>
-    <?php if ($_SESSION['username'] !== $_GET['id']): ?>
-      <div class="mt-10">
-        <a href="#" data-id="<?php echo htmlspecialchars($_GET['id']); ?>" class="follow bg-fadedpurple px-5 py-3 rounded font-semibold mt-5"><?php if(Follow::getAll($_GET['id']) == true) { echo htmlspecialchars('Unfollow'); } else { echo htmlspecialchars('Follow');}?></a>
+    <article class="flex flex-wrap gap-10 justify-center items-center">
+      <div>
+        <img src="uploads/promptbg.jpg" class="rounded-full w-96 h-96" alt="pic">
       </div>
-    <?php endif; ?>
+      <div>
+        <h2 class="text-3xl text-fadedblue mb-5">Hi, it's <?php echo htmlspecialchars($_GET["id"]);?>!</h2>
+        <?php if($user->checkVerify()): ?>
+          <h2 class="text-2xl text-fadedpurple mb-5">I am a verified user.</h2>
+        <?php endif; ?>
+        <h3 class="text-2xl mb-3"><?php echo "My credits: " . htmlspecialchars($credits);?></h3>
+        
+        <div class="max-w-sm">
+        <h3 class="text-2xl mb-3">My biography:</h3>
+        <p class="text-8sm mb-3"><?php echo htmlspecialchars($biography); ?></p> 
+        </div>
+        <?php if ($_SESSION['username'] !== $_GET['id']): ?>
+          <div class="mt-10">
+            <a href="#" data-id="<?php echo htmlspecialchars($_GET['id']); ?>" class="follow bg-fadedpurple px-5 py-3 rounded font-semibold mt-5"><?php if(Follow::getAll($_GET['id']) == true) { echo htmlspecialchars('Unfollow'); } else { echo htmlspecialchars('Follow');}?></a>
+          </div>
+        <?php endif; ?>
+    </article>
+
     <?php if ($isModerator) : ?>
       <div class="flex">
         <form method="post">
@@ -105,12 +137,12 @@
     <?php if (isset($success)) : ?>
         <p><?php echo htmlspecialchars($success) ?></p>
     <?php endif; ?>
-  <article class="flex flex-wrap">
+  <article class="flex flex-wrap justify-center mt-5 pt-5">
       <?php if(!empty($user_prompts)) : ?>
           <?php foreach($user_prompts as $prompt): ?>
               <div class="my-5 bg-offblack mr-10 px-8 py-8 rounded max-w-sm">
                   <p class="mb-5 text-lg text-offwhite"> <strong>Name: </strong> <?php echo htmlspecialchars($prompt["name"]);?></p>
-                  <img class="mb-5" src="<?php echo htmlspecialchars($prompt["image"]); ?>" alt="input image">
+                  <img class="object-none h-96 w-96 mb-5" src="<?php echo htmlspecialchars($prompt["image"]); ?>" alt="input image">
                   <p class="mb-3 text-lg text-offwhite"> <strong>description: </strong> <?php echo htmlspecialchars($prompt["description"]);?></p>
                   <p class="mb-3 text-lg text-offwhite"> <strong>type: </strong> <?php echo htmlspecialchars($prompt["type"])?>  </p>
                   <p class="mb-3 text-lg text-offwhite"> <strong>price: </strong> <?php echo htmlspecialchars($prompt["price"]);?></p>
