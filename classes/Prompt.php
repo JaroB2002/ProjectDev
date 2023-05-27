@@ -201,12 +201,12 @@ class Prompt{
         return $prompts;
     }
 
-    public function ratePrompt($promptId, $rating){
+    /*public function ratePrompt($promptId, $rating){
         $conn = Db::getInstance();
         $statement = $conn->prepare("INSERT INTO ratings (prompt_id, rating) VALUES (:promptId, :rating)");
         $statement->bindValue(":promptId", $promptId);
         $statement->bindValue(":rating", $rating);
         return $statement->execute();
-    }
+    }*/
     
 }

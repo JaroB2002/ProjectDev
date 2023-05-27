@@ -33,12 +33,7 @@
     header("location: editprofile.php");
     exit;
   }
-  //share profile
-  /*$currentDomain = $_SERVER['HTTP_HOST'];
-  $profileLink = "https://" . $currentDomain . "/user.php?id=" . urlencode($username);
-  $profileLink = urldecode($profileLink);*/
-  
-
+ 
   //verify user
   if($user->checkVerify()){
     $user->verifyUser(true);
@@ -53,8 +48,6 @@
   $user_prompts = $u->showUserPrompts();
   $user_favorites = $u->getFavorites();
 
- 
-
   try {
     if(isset($_POST['delete_account'])){
       $u->deleteAccount($username);
@@ -63,27 +56,6 @@
   } catch (PDOException $e) {
       echo "Error: " . $e->getMessage();
   }
-
-  //profile photo
-  /*$profile = new Profile();
-
-  if (isset($_POST['uploadPhoto'])) {
-    $result = $profile->setProfilePhoto($_FILES['image']);
-    //echo $result;
-  }
-
-  if (isset($_POST['deletePhoto'])) {
-    $result = $profile->deleteProfilePhoto();
-    //echo $result;
-  }
-
-  if ($profile->getProfilePhoto() != '') {
-    //echo '<img src="' . $profile->getProfilePhoto() . '">';
-  }
-
-  if (isset($_POST['blockUser'])) {
-    // Voeg hier de code toe om de gebruiker te blokkeren
-  }*/
 ?>
 
 <!DOCTYPE html>
@@ -147,7 +119,6 @@
             <a class="bg-fadedpurple px-3.5 py-3.5 mt-5 rounded font-semibold text-white" href="following.php">View Following</a>
           </div>
         </form>
-        <!--<a href="<?php echo htmlspecialchars($profileLink); ?>" class="text-fadedblue pt-5">Share my profile</a>-->
       </div>
     </article>
   </header>
@@ -190,19 +161,6 @@
     <form method="post" action="">
       <button class="text-fadedpurple underline" type="submit" name="delete_account" onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">Delete Account</button>
     </form>
-
-    <!--<div class="mt-10 mb-10">
-    <h4 class="text-xl text-fadedblue mb-5">Download Your Data</h4>
-    <p>You can download a copy of your data by clicking the button below.</p>
-    <a class="text-fadedpurple underline" href="download_data.php">Download My Data</a>
-    </div>-->
-    <!--<form action="" method="post" enctype="multipart/form-data" class="ml-10">
-      <label>Select an image:</label>
-      <input type="file" name="image" required>
-      <br><br>
-      <input type="submit" name="uploadPhoto" value="Upload" class="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded">
-      <input type="submit" name="deletePhoto" value="Delete" class="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded">
-    </form>-->
     <form action="editprofile.php" method="post" class="py-5">
     <h4 class="text-xl text-fadedblue mb-5">Do you want to change your password?</h4>
     <div>

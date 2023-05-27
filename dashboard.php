@@ -173,7 +173,6 @@ include_once("bootstrap.php");
                     </div>
                 </form>-->
                 <div>
-                    <!--<button class="report-button" data-prompt-id="<?php echo $prompt["id"]; ?>" data-error-id="<?php echo 'error-' . $prompt["id"]; ?>">Report user</button>-->
                     <?php if (isset($errorMessage) && $_GET["buy"] == $prompt["id"]): ?>
                         <div class="error-message text-red-500" id="<?php echo 'error-' . $prompt["id"]; ?>">
                             <?php echo htmlspecialchars($errorMessage); ?>
