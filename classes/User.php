@@ -286,4 +286,34 @@ class User{
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function banUser(){
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("UPDATE users SET is_banned = :is_banned WHERE email = :email");
+        $statement->bindValue(":is_banned", 1);
+        $statement->bindValue(":email", $_GET['id']);
+        $statement->execute();
+    }
+
+    public function isBanned()
+    {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("SELECT is_banned FROM users WHERE email = :email");
+        $statement->bindValue(":email", $_GET['id']);
+        $statement->execute(); 
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        return $result['is_banned'];
+    }
+
+    public function deleteAccount($email) {
+        $conn = Db::getInstance();
+        $statement = $conn->prepare("DELETE users, prompts FROM users LEFT JOIN prompts ON users.email = prompts.email WHERE users.email = :email");
+        $statement->bindValue(":email", $email);
+        $statement->execute();
+    
+        // Reset the object properties
+        $this->email = null;
+        $this->password = null;
+        $this->biography = null;
+    }
 }
