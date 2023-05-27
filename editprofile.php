@@ -36,6 +36,8 @@
   //share profile
   $currentDomain = $_SERVER['HTTP_HOST'];
   $profileLink = "https://" . $currentDomain . "/user.php?id=" . urlencode($username);
+  $profileLink = urldecode($profileLink);
+  
 
   //verify user
   if($user->checkVerify()){
@@ -139,10 +141,6 @@
     </article>
   </header>
   <main class="ml-10 mt-10 mr-10">
-    <!--<form action="reportedUsers.php" method="post">
-      <input type="hidden" name="reportedUser" value="<?php echo $username; ?>">
-      <button class="bg-red-500 px-5 py-3 mt-5 rounded font-semibold text-white" type="submit" name="reportUser">Report User</button>
-    </form>-->
     <div class="flex justify-center mt-20">
       <h2 class="text-3xl mb-2 font-semibold">My Favorites</h2>
     </div>
@@ -192,11 +190,11 @@
       <button class="text-fadedpurple underline" type="submit" name="delete_account" onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">Delete Account</button>
     </form>
 
-    <div class="mt-10 mb-10">
+    <!--<div class="mt-10 mb-10">
     <h4 class="text-xl text-fadedblue mb-5">Download Your Data</h4>
     <p>You can download a copy of your data by clicking the button below.</p>
     <a class="text-fadedpurple underline" href="download_data.php">Download My Data</a>
-    </div>
+    </div>-->
     <!--<form action="" method="post" enctype="multipart/form-data" class="ml-10">
       <label>Select an image:</label>
       <input type="file" name="image" required>
@@ -204,15 +202,16 @@
       <input type="submit" name="uploadPhoto" value="Upload" class="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded">
       <input type="submit" name="deletePhoto" value="Delete" class="py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded">
     </form>-->
-    <form action="editprofile.php" method="post">
-  <div>
-    <label for="password">New Password:</label><br>
-    <input type="password" name="password" required>
-  </div>
-  <div>
-    <button type="submit" name="changePassword">Change Password</button>
-  </div>
-</form>
+    <form action="editprofile.php" method="post" class="py-5">
+    <h4 class="text-xl text-fadedblue mb-5">Do you want to change your password?</h4>
+    <div>
+      <label for="password"  class="font-bold">New Password:</label><br>
+      <input type="password" class="bg-offgrey" name="password" required>
+    </div>
+    <div>
+      <button class="text-fadedpurple underline" type="submit" name="changePassword">Change Password</button>
+    </div>
+    </form>
 </main>
 <footer><?php include_once("footer.php");?></footer>
 </body>
