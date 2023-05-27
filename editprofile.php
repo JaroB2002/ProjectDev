@@ -176,10 +176,6 @@
       <?php endif; ?>
     </article>
 
-    <!--<form action="banUser.php" method="post">
-      <input type="hidden" name="blockedUser" value="<?php echo $username; ?>">
-      <button class="bg-red-500 px-5 py-3 mt-5 rounded font-semibold text-white" type="submit" name="blockUser">Block User</button>
-    </form>-->
     <hr class="h-px my-8 bg-offgrey">
     <h4 class="text-xl text-fadedblue mb-5">Do you want to delete your account?</h4>
     <p>Please confirm your email address to delete your account and all associated data.</p>
