@@ -91,10 +91,10 @@
     <?php if ($isModerator) : ?>
       <div class="flex">
         <form method="post">
-            <button class="bg-fadedblue px-5 py-3 mt-5 rounded font-semibold text-white mr-5" type="submit" name="add" value="<?= isset($_GET['id']) ? $_GET['id'] : '' ?>">Add Moderator</button>
+            <button class="bg-fadedblue px-5 py-3 mt-5 rounded font-semibold text-white mr-5" type="submit" name="add" value="<?= isset($_GET['id']) ? htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8') : '' ?>">Add Moderator</button>
         </form>
         <form method="post">
-            <button class="bg-fadedblue px-5 py-3 mt-5 rounded font-semibold text-white mr-5" type="submit" name="remove" value="<?= isset($_GET['id']) ? $_GET['id'] : '' ?>">Remove Moderator</button>
+            <button class="bg-fadedblue px-5 py-3 mt-5 rounded font-semibold text-white mr-5" type="submit" name="remove" value="<?= isset($_GET['id']) ? htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8') : '' ?>">Remove Moderator</button>
         </form>
         <form method="post">
             <button class="bg-red-500 px-5 py-3 mt-5 rounded font-semibold text-white" type="submit" name="ban">Ban User</button>
