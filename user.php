@@ -97,8 +97,7 @@
 <body class="ml-10">
   <nav><?php include_once("navigation.php")?></nav>
 
-    <h1 class="text-3xl font-semibold mt-5"> <?php echo htmlspecialchars($_GET["id"]); ?> </h1>
-    <article class="flex flex-wrap gap-10 justify-center items-center">
+    <article class="flex flex-wrap gap-10 justify-center items-center mt-5">
       <div>
         <img src="uploads/promptbg.jpg" class="rounded-full w-96 h-96" alt="pic">
       </div>
@@ -121,9 +120,9 @@
     </article>
 
     <?php if ($isModerator) : ?>
-      <div class="flex">
+      <div class="flex ml-20 mt-10">
         <form method="post">
-            <button class="bg-fadedblue px-5 py-3 mt-5 rounded font-semibold text-white mr-5" type="submit" name="add" value="<?= isset($_GET['id']) ? htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8') : '' ?>">Add Moderator</button>
+            <button class="bg-fadedblue px-5 py-3 mt-5 rounded font-semibold text-white mr-5 ml-5" type="submit" name="add" value="<?= isset($_GET['id']) ? htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8') : '' ?>">Add Moderator</button>
         </form>
         <form method="post">
             <button class="bg-fadedblue px-5 py-3 mt-5 rounded font-semibold text-white mr-5" type="submit" name="remove" value="<?= isset($_GET['id']) ? htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8') : '' ?>">Remove Moderator</button>
@@ -131,9 +130,9 @@
         <form method="post">
             <button class="bg-red-500 px-5 py-3 mt-5 rounded font-semibold text-white" type="submit" name="ban">Ban User</button>
         </form>
-      </div>
-      
+      </div>   
     <?php endif; ?>
+    
     <?php if (isset($success)) : ?>
         <p><?php echo htmlspecialchars($success) ?></p>
     <?php endif; ?>
