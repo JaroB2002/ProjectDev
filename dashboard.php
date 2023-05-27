@@ -57,13 +57,13 @@ include_once("bootstrap.php");
     }
 
     // Handle prompt rating
-    if (isset($_POST['rating']) && isset($_POST['promptId'])) {
+    /*if (isset($_POST['rating']) && isset($_POST['promptId'])) {
         $rating = $_POST['rating'];
         $promptId = $_POST['promptId'];
     
         $prompt = new Prompt();
         $prompt->ratePrompt($promptId, $rating);
-    }
+    }*/
 
 ?>
 <!DOCTYPE html>
@@ -158,8 +158,8 @@ include_once("bootstrap.php");
                 <p class="mb-5 text-lg text-offblack"><strong>Description:</strong> <?php echo htmlspecialchars($prompt["description"]); ?></p>
                 <p class="mb-5 text-lg text-offblack"><strong>Type:</strong> <?php echo htmlspecialchars($prompt["type"]); ?></p>
                 <p class="mb-5 text-lg text-offblack"><strong>Price:</strong> <?php echo htmlspecialchars($prompt["price"]); ?></p>
-                <form method="post" class="mt-4">
-                    <input type="hidden" name="promptId" value="<?php echo $prompt['id']; ?>">
+                <!--<form method="post" class="mt-4">
+                    <input type="hidden" name="promptId" value="<?php echo htmlspecialchars($prompt['id']); ?>">
                     <div class="flex items-center">
                         <label for="rating" class="mb-5 text-lg text-offblack">Rate prompt:</label>
                         <select name="rating" id="rating" class="border border-gray-300 rounded p-1">
@@ -171,7 +171,7 @@ include_once("bootstrap.php");
                         </select>
                         <button type="submit" class="ml-2 bg-fadedpurple text-white font-semibold px-4 py-2 rounded">Rate</button>
                     </div>
-                </form>
+                </form>-->
                 <div>
                     <!--<button class="report-button" data-prompt-id="<?php echo $prompt["id"]; ?>" data-error-id="<?php echo 'error-' . $prompt["id"]; ?>">Report user</button>-->
                     <?php if (isset($errorMessage) && $_GET["buy"] == $prompt["id"]): ?>
