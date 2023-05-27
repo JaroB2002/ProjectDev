@@ -104,7 +104,10 @@ if(!empty($_POST)){
         <div class="my-2">
         <button class="bg-fadedpurple px-5 py-3 mt-5 rounded font-semibold" type="submit" name="uploadPrompt">Upload prompt</button>
         </div>
-        <p class="font-semibold text-fadedblue pt-5 text-xl"><?php echo $succes?></p>
+        <p class="font-semibold text-fadedblue pt-5 text-xl"><?php echo htmlspecialchars($succes)?></p>
+        <?php if(isset($error)): ?>
+            <p class="font-semibold text-fadedblue pt-5 text-xl"><?php echo htmlspecialchars($error)?></p>
+        <?php endif; ?>
     </form>
   </main>
   <footer><?php include_once("footer.php");?></footer>
