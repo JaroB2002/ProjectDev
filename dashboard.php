@@ -145,7 +145,7 @@ include_once("bootstrap.php");
     </form>
     <h2 class="text-3xl font-semibold mt-5 ml-10">Prompt overview</h2>
     <?php if ($filter == null): ?>
-        <p class="text-xl font-semibold mt-5 text-fadedpurple">No prompts found</p>
+        <p class="text-xl font-semibold mt-5 text-fadedpurple ml-10">No prompts found</p>
     <?php endif; ?>
     <article class="flex flex-wrap justify-center mt-5 pt-5">
         <?php foreach ($filter as $prompt): ?>
