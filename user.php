@@ -46,17 +46,9 @@
             exit();
         }
     }
-    //verify user
-    if($user->checkVerify()){
-      $user->verifyUser(true);
-    }
-    //show credits
-    $allCredits = $user->showCredits();
-    $credits = $allCredits['credits'];
 
     //bio
-    $username = $_SESSION['username'];
-    $user->setEmail($username);
+    $user->setEmail($_GET['id']);
     $userDetails = $user->getUserDetails();
     $biography = $userDetails['biography'];
   
@@ -104,11 +96,6 @@
       </div>
       <div>
         <h2 class="text-3xl text-fadedblue mb-5">Hi, it's <?php echo htmlspecialchars($_GET["id"]);?>!</h2>
-        <?php if($user->checkVerify()): ?>
-          <h2 class="text-2xl text-fadedpurple mb-5">I am a verified user.</h2>
-        <?php endif; ?>
-        <h3 class="text-2xl mb-3"><?php echo "My credits: " . htmlspecialchars($credits);?></h3>
-        
         <div class="max-w-sm">
         <h3 class="text-2xl mb-3">My biography:</h3>
         <p class="text-8sm mb-3"><?php echo htmlspecialchars($biography); ?></p> 
