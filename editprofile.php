@@ -34,9 +34,9 @@
     exit;
   }
   //share profile
-  $currentDomain = $_SERVER['HTTP_HOST'];
+  /*$currentDomain = $_SERVER['HTTP_HOST'];
   $profileLink = "https://" . $currentDomain . "/user.php?id=" . urlencode($username);
-  $profileLink = urldecode($profileLink);
+  $profileLink = urldecode($profileLink);*/
   
 
   //verify user
@@ -136,7 +136,7 @@
             <a class="bg-fadedpurple px-3.5 py-3.5 mt-5 rounded font-semibold text-white" href="following.php">View Following</a>
           </div>
         </form>
-        <a href="<?php echo htmlspecialchars($profileLink); ?>" class="text-fadedblue pt-5">Share my profile</a>
+        <!--<a href="<?php echo htmlspecialchars($profileLink); ?>" class="text-fadedblue pt-5">Share my profile</a>-->
       </div>
     </article>
   </header>
