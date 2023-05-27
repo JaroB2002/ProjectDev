@@ -35,6 +35,22 @@
             $success = "Moderator removed";
         }
     }
+
+    if (isset($_POST['report'])) {
+        $reportedUser = $_GET['id'];
+        header("location: flaggedusers.php?user=" . urlencode($reportedUser));
+    }
+    
+    if (isset($_POST['ban'])) {
+        $u = new User();
+        $u->banUser();    
+        // Delete the user's account if it is banned
+        if ($u->isBanned() !== false) {
+            $u->deleteAccount($_GET['id']);
+            header("Location: dashboard.php"); 
+            exit();
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -82,11 +98,14 @@
         <form method="post">
             <button class="bg-fadedblue px-5 py-3 mt-5 rounded font-semibold text-white mr-5" type="submit" name="add" value="<?= isset($_GET['id']) ? $_GET['id'] : '' ?>">Add Moderator</button>
         </form>
-
         <form method="post">
             <button class="bg-fadedblue px-5 py-3 mt-5 rounded font-semibold text-white mr-5" type="submit" name="remove" value="<?= isset($_GET['id']) ? $_GET['id'] : '' ?>">Remove Moderator</button>
         </form>
+        <form method="post">
+            <button class="bg-red-500 px-5 py-3 mt-5 rounded font-semibold text-white" type="submit" name="ban">Ban User</button>
+        </form>
       </div>
+      
     <?php endif; ?>
     <?php if (isset($success)) : ?>
         <p><?php echo htmlspecialchars($success) ?></p>
