@@ -111,6 +111,7 @@ if(!empty($_POST)){
     </form>
   </main>
   <footer><?php include_once("footer.php");?></footer>
+  <script src="js/nav.js"></script>
 </body>
 </html>
 

@@ -80,8 +80,8 @@
           colors: {
             fadedpurple: '#C688F4',
             fadedblue: '#5C69AA',
-            offgrey: '#D9D9D9',
-            offblack: '#D9D9D9',
+            offgrey: '#faf9f6',
+            offblack: '#313639',
             offwhite: '#f9f9f9'
           }
         }
@@ -173,6 +173,7 @@
     </form>
 </main>
 <footer><?php include_once("footer.php");?></footer>
+<script src="js/nav.js"></script>
 </body>
 </html>
 
