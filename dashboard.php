@@ -88,7 +88,7 @@ include_once("bootstrap.php");
           colors: {
             fadedpurple: '#C688F4',
             fadedblue: '#5C69AA',
-            offgrey: '#fdfcfd',
+            offgrey: '#faf9f6',
             offblack: '#313639',
             offwhite: '#f9f9f9'
           }
@@ -250,54 +250,7 @@ include_once("bootstrap.php");
     <script src="js/favorite.js"></script>
     <script src="js/comment.js"></script>
     <script src="js/reportPrompt.js"></script>
+    <script src="js/nav.js"></script>
 </body>
 </html>
-<?php
-//IN COMMENTS GEZET WANT MOET NOG GECLEAND WORDEN*/
-// START DELETE ACCOUNT CODE
-
-// Establish database connection
-//$conn = new PDO('mysql:host=localhost;dbname=demo', 'root', '');
-/*$conn = Db::getInstance();
-
-// Check if form is submitted
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Validate and sanitize email input to prevent SQL injection
-    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-
-    // Get user data from database
-    $stmt = $conn->prepare('SELECT * FROM users WHERE email = :email');
-    $stmt->bindParam(':email', $email);
-    $stmt->execute();
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    // Check if account was found
-    if ($stmt->rowCount() == 0) {
-        echo "Account not found.";
-    } else {
-        // Confirm user's identity
-        $confirm = filter_input(INPUT_POST, 'confirm_delete', FILTER_SANITIZE_EMAIL);
-        if ($confirm != $user['email']) {
-            echo "Email confirmation does not match.";
-        } else {
-            // Delete all data related to user
-            $stmt = $conn->prepare('DELETE FROM users WHERE email = :email');
-            $stmt->bindParam(':email', $email);
-            $stmt->execute();
-
-            // Confirm deletion
-            if ($stmt->rowCount() > 0) {
-                // Log out user and redirect to index.php
-                session_start();
-                session_unset();
-                session_destroy();
-                header("Location: index.php");
-                exit();
-            } else {
-                echo "Account was not deleted.";
-            }
-        }
-    }
-}*/
-?>
 
