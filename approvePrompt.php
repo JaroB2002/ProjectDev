@@ -59,7 +59,7 @@ $allPrompts = Prompt::getAllUnapproved();
                     <p class="font-semibold text-xl text-fadedpurple"><strong>Name: </strong><?php echo htmlspecialchars($prompt["name"]);?></p>
                     <img class="object-none h-96 w-96 mb-5" src="<?php echo htmlspecialchars($prompt["image"]); ?>" alt="input image">
                     <p class="mb-3 text-lg text-offwhite"><strong>Description: </strong><?php echo htmlspecialchars($prompt["description"]);?></p>
-                    <p class="mb-3 text-lg text-offwhite"><strong>tags: </strong><?php echo htmlspecialchars($prompt["tags"]);?></p>
+                    <p class="mb-3 text-lg text-offwhite"><strong>Tags: </strong><?php echo htmlspecialchars($prompt["tags"]);?></p>
                     <p class="mb-3 text-lg text-offwhite"><strong>Type: </strong><?php echo htmlspecialchars($prompt["type"])?></p>
                     <p class="mb-3 text-lg text-offwhite" ><strong>Price: </strong><?php echo htmlspecialchars($prompt["price"]);?></p>
                 </div>
