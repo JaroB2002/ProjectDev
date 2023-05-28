@@ -87,7 +87,7 @@
 </head>
 
 <body class="ml-10">
-  <nav><?php include_once("navigation.php")?></nav>
+  <nav><?php include_once("inc/navigation.php")?></nav>
 
     <article class="flex flex-wrap gap-10 justify-center items-center mt-5">
       <div>

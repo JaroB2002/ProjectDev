@@ -100,7 +100,7 @@ include_once("bootstrap.php");
 
 <body>
     <header class="bg-gray-900">
-        <nav><?php include_once("navigation.php")?></nav>
+        <nav><?php include_once("inc/navigation.php")?></nav>
         <div class="flex flex-col justify-center items-center py-20 gap-10">
             <img src="uploads/homeheader.jpg" alt="header" class="rounded-full w-96 h-96">
             <img src="uploads/PromptBaes.svg" alt="header" class="w-96 h-35" >
@@ -204,7 +204,7 @@ include_once("bootstrap.php");
             </div>
         <?php endforeach; ?>
     </article>
-    <footer><?php include_once("footer.php");?></footer>
+    <footer><?php include_once("inc/footer.php");?></footer>
     <script>
         let links = document.querySelectorAll(".like");
         for (let i = 0; i < links.length; i++) {
