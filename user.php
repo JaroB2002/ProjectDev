@@ -107,7 +107,7 @@
     </article>
 
     <?php if ($isModerator) : ?>
-      <div class="flex ml-20 mt-10 justify-center">
+      <div class="flex mt-10 justify-center">
         <form method="post">
             <button class="bg-fadedblue px-5 py-3 mt-5 rounded font-semibold text-white mr-5 ml-5" type="submit" name="add" value="<?= isset($_GET['id']) ? htmlspecialchars($_GET['id'], ENT_QUOTES, 'UTF-8') : '' ?>">Add Moderator</button>
         </form>
