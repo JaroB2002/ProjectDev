@@ -1,3 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+      theme: {
+        screens: {
+            sm: '480px',
+            md: '768px',
+            lg: '1024px',
+            xl: '1280px',
+        },
+        extend: {
+          colors: {
+            fadedpurple: '#C688F4',
+            fadedblue: '#5C69AA',
+            offgrey: '#fdfcfd',
+            offblack: '#313639',
+            offwhite: '#f9f9f9'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body>
+  
 <div class="bg-gray-900">
   <div class="px-4 pt-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8">
     <div class="grid row-gap-10 mb-8 lg:grid-cols-6">
@@ -72,3 +104,5 @@
     </div>
   </div>
 </div>
+</body>
+</html>
