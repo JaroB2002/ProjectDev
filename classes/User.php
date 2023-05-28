@@ -271,7 +271,7 @@ class User{
         $this->biography = null;
     }
 
-    public function incrementCredits($amount) {
+   /* public function incrementCredits($amount) {
         $this->credits += $amount;
         // Update credits in de database of waar je de credits ook opslaat
         // ...
@@ -282,7 +282,7 @@ class User{
         $statement = $conn->prepare("UPDATE users SET credits = credits + 1 WHERE email = :email");
         $statement->bindValue(":email", $this->getEmail());
         $statement->execute();
-    }
+    }*/
     /*public function blockUser() {
         $conn = Db::getInstance();
         $statement = $conn->prepare("UPDATE users SET is_blocked = :is_blocked WHERE email = :email");
