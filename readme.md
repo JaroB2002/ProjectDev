@@ -1,5 +1,5 @@
 Promptbaes, een webapp omtrent AI prompts voor Development 4.
-Groepsleden: Yadina Moreira, Jaro Brichau en Sarah-Lisa Mero uit Digital Experience Design
+Groepsleden: Yadina Moreira, Jaro Brichau en Sarah-Lisa Mero uit Digital Experience Design.
 Extra uitleg indien nodig: 
 - Je hebt een account nodig om gebruik te maken van de webapp.
 - Je kan credits verdienen door prompts te uploaden (approved prompts). Met deze credits kan je prompts kopen. Je ziet de creditwaarde op je profiel.
