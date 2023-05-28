@@ -69,7 +69,7 @@ if(!empty($_POST)){
 </head>
 <body   class="relative bg-cover bg-no-repeat"
   style="background-image: url('uploads/promptbg.jpg');">
-  <nav><?php include_once("navigation.php")?></nav>
+  <nav><?php include_once("inc/navigation.php")?></nav>
   <main class="flex justify-center">
     <form action="#" method="post" class="my-5 mx-5 py-8 rounded max-w-lg bg-offgrey px-20">
       <h1 class="text-4xl font-semibold mt-2"> Share your prompt! </h1>  
@@ -110,7 +110,7 @@ if(!empty($_POST)){
         <?php endif; ?>
     </form>
   </main>
-  <footer><?php include_once("footer.php");?></footer>
+  <footer><?php include_once("inc/footer.php");?></footer>
   <script src="js/nav.js"></script>
 </body>
 </html>

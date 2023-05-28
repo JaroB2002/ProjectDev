@@ -91,7 +91,7 @@
 </head>
 <body>
   <header class="bg-gray-900 pb-20">
-    <nav><?php include_once("navigation.php")?></nav>
+    <nav><?php include_once("inc/navigation.php")?></nav>
     <article class="flex flex-wrap gap-10 justify-center items-end">
       <div>
         <h1 class="text-5xl text-offgrey mb-10 mt-10 font-semibold">Profile</h1>
@@ -172,7 +172,7 @@
     </div>
     </form>
 </main>
-<footer><?php include_once("footer.php");?></footer>
+<footer><?php include_once("inc/footer.php");?></footer>
 <script src="js/nav.js"></script>
 </body>
 </html>
