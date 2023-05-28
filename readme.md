@@ -7,3 +7,6 @@ Extra uitleg indien nodig:
 - Ga zeker ook naar user, waar je kan bannen, en moderators aanstellen/verwijderen zoals hierboven vermeld.
 - Bij het uploaden van prompts moeten alle veldjes ingevuld worden, afbeeldingen worden via het afbeeldingsadres geüpload.
 - Na meer dan 3 approved prompts te plaatsen ben je een verified user. 
+
+Link verslag groepswerk:
+https://docs.google.com/document/d/1xUAE-UfXOvNXoQWN7X8CMUB986TFPkVhjm2VcqITm-g/edit
