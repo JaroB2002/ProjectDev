@@ -56,6 +56,13 @@
   } catch (PDOException $e) {
       echo "Error: " . $e->getMessage();
   }
+
+  if (isset($_POST['addCredit'])) {
+    $user->incrementCredits(1);
+    $user->updateCredits(); // Update credits in de database
+    header("Location: editprofile.php");
+    exit;
+  }
 ?>
 
 <!DOCTYPE html>
@@ -103,7 +110,9 @@
           <h2 class="text-2xl text-fadedpurple mb-5">I am a verified user.</h2>
         <?php endif; ?>
         <h3 class="text-2xl text-offgrey mb-3"><?php echo "My credits: " . htmlspecialchars($credits);?></h3>
-        
+        <form action="#" method="post">
+  <button class="bg-fadedpurple px-5 py-3 mt-5 rounded font-semibold text-white" type="submit" name="addCredit">Add Credit</button>
+</form>
         <div class="max-w-sm">
         <h3 class="text-2xl mb-3 text-offgrey">My biography:</h3>
         <p class="text-8sm mb-3 text-offgrey"><?php echo htmlspecialchars($biography); ?></p> 
