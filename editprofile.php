@@ -150,7 +150,7 @@
                   <p class="mb-5 text-lg text-offblack"> <strong>Name: </strong> <?php echo htmlspecialchars($prompt["name"]);?></p>
                   <img class="object-none h-96 w-96 mb-5" src="<?php echo htmlspecialchars($prompt["image"]); ?>" alt="input image">
                   <p class="mb-3 text-lg text-offblack"> <strong>Description: </strong> <?php echo htmlspecialchars($prompt["description"]);?></p>
-                  <p class="mb-3 text-lg text-offwhite"><strong>Tags: </strong><?php echo htmlspecialchars($prompt["tags"]);?></p>
+                  <p class="mb-3 text-lg text-offblack"><strong>Tags: </strong><?php echo htmlspecialchars($prompt["tags"]);?></p>
                   <p class="mb-3 text-lg text-offblack"> <strong>Type: </strong> <?php echo htmlspecialchars($prompt["type"])?>  </p>
                   <p class="mb-3 text-lg text-offblack"> <strong>Price: </strong> <?php echo htmlspecialchars($prompt["price"]);?></p>
               </div>

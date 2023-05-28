@@ -13,7 +13,6 @@
         // Check if email is available before saving
         if ($user->checkMailAvailable()) {
           $user->save();
-          $user->sendMail();
           header("Location: index.php");
         } else {
           $error = "Email was already taken. Registration failed.";

@@ -108,32 +108,6 @@ class User{
         }
         return $count;
     }
-    /*Email versturen*/
-    public function sendMail(){
-        $config = parse_ini_file('config/config.ini', true);
-        $key = $config['keys']['SENDGRID_API_KEY'];
-        //var_dump($key);
-        
-        $email = new \SendGrid\Mail\Mail();
-        $email->setFrom("r0784273@student.thomasmore.be", "PromptBaes");
-        $email->setSubject("Confirm email");
-        $email->addTo($_POST["email"], $_POST["email"]);
-        $email->addContent("text/plain", "Please confirm your email by clicking the link below");
-        $email->addContent(
-           "text/html", "Please confirm your email by clicking the link <a>https://promptbaesxd.azurewebsites.net/index.php</a>"
-        );
-
-        $options = array(
-          'turn_off_ssl_verification' => true
-        );
-
-        $sendgrid = new \SendGrid($key, $options);
-        try {
-            $response = $sendgrid->send($email);
-        } catch (Exception $e) {
-            echo 'Caught exception: '. $e->getMessage() ."\n";
-        }
-    }
 
     public function setBiography($biography){
         $this->biography=$biography;
