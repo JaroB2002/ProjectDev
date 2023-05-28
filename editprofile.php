@@ -56,13 +56,13 @@
   } catch (PDOException $e) {
       echo "Error: " . $e->getMessage();
   }
-
+/*
   if (isset($_POST['addCredit'])) {
     $user->incrementCredits(1);
     $user->updateCredits(); // Update credits in de database
     header("Location: editprofile.php");
     exit;
-  }
+  }*/
 ?>
 
 <!DOCTYPE html>
