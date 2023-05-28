@@ -201,12 +201,40 @@ class Prompt{
         return $prompts;
     }
 
-    /*public function ratePrompt($promptId, $rating){
+    public function checkExistingRating($promptId, $userId)
+    {
         $conn = Db::getInstance();
-        $statement = $conn->prepare("INSERT INTO ratings (prompt_id, rating) VALUES (:promptId, :rating)");
-        $statement->bindValue(":promptId", $promptId);
-        $statement->bindValue(":rating", $rating);
-        return $statement->execute();
-    }*/
+
+        $existingStatement = $conn->prepare("SELECT * FROM ratings WHERE prompt_id = :promptId AND user_id = :userId");
+        $existingStatement->bindValue(":promptId", $promptId);
+        $existingStatement->bindValue(":userId", $userId);
+        $existingStatement->execute();
+
+        return $existingStatement->rowCount() > 0;
+    }
+
+    public function updateRating($promptId, $rating, $userId)
+    {
+        $conn = Db::getInstance();
+
+        $updateStatement = $conn->prepare("UPDATE ratings SET rating = :rating WHERE prompt_id = :promptId AND user_id = :userId");
+        $updateStatement->bindValue(":promptId", $promptId);
+        $updateStatement->bindValue(":userId", $userId);
+        $updateStatement->bindValue(":rating", $rating);
+
+        return $updateStatement->execute();
+    }
+
+    public function addRating($promptId, $rating, $userId)
+    {
+        $conn = Db::getInstance();
+
+        $insertStatement = $conn->prepare("INSERT INTO ratings (prompt_id, rating, user_id) VALUES (:promptId, :rating, :userId)");
+        $insertStatement->bindValue(":promptId", $promptId);
+        $insertStatement->bindValue(":rating", $rating);
+        $insertStatement->bindValue(":userId", $userId);
+
+        return $insertStatement->execute();
+    }
     
 }

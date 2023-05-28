@@ -56,14 +56,26 @@ include_once("bootstrap.php");
         $errorMessage = $e->getMessage();
     }
 
-    // Handle prompt rating
-    /*if (isset($_POST['rating']) && isset($_POST['promptId'])) {
-        $rating = $_POST['rating'];
-        $promptId = $_POST['promptId'];
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_POST['rating'], $_POST['promptId'])) {
+            $rating = $_POST['rating'];
+            $promptId = $_POST['promptId'];
+            var_dump($rating, $promptId);
+            $userId = $_SESSION['username']; // User ID obtained from the session
     
-        $prompt = new Prompt();
-        $prompt->ratePrompt($promptId, $rating);
-    }*/
+            $prompt = new Prompt();
+            $existingRating = $prompt->checkExistingRating($promptId, $userId);
+    
+            if ($existingRating) {
+                $prompt->updateRating($promptId, $rating, $userId);
+            } else {
+                $prompt->addRating($promptId, $rating, $userId);
+            }
+        }
+    }
+    
+    // Get current rating, if set
+    $rating = isset($_POST['rating']) ? (int) $_POST['rating'] : null;
 
 ?>
 <!DOCTYPE html>
@@ -158,20 +170,18 @@ include_once("bootstrap.php");
                 <p class="mb-5 text-lg text-offblack"><strong>Description:</strong> <?php echo htmlspecialchars($prompt["description"]); ?></p>
                 <p class="mb-5 text-lg text-offblack"><strong>Type:</strong> <?php echo htmlspecialchars($prompt["type"]); ?></p>
                 <p class="mb-5 text-lg text-offblack"><strong>Price:</strong> <?php echo htmlspecialchars($prompt["price"]); ?></p>
-                <!--<form method="post" class="mt-4">
-                    <input type="hidden" name="promptId" value="<?php echo htmlspecialchars($prompt['id']); ?>">
-                    <div class="flex items-center">
-                        <label for="rating" class="mb-5 text-lg text-offblack">Rate prompt:</label>
-                        <select name="rating" id="rating" class="border border-gray-300 rounded p-1">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
-                        <button type="submit" class="ml-2 bg-fadedpurple text-white font-semibold px-4 py-2 rounded">Rate</button>
-                    </div>
-                </form>-->
+                <form action="" method="post">
+                <input type="hidden" name="promptId" value="<?php echo htmlspecialchars($prompt['id'], ENT_QUOTES, 'UTF-8'); ?>">
+                <div class="flex items-center">
+                    <label for="rating" class="mb-5 text-lg text-offblack">Rate prompt:</label>
+                    <select name="rating" id="rating" class="border border-gray-300 rounded p-1">
+                        <?php for ($i = 1; $i <= 5; $i++): ?>
+                            <option value="<?php echo $i; ?>" <?php if ($rating === $i) echo 'selected'; ?>><?php echo $i; ?></option>
+                        <?php endfor; ?>
+                    </select>
+                    <button type="submit" class="ml-2 bg-fadedpurple text-white font-semibold px-4 py-2 rounded">Rate</button>
+                </div>
+                </form>
                 <div>
                     <?php if (isset($errorMessage) && $_GET["buy"] == $prompt["id"]): ?>
                         <div class="error-message text-red-500" id="<?php echo htmlspecialchars('error-' . $prompt["id"]); ?>">
